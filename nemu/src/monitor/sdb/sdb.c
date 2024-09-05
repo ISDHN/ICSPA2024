@@ -108,8 +108,11 @@ static int cmd_x(char *args) {
 		return 0;
 	}
 	for (int i = 0; i < length; i++) {
-		word_t val = vaddr_read(addr + i * 4, 4);
-		printf("0x%08x |  %08x\n", addr + i * 4, val);
+		printf("0x%08x |  ", addr + i * 4);
+		for (int j = 0; j < 4; j++) {
+			printf("%02x ", vaddr_read(addr + i * 4 + j, 1));
+		}
+		printf("\n");
 	}
 	return 0;
 }
