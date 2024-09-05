@@ -26,11 +26,17 @@ void isa_reg_display() {
 	int reg_count = ARRLEN(regs);
 	for (int i = 0; i < reg_count; i++) {
 		bool success = false;
-		printf("%-3s: 0x%08x\n", regs[i], isa_reg_str2val(regs[i], &success));
+		printf("%-3s: 0x%08x\n", regs[i], isa_reg_str2val(reg_name(i), &success));
 	}
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
-
+	for (int i = 0; i < ARRLEN(regs); i++) {
+		if (strcmp(s, regs[i]) == 0) {
+			*success = true;
+			return gpr(i);
+		}
+	}
+	*success = false;
 	return 0;
 }
