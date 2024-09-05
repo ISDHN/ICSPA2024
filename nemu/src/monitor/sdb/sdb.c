@@ -70,6 +70,15 @@ static int cmd_si(char *args) {
 	return 0;
 }
 
+static int cmd_w(char *args) {
+	if (args == NULL) {
+		printf("No expression given\n");
+		return 0;
+	}
+	add_wp(args);
+	return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -81,6 +90,7 @@ static struct {
 	{"c", "Continue the execution of the program", cmd_c},
 	{"q", "Exit NEMU", cmd_q},
 	{"si", "Execute N instructions in a single step", cmd_si},
+	{"w", "Set a watchpoint", cmd_w},
 	/* TODO: Add more commands */
 
 };
