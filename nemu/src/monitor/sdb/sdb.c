@@ -57,14 +57,13 @@ static int cmd_q(char *args) {
 }
 
 static int cmd_si(char *args) {
-	char *arg = strtok(NULL, " ");
 	int steps = 1;
-	if (arg != NULL) {
-		if (!is_number_str(arg)) {
-			printf("Invalid step count: '%s'\n", arg);
+	if (args != NULL) {
+		if (!is_number_str(args)) {
+			printf("Invalid step count: '%s'\n", args);
 			return 0;
 		}
-		sscanf(arg, "%d", &steps);
+		sscanf(args, "%d", &steps);
 	}
 	cpu_exec(steps);
 	return 0;
