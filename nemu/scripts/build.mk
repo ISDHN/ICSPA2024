@@ -22,14 +22,13 @@ CXX := g++
 endif
 LD := $(CXX)
 INCLUDES = $(addprefix -I, $(INC_PATH))
-CFLAGS  := -O2 -MMD -Wall $(INCLUDES) $(CFLAGS)
+CFLAGS  := -O2 -MMD -Wall -Werror $(INCLUDES) $(CFLAGS)
 LDFLAGS := -O2 $(LDFLAGS)
 
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o) $(CXXSRC:%.cc=$(OBJ_DIR)/%.o)
 
 # Compilation patterns
 $(OBJ_DIR)/%.o: %.c
-	@echo $(CC)
 	@echo + CC $<
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -c -o $@ $<
