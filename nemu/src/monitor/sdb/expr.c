@@ -13,25 +13,9 @@
  * See the Mulan PSL v2 for more details.
  ***************************************************************************************/
 
-#include <isa.h>
+#include "expr.h"
 
-/* We use the POSIX regex functions to process regular expressions.
- * Type 'man regex' for more information about POSIX regex functions.
- */
-#include <regex.h>
-
-enum {
-	TK_NOTYPE = 256,
-	TK_EQ,
-
-	/* TODO: Add more token types */
-
-};
-
-static struct rule {
-	const char *regex;
-	int token_type;
-} rules[] = {
+static rule rules[] = {
 
 	/* TODO: Add more rules.
 	 * Pay attention to the precedence level of different rules.

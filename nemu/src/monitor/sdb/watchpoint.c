@@ -13,22 +13,10 @@
  * See the Mulan PSL v2 for more details.
  ***************************************************************************************/
 #include "watchpoint.h"
-#include "sdb.h"
-
-#define NR_WP 64
 
 static WP wp_pool[NR_WP] = {};
-static WP *head = NULL, *free_ = NULL;
 
 void init_wp_pool() {
-	int i;
-	for (i = 0; i < NR_WP; i++) {
-		wp_pool[i].NO = i;
-		wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
-	}
-
-	head = NULL;
-	free_ = wp_pool;
 }
 
 void add_wp(char *e) {
@@ -39,18 +27,36 @@ void add_wp(char *e) {
 		return;
 	}
 
-	WP *wp = free_;
-	if (wp == NULL) {
-		printf("No enough watchpoints\n");
+	for (int i = 0; i < NR_WP; i++) {
+		if (wp_pool[i].occupied) {
+			continue;
+		}
+		wp_pool[i].expr = e;
+		wp_pool[i].val = val;
+		printf("Watchpoint No.%d: %s , value is %u\n", i, e, val);
 		return;
 	}
+	printf("No more slot to contain new watchpoint.\n");
+}
 
-	free_ = free_->next;
-	wp->next = head;
-	head = wp;
+void list_wps() {
+	for (int i = 0; i < NR_WP; i++) {
+		if (!wp_pool[i].occupied) {
+			continue;
+		}
+		printf("Watchpoint No.%d: %s , value is %u\n", i, wp_pool[i].expr, wp_pool[i].val);
+	}
+}
 
-	strcpy(wp->expr, e);
-	wp->val = val;
-	printf("Watchpoint %d: %s\n", wp->NO, wp->expr);
+void rm_wp(int index) {
+	if (index >= NR_WP) {
+		printf("Invalid index: %d\n", index);
+		return;
+	}
+	if (!wp_pool[index].occupied) {
+		printf("There is no watchpoint No.%d \n", index);
+		return;
+	}
+	wp_pool[index].occupied = false;
 }
 /* TODO: Implement the functionality of watchpoint */

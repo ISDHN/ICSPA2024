@@ -70,11 +70,71 @@ static int cmd_si(char *args) {
 }
 
 static int cmd_w(char *args) {
-	if (args == NULL) {
-		printf("No expression given\n");
+	NEED_ARGS
+	add_wp(args);
+	return 0;
+}
+
+static int cmd_d(char *args) {
+	NEED_ARGS
+	if (!is_number_str(args)) {
+		printf("Invalid index: '%s'\n", args);
 		return 0;
 	}
-	add_wp(args);
+	int index = -1;
+	sscanf(args, "%d", &index);
+	rm_wp(index);
+	return 0;
+}
+
+static int cmd_x(char *args) {
+	NEED_ARGS
+	char *_length = strtok(args, " ");
+	char *expression = strtok(NULL, " ");
+	if (_length == NULL || expression == NULL) {
+		printf("Invalid arguments\n");
+		return 0;
+	}
+	if (!is_number_str(_length)) {
+		printf("Invalid number: '%s'\n", _length);
+		return 0;
+	}
+	int length = 0;
+	sscanf(_length, "%d", &length);
+	bool success = false;
+	word_t addr = expr(expression, &success);
+	if (!success) {
+		printf("Invalid expression\n");
+		return 0;
+	}
+	for (int i = 0; i < length; i++) {
+		word_t val = vaddr_read(addr + i * 4, 4);
+		printf("0x%08x |  %08x\n", addr + i * 4, val);
+	}
+	return 0;
+}
+
+static int cmd_p(char *args) {
+	NEED_ARGS
+	bool success = false;
+	word_t res = expr(args, &success);
+	if (!success) {
+		printf("Invalid expression\n");
+		return 0;
+	}
+	printf("Result: %u\n", res);
+	return 0;
+}
+
+static int cmd_info(char *args) {
+	NEED_ARGS
+	if (strcmp(args, "r")) {
+		isa_reg_display();
+	} else if (strcmp(args, "w")) {
+		list_wps();
+	} else {
+		printf("Unknown SUBCMD\n");
+	}
 	return 0;
 }
 
@@ -90,6 +150,10 @@ static struct {
 	{"q", "Exit NEMU", cmd_q},
 	{"si", "Execute N instructions in a single step", cmd_si},
 	{"w", "Set a watchpoint", cmd_w},
+	{"d", "Delete a watchpoint", cmd_d},
+	{"x", "Scan memory", cmd_x},
+	{"p", "Evaluate an expression", cmd_p},
+	{"info", "Print program state", cmd_info},
 	/* TODO: Add more commands */
 
 };
@@ -140,7 +204,7 @@ void sdb_mainloop() {
 		/* treat the remaining string as the arguments,
 		 * which may need further parsing
 		 */
-		char *args = cmd + strlen(cmd) + 1;
+		char *args = strtok(NULL, " ");
 		if (args >= str_end) {
 			args = NULL;
 		}

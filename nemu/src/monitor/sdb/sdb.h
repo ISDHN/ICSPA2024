@@ -16,8 +16,16 @@
 #ifndef __SDB_H__
 #define __SDB_H__
 
+#include "expr.h"
 #include "watchpoint.h"
 #include <common.h>
+#include <memory/vaddr.h>
+
+#define NEED_ARGS                   \
+	if (args == NULL) {             \
+		printf("No index given\n"); \
+		return 0;                   \
+	}
 word_t expr(char *e, bool *success);
 
 #endif
