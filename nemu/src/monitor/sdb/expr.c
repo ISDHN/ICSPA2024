@@ -15,96 +15,103 @@
 
 #include "expr.h"
 
-static rule rules[] = {
+extern void yy_scan_string(const char *str);
+extern int yyparse(word_t *result);
 
-	/* TODO: Add more rules.
-	 * Pay attention to the precedence level of different rules.
-	 */
+// static rule rules[] = {
 
-	{" +", TK_NOTYPE}, // spaces
-	{"\\+", '+'},	   // plus
-	{"==", TK_EQ},	   // equal
-};
+// 	/* TODO: Add more rules.
+// 	 * Pay attention to the precedence level of different rules.
+// 	 */
 
-#define NR_REGEX ARRLEN(rules)
+// 	{" +", TK_NOTYPE}, // spaces
+// 	{"\\+", '+'},	   // plus
+// 	{"==", TK_EQ},	   // equal
+// };
 
-static regex_t re[NR_REGEX] = {};
+// #define NR_REGEX ARRLEN(rules)
 
-/* Rules are used for many times.
- * Therefore we compile them only once before any usage.
- */
-void init_regex() {
-	int i;
-	char error_msg[128];
-	int ret;
+// static regex_t re[NR_REGEX] = {};
 
-	for (i = 0; i < NR_REGEX; i++) {
-		ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
-		if (ret != 0) {
-			regerror(ret, &re[i], error_msg, 128);
-			panic("regex compilation failed: %s\n%s", error_msg, rules[i].regex);
-		}
-	}
-}
+// /* Rules are used for many times.
+//  * Therefore we compile them only once before any usage.
+//  */
+// void init_regex() {
+// 	int i;
+// 	char error_msg[128];
+// 	int ret;
 
-typedef struct token {
-	int type;
-	char str[32];
-} Token;
+// 	for (i = 0; i < NR_REGEX; i++) {
+// 		ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
+// 		if (ret != 0) {
+// 			regerror(ret, &re[i], error_msg, 128);
+// 			panic("regex compilation failed: %s\n%s", error_msg, rules[i].regex);
+// 		}
+// 	}
+// }
 
-static Token tokens[32] __attribute__((used)) = {};
-static int nr_token __attribute__((used)) = 0;
+// typedef struct token {
+// 	int type;
+// 	char str[32];
+// } Token;
 
-static bool make_token(char *e) {
-	int position = 0;
-	int i;
-	regmatch_t pmatch;
+// static Token tokens[32] __attribute__((used)) = {};
+// static int nr_token __attribute__((used)) = 0;
 
-	nr_token = 0;
+// static bool make_token(char *e) {
+// 	int position = 0;
+// 	int i;
+// 	regmatch_t pmatch;
 
-	while (e[position] != '\0') {
-		/* Try all rules one by one. */
-		for (i = 0; i < NR_REGEX; i++) {
-			if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
-				char *substr_start = e + position;
-				int substr_len = pmatch.rm_eo;
+// 	nr_token = 0;
 
-				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-					i, rules[i].regex, position, substr_len, substr_len, substr_start);
+// 	while (e[position] != '\0') {
+// 		/* Try all rules one by one. */
+// 		for (i = 0; i < NR_REGEX; i++) {
+// 			if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
+// 				char *substr_start = e + position;
+// 				int substr_len = pmatch.rm_eo;
 
-				position += substr_len;
+// 				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+// 					i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
-				/* TODO: Now a new token is recognized with rules[i]. Add codes
-				 * to record the token in the array `tokens'. For certain types
-				 * of tokens, some extra actions should be performed.
-				 */
+// 				position += substr_len;
 
-				switch (rules[i].token_type) {
-					default:
-						TODO();
-				}
+// 				/* TODO: Now a new token is recognized with rules[i]. Add codes
+// 				 * to record the token in the array `tokens'. For certain types
+// 				 * of tokens, some extra actions should be performed.
+// 				 */
 
-				break;
-			}
-		}
+// 				switch (rules[i].token_type) {
+// 					default:
+// 						TODO();
+// 				}
 
-		if (i == NR_REGEX) {
-			printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
-			return false;
-		}
-	}
+// 				break;
+// 			}
+// 		}
 
-	return true;
-}
+// 		if (i == NR_REGEX) {
+// 			printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+// 			return false;
+// 		}
+// 	}
+
+// 	return true;
+// }
 
 word_t expr(char *e, bool *success) {
-	if (!make_token(e)) {
-		*success = false;
-		return 0;
+	// if (!make_token(e)) {
+	// 	*success = false;
+	// 	return 0;
+	// }
+	word_t result = 0;
+	yy_scan_string(e);
+	if (yyparse(&result) == 0) {
+		*success = true;
+		return result;
 	}
 
-	/* TODO: Insert codes to evaluate the expression. */
-	// TODO();
-
+	*success = false;
 	return 0;
 }

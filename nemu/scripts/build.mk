@@ -18,7 +18,7 @@ BINARY   = $(BUILD_DIR)/$(NAME)$(SO)
 ifeq ($(CC),clang)
 CXX := clang++
 else
-CXX := gcc
+CXX := g++
 endif
 LD := $(CXX)
 INCLUDES = $(addprefix -I, $(INC_PATH))
