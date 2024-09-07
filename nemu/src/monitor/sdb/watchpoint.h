@@ -1,10 +1,8 @@
 #ifndef __WATCHPOINT_H__
 #define __WATCHPOINT_H__
 
-#include "expr.h"
 #include <common.h>
-#include <stdint.h>
-#include <stdlib.h>
+#include <monitor.h>
 
 #define NR_WP 64
 

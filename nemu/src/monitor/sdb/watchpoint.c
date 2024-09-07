@@ -59,4 +59,22 @@ void rm_wp(int index) {
 	}
 	wp_pool[index].occupied = false;
 }
+
+bool check_wps() {
+	bool changed = false;
+	for (int i = 0; i < NR_WP; i++) {
+		if (!wp_pool[i].occupied) {
+			continue;
+		}
+		bool success = true;
+		word_t val = expr(wp_pool[i].expr, &success);
+		if (val != wp_pool[i].val) {
+			printf("Watchpoint No.%d: %s\n", i, wp_pool[i].expr);
+			printf("Old value: %u, New value: %u\n", wp_pool[i].val, val);
+			wp_pool[i].val = val;
+			changed = true;
+		}
+	}
+	return changed;
+}
 /* TODO: Implement the functionality of watchpoint */

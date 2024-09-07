@@ -25,8 +25,8 @@ static int is_batch_mode = false;
 
 extern NEMUState nemu_state;
 
-void init_regex();
-void init_wp_pool();
+// void init_regex();
+// void init_wp_pool();
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char *rl_gets() {
@@ -237,5 +237,5 @@ void init_sdb() {
 	// init_regex();
 
 	/* Initialize the watchpoint pool. */
-	init_wp_pool();
+	// init_wp_pool();
 }

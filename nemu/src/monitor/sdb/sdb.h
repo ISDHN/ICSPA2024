@@ -16,10 +16,10 @@
 #ifndef __SDB_H__
 #define __SDB_H__
 
-#include "expr.h"
 #include "watchpoint.h"
 #include <common.h>
 #include <memory/vaddr.h>
+#include <monitor.h>
 
 #define NEED_ARGS                   \
 	if (args == NULL) {             \
