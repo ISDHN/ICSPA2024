@@ -15,7 +15,7 @@
 
 #include "expr.h"
 
-extern void yy_scan_string(const char *str);
+extern void set_input(const char *str);
 extern int yyparse(word_t *result);
 
 // static rule rules[] = {
@@ -106,7 +106,7 @@ word_t expr(char *e, bool *success) {
 	// 	return 0;
 	// }
 	word_t result = 0;
-	yy_scan_string(e);
+	set_input(e);
 	if (yyparse(&result) == 0) {
 		*success = true;
 		return result;

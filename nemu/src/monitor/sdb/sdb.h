@@ -26,6 +26,5 @@
 		printf("No index given\n"); \
 		return 0;                   \
 	}
-word_t expr(char *e, bool *success);
 
 #endif

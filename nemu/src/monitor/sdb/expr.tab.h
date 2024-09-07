@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_PARSER_TAB_H_INCLUDED
-# define YY_YY_PARSER_TAB_H_INCLUDED
+#ifndef YY_YY_EXPR_TAB_H_INCLUDED
+# define YY_YY_EXPR_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -44,6 +44,16 @@
 #if YYDEBUG
 extern int yydebug;
 #endif
+/* "%code requires" blocks.  */
+#line 1 "expr.y"
+
+    #include <memory/vaddr.h>
+    #include <isa.h>
+
+    int yylex(void);
+    void yyerror(word_t* result, const char *s);
+
+#line 57 "expr.tab.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -72,12 +82,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 6 "parser.y"
+#line 9 "expr.y"
 
-    int num;
+    word_t num;
     char* reg;
 
-#line 81 "parser.tab.h"
+#line 91 "expr.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -89,7 +99,7 @@ typedef union YYSTYPE YYSTYPE;
 extern YYSTYPE yylval;
 
 
-int yyparse (void);
+int yyparse (word_t* result);
 
 
-#endif /* !YY_YY_PARSER_TAB_H_INCLUDED  */
+#endif /* !YY_YY_EXPR_TAB_H_INCLUDED  */

@@ -21,13 +21,27 @@ else
 CXX := g++
 endif
 LD := $(CXX)
+LEX := flex
+YACC := bison
 INCLUDES = $(addprefix -I, $(INC_PATH))
 CFLAGS  := -O2 -MMD -Wall -Werror $(INCLUDES) $(CFLAGS)
 LDFLAGS := -O2 $(LDFLAGS)
 
+LEX_C = $(BNFS:%.l=%.yy.c)
+PARSER_C = $(BNFS:%.l=%.tab.c)
+SRCS += $(LEX_C) $(PARSER_C)
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o) $(CXXSRCS:%.cpp=$(OBJ_DIR)/%.o)
 
 # Compilation patterns
+
+%.tab.c %.tab.h: %.y
+	@echo + YACC $<
+	@$(YACC) -d -o $(<:%.y=%.tab.c)  $<
+
+%.yy.c : %.l %.tab.h
+	@echo + LEX $<
+	@$(LEX) -o $@ $<
+
 $(OBJ_DIR)/%.o: %.c
 	@echo + CC $<
 	@mkdir -p $(dir $@)
@@ -49,9 +63,16 @@ $(OBJ_DIR)/%.o: %.cpp
 
 app: $(BINARY)
 
-$(BINARY):: $(OBJS) $(ARCHIVES)
+$(BINARY):: $(LEX_C) $(OBJS) $(ARCHIVES) 
 	@echo + LD $@
 	@$(LD) -o $@ $(OBJS) $(LDFLAGS) $(ARCHIVES) $(LIBS)
 
 clean:
 	-rm -rf $(BUILD_DIR)
+
+clean_exp_eng:
+	-find . -name "*.yy.c" -exec rm {} \;
+	-find . -name "*.tab.c" -exec rm {} \;
+	-find . -name "*.tab.h" -exec rm {} \;
+
+clean_all: clean clean_exp_eng

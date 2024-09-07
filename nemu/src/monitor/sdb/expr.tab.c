@@ -66,13 +66,6 @@
 
 
 
-/* First part of user prologue.  */
-#line 1 "parser.y"
-
-    #include <isa.h>
-    #include <memory/vaddr.h>
-
-#line 76 "parser.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -95,7 +88,7 @@
 #  endif
 # endif
 
-#include "parser.tab.h"
+#include "expr.tab.h"
 /* Symbol kind.  */
 enum yysymbol_kind_t
 {
@@ -509,8 +502,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    27,    27,    30,    31,    41,    42,    43,    44,    45,
-      46,    47,    48
+       0,    32,    32,    35,    36,    45,    46,    47,    48,    49,
+      50,    56,    57
 };
 #endif
 
@@ -648,7 +641,7 @@ enum { YYENOMEM = -2 };
       }                                                           \
     else                                                          \
       {                                                           \
-        yyerror (YY_("syntax error: cannot back up")); \
+        yyerror (result, YY_("syntax error: cannot back up")); \
         YYERROR;                                                  \
       }                                                           \
   while (0)
@@ -681,7 +674,7 @@ do {                                                                      \
     {                                                                     \
       YYFPRINTF (stderr, "%s ", Title);                                   \
       yy_symbol_print (stderr,                                            \
-                  Kind, Value); \
+                  Kind, Value, result); \
       YYFPRINTF (stderr, "\n");                                           \
     }                                                                     \
 } while (0)
@@ -693,10 +686,11 @@ do {                                                                      \
 
 static void
 yy_symbol_value_print (FILE *yyo,
-                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep)
+                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, word_t* result)
 {
   FILE *yyoutput = yyo;
   YY_USE (yyoutput);
+  YY_USE (result);
   if (!yyvaluep)
     return;
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
@@ -711,12 +705,12 @@ yy_symbol_value_print (FILE *yyo,
 
 static void
 yy_symbol_print (FILE *yyo,
-                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep)
+                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, word_t* result)
 {
   YYFPRINTF (yyo, "%s %s (",
              yykind < YYNTOKENS ? "token" : "nterm", yysymbol_name (yykind));
 
-  yy_symbol_value_print (yyo, yykind, yyvaluep);
+  yy_symbol_value_print (yyo, yykind, yyvaluep, result);
   YYFPRINTF (yyo, ")");
 }
 
@@ -750,7 +744,7 @@ do {                                                            \
 
 static void
 yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
-                 int yyrule)
+                 int yyrule, word_t* result)
 {
   int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
@@ -763,7 +757,7 @@ yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr,
                        YY_ACCESSING_SYMBOL (+yyssp[yyi + 1 - yynrhs]),
-                       &yyvsp[(yyi + 1) - (yynrhs)]);
+                       &yyvsp[(yyi + 1) - (yynrhs)], result);
       YYFPRINTF (stderr, "\n");
     }
 }
@@ -771,7 +765,7 @@ yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
 # define YY_REDUCE_PRINT(Rule)          \
 do {                                    \
   if (yydebug)                          \
-    yy_reduce_print (yyssp, yyvsp, Rule); \
+    yy_reduce_print (yyssp, yyvsp, Rule, result); \
 } while (0)
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
@@ -812,9 +806,10 @@ int yydebug;
 
 static void
 yydestruct (const char *yymsg,
-            yysymbol_kind_t yykind, YYSTYPE *yyvaluep)
+            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, word_t* result)
 {
   YY_USE (yyvaluep);
+  YY_USE (result);
   if (!yymsg)
     yymsg = "Deleting";
   YY_SYMBOL_PRINT (yymsg, yykind, yyvaluep, yylocationp);
@@ -841,7 +836,7 @@ int yynerrs;
 `----------*/
 
 int
-yyparse (void)
+yyparse (word_t* result)
 {
     yy_state_fast_t yystate = 0;
     /* Number of tokens to shift before error messages enabled.  */
@@ -1083,80 +1078,84 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* res: expr  */
-#line 27 "parser.y"
-           { printf("%d\n", (yyvsp[0].num)); }
-#line 1089 "parser.tab.c"
+#line 32 "expr.y"
+           { printf("%d\n", (yyvsp[0].num)); *result = (yyvsp[0].num); }
+#line 1084 "expr.tab.c"
     break;
 
   case 3: /* number: T_NUM  */
-#line 30 "parser.y"
+#line 35 "expr.y"
                { (yyval.num) = (yyvsp[0].num); }
-#line 1095 "parser.tab.c"
+#line 1090 "expr.tab.c"
     break;
 
   case 4: /* number: T_REG  */
-#line 31 "parser.y"
+#line 36 "expr.y"
                { 
         bool success = false;
         (yyval.num) = isa_reg_str2val((yyvsp[0].reg), &success);
         if (!success) {
-            printf("Invalid register name\n");
-            exit(1); 
+            yyerror(result, "Invalid register name");
         }
        }
-#line 1108 "parser.tab.c"
+#line 1102 "expr.tab.c"
     break;
 
   case 5: /* expr: number  */
-#line 41 "parser.y"
+#line 45 "expr.y"
               { (yyval.num) = (yyvsp[0].num); }
-#line 1114 "parser.tab.c"
+#line 1108 "expr.tab.c"
     break;
 
   case 6: /* expr: '*' expr  */
-#line 42 "parser.y"
+#line 46 "expr.y"
                            { (yyval.num) = vaddr_read((yyvsp[0].num), 4); }
-#line 1120 "parser.tab.c"
+#line 1114 "expr.tab.c"
     break;
 
   case 7: /* expr: expr '+' expr  */
-#line 43 "parser.y"
+#line 47 "expr.y"
                      { (yyval.num) = (yyvsp[-2].num) + (yyvsp[0].num); }
-#line 1126 "parser.tab.c"
+#line 1120 "expr.tab.c"
     break;
 
   case 8: /* expr: expr '-' expr  */
-#line 44 "parser.y"
+#line 48 "expr.y"
                      { (yyval.num) = (yyvsp[-2].num) - (yyvsp[0].num); }
-#line 1132 "parser.tab.c"
+#line 1126 "expr.tab.c"
     break;
 
   case 9: /* expr: expr '*' expr  */
-#line 45 "parser.y"
+#line 49 "expr.y"
                      {  (yyval.num) = (yyvsp[-2].num) * (yyvsp[0].num); }
-#line 1138 "parser.tab.c"
+#line 1132 "expr.tab.c"
     break;
 
   case 10: /* expr: expr '/' expr  */
-#line 46 "parser.y"
-                     { (yyval.num) = (yyvsp[-2].num) / (yyvsp[0].num); }
-#line 1144 "parser.tab.c"
+#line 50 "expr.y"
+                     { 
+            if ((yyvsp[0].num) == 0) {
+                yyerror(result, "Division by zero");
+            }
+            (yyval.num) = (yyvsp[-2].num) / (yyvsp[0].num); 
+        }
+#line 1143 "expr.tab.c"
     break;
 
   case 11: /* expr: '-' expr  */
-#line 47 "parser.y"
+#line 56 "expr.y"
                            { (yyval.num) = - (yyvsp[0].num); }
-#line 1150 "parser.tab.c"
+#line 1149 "expr.tab.c"
     break;
 
   case 12: /* expr: '(' expr ')'  */
-#line 48 "parser.y"
+#line 57 "expr.y"
                     { (yyval.num) = (yyvsp[-1].num); }
-#line 1156 "parser.tab.c"
+#line 1155 "expr.tab.c"
     break;
 
 
-#line 1160 "parser.tab.c"
+#line 1159 "expr.tab.c"
 
       default: break;
     }
@@ -1203,7 +1202,7 @@ yyerrlab:
   if (!yyerrstatus)
     {
       ++yynerrs;
-      yyerror (YY_("syntax error"));
+      yyerror (result, YY_("syntax error"));
     }
 
   if (yyerrstatus == 3)
@@ -1220,7 +1219,7 @@ yyerrlab:
       else
         {
           yydestruct ("Error: discarding",
-                      yytoken, &yylval);
+                      yytoken, &yylval, result);
           yychar = YYEMPTY;
         }
     }
@@ -1276,7 +1275,7 @@ yyerrlab1:
 
 
       yydestruct ("Error: popping",
-                  YY_ACCESSING_SYMBOL (yystate), yyvsp);
+                  YY_ACCESSING_SYMBOL (yystate), yyvsp, result);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -1314,7 +1313,7 @@ yyabortlab:
 | yyexhaustedlab -- YYNOMEM (memory exhaustion) comes here.  |
 `-----------------------------------------------------------*/
 yyexhaustedlab:
-  yyerror (YY_("memory exhausted"));
+  yyerror (result, YY_("memory exhausted"));
   yyresult = 2;
   goto yyreturnlab;
 
@@ -1329,7 +1328,7 @@ yyreturnlab:
          user semantic actions for why this is necessary.  */
       yytoken = YYTRANSLATE (yychar);
       yydestruct ("Cleanup: discarding lookahead",
-                  yytoken, &yylval);
+                  yytoken, &yylval, result);
     }
   /* Do not reclaim the symbols of the rule whose action triggered
      this YYABORT or YYACCEPT.  */
@@ -1338,7 +1337,7 @@ yyreturnlab:
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-                  YY_ACCESSING_SYMBOL (+*yyssp), yyvsp);
+                  YY_ACCESSING_SYMBOL (+*yyssp), yyvsp, result);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -1349,4 +1348,9 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 51 "parser.y"
+#line 60 "expr.y"
+
+
+void yyerror(word_t* result, const char *s) {
+    printf("error: %s\n", s);
+}
