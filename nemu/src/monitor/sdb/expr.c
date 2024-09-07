@@ -90,7 +90,6 @@ extern int yyparse(word_t *result);
 // 				break;
 // 			}
 // 		}
-
 // 		if (i == NR_REGEX) {
 // 			printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
 // 			return false;

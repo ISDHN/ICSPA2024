@@ -66,8 +66,11 @@ extern int yydebug;
     YYUNDEF = 257,                 /* "invalid token"  */
     T_REG = 258,                   /* T_REG  */
     T_NUM = 259,                   /* T_NUM  */
-    NEGM = 260,                    /* NEGM  */
-    DREF = 261                     /* DREF  */
+    T_LAND = 260,                  /* T_LAND  */
+    T_EQ = 261,                    /* T_EQ  */
+    T_NE = 262,                    /* T_NE  */
+    NEGM = 263,                    /* NEGM  */
+    DREF = 264                     /* DREF  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -81,7 +84,7 @@ union YYSTYPE
     word_t num;
     char* reg;
 
-#line 85 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.h"
+#line 88 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
