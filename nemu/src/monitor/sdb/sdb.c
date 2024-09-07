@@ -206,9 +206,11 @@ void sdb_mainloop() {
 		/* treat the remaining string as the arguments,
 		 * which may need further parsing
 		 */
-		char *args = strtok(NULL, " ");
+		char *args = cmd + strlen(cmd) + 1;
 		if (args >= str_end) {
 			args = NULL;
+		} else {
+			args = strstp(args);
 		}
 
 #ifdef CONFIG_DEVICE
