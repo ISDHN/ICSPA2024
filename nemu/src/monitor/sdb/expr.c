@@ -101,7 +101,6 @@ extern int yyparse(word_t *result);
 // }
 
 word_t expr(char *e, bool *success) {
-
 	word_t result = 0;
 	set_input(e);
 	if (yyparse(&result) == 0) {

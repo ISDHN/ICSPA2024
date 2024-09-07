@@ -738,7 +738,10 @@ YY_RULE_SETUP
 { /* ignore */ }
 	YY_BREAK
 case 2:
-#line 18 "src/monitor/sdb/expr.l"
+YY_RULE_SETUP
+#line 17 "src/monitor/sdb/expr.l"
+{yylval.reg = strdup(yytext+1); return T_REG;}
+	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 18 "src/monitor/sdb/expr.l"
@@ -759,7 +762,7 @@ YY_RULE_SETUP
 #line 23 "src/monitor/sdb/expr.l"
 ECHO;
 	YY_BREAK
-#line 763 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.yy.c"
+#line 766 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
