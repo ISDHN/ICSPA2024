@@ -3,6 +3,7 @@
 
 #include <common.h>
 #include <monitor.h>
+#include <string.h>
 
 #define NR_WP 64
 
