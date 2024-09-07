@@ -88,7 +88,67 @@
 #  endif
 # endif
 
-#include "expr.tab.h"
+
+/* Debug traces.  */
+#ifndef YYDEBUG
+# define YYDEBUG 0
+#endif
+#if YYDEBUG
+extern int yydebug;
+#endif
+/* "%code requires" blocks.  */
+#line 1 "src/monitor/sdb/expr.y"
+
+    #include <memory/vaddr.h>
+    #include <isa.h>
+
+    int yylex(void);
+    void yyerror(word_t* result, const char *s);
+
+#line 109 "expr.tab.c"
+
+/* Token kinds.  */
+#ifndef YYTOKENTYPE
+# define YYTOKENTYPE
+  enum yytokentype
+  {
+    YYEMPTY = -2,
+    YYEOF = 0,                     /* "end of file"  */
+    YYerror = 256,                 /* error  */
+    YYUNDEF = 257,                 /* "invalid token"  */
+    T_REG = 258,                   /* T_REG  */
+    T_NUM = 259,                   /* T_NUM  */
+    NEGM = 260,                    /* NEGM  */
+    DREF = 261                     /* DREF  */
+  };
+  typedef enum yytokentype yytoken_kind_t;
+#endif
+
+/* Value type.  */
+#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
+union YYSTYPE
+{
+#line 9 "src/monitor/sdb/expr.y"
+
+    word_t num;
+    char* reg;
+
+#line 137 "expr.tab.c"
+
+};
+typedef union YYSTYPE YYSTYPE;
+# define YYSTYPE_IS_TRIVIAL 1
+# define YYSTYPE_IS_DECLARED 1
+#endif
+
+
+extern YYSTYPE yylval;
+
+
+int yyparse (word_t* result);
+
+
+
 /* Symbol kind.  */
 enum yysymbol_kind_t
 {
@@ -1073,7 +1133,7 @@ yyreduce:
   case 2: /* res: expr  */
 #line 30 "src/monitor/sdb/expr.y"
            { *result = (yyvsp[0].num); }
-#line 1077 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1137 "expr.tab.c"
     break;
 
   case 3: /* number: T_NUM  */
@@ -1081,7 +1141,7 @@ yyreduce:
                { 
             (yyval.num) = (yyvsp[0].num); 
         }
-#line 1085 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1145 "expr.tab.c"
     break;
 
   case 4: /* number: T_REG  */
@@ -1093,37 +1153,37 @@ yyreduce:
                 yyerror(result, "Invalid register name");
             }
         }
-#line 1097 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1157 "expr.tab.c"
     break;
 
   case 5: /* expr: number  */
 #line 45 "src/monitor/sdb/expr.y"
               { (yyval.num) = (yyvsp[0].num); }
-#line 1103 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1163 "expr.tab.c"
     break;
 
   case 6: /* expr: '*' expr  */
 #line 46 "src/monitor/sdb/expr.y"
                            { (yyval.num) = vaddr_read((yyvsp[0].num), 4); }
-#line 1109 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1169 "expr.tab.c"
     break;
 
   case 7: /* expr: expr '+' expr  */
 #line 47 "src/monitor/sdb/expr.y"
                      { (yyval.num) = (yyvsp[-2].num) + (yyvsp[0].num); }
-#line 1115 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1175 "expr.tab.c"
     break;
 
   case 8: /* expr: expr '-' expr  */
 #line 48 "src/monitor/sdb/expr.y"
                      { (yyval.num) = (yyvsp[-2].num) - (yyvsp[0].num); }
-#line 1121 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1181 "expr.tab.c"
     break;
 
   case 9: /* expr: expr '*' expr  */
 #line 49 "src/monitor/sdb/expr.y"
                      {  (yyval.num) = (yyvsp[-2].num) * (yyvsp[0].num); }
-#line 1127 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1187 "expr.tab.c"
     break;
 
   case 10: /* expr: expr '/' expr  */
@@ -1134,23 +1194,23 @@ yyreduce:
             }
             (yyval.num) = (yyvsp[-2].num) / (yyvsp[0].num); 
         }
-#line 1138 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1198 "expr.tab.c"
     break;
 
   case 11: /* expr: '-' expr  */
 #line 56 "src/monitor/sdb/expr.y"
                            { (yyval.num) = - (yyvsp[0].num); }
-#line 1144 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1204 "expr.tab.c"
     break;
 
   case 12: /* expr: '(' expr ')'  */
 #line 57 "src/monitor/sdb/expr.y"
                     { (yyval.num) = (yyvsp[-1].num); }
-#line 1150 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1210 "expr.tab.c"
     break;
 
 
-#line 1154 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1214 "expr.tab.c"
 
       default: break;
     }
