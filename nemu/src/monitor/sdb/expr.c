@@ -101,10 +101,7 @@ extern int yyparse(word_t *result);
 // }
 
 word_t expr(char *e, bool *success) {
-	// if (!make_token(e)) {
-	// 	*success = false;
-	// 	return 0;
-	// }
+
 	word_t result = 0;
 	set_input(e);
 	if (yyparse(&result) == 0) {
