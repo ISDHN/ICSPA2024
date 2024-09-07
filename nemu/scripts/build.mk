@@ -29,7 +29,6 @@ LDFLAGS := -O2 $(LDFLAGS)
 
 LEX_C = $(BNFS:%.l=%.yy.c)
 PARSER_C = $(BNFS:%.l=%.tab.c)
-SRCS += $(LEX_C) $(PARSER_C)
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o) $(CXXSRCS:%.cpp=$(OBJ_DIR)/%.o)
 
 # Compilation patterns

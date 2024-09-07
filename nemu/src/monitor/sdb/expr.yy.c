@@ -1,6 +1,6 @@
-#line 2 "expr.yy.c"
+#line 2 "src/monitor/sdb/expr.yy.c"
 
-#line 4 "expr.yy.c"
+#line 4 "src/monitor/sdb/expr.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -454,14 +454,14 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "expr.l"
+#line 1 "src/monitor/sdb/expr.l"
 #define YY_NO_INPUT 1
-#line 5 "expr.l"
+#line 5 "src/monitor/sdb/expr.l"
 #include "expr.tab.h"
 #include <stdlib.h>
 #include <string.h>
-#line 464 "expr.yy.c"
-#line 465 "expr.yy.c"
+#line 464 "src/monitor/sdb/expr.yy.c"
+#line 465 "src/monitor/sdb/expr.yy.c"
 
 #define INITIAL 0
 
@@ -676,10 +676,10 @@ YY_DECL
 		}
 
 	{
-#line 14 "expr.l"
+#line 14 "src/monitor/sdb/expr.l"
 
 
-#line 683 "expr.yy.c"
+#line 683 "src/monitor/sdb/expr.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -739,57 +739,57 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 16 "expr.l"
+#line 16 "src/monitor/sdb/expr.l"
 { /* ignore */ }
 	YY_BREAK
 case 2:
-#line 18 "expr.l"
+#line 18 "src/monitor/sdb/expr.l"
 case 3:
 YY_RULE_SETUP
-#line 18 "expr.l"
+#line 18 "src/monitor/sdb/expr.l"
 {yylval.num = atoi(yytext); return T_NUM;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 19 "expr.l"
+#line 19 "src/monitor/sdb/expr.l"
 {yylval.num = strtol(yytext, NULL, 16); return T_NUM;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 20 "expr.l"
+#line 20 "src/monitor/sdb/expr.l"
 {return T_LPAR;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 21 "expr.l"
+#line 21 "src/monitor/sdb/expr.l"
 {return T_RPAR;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 22 "expr.l"
+#line 22 "src/monitor/sdb/expr.l"
 { return T_ADD; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 23 "expr.l"
+#line 23 "src/monitor/sdb/expr.l"
 { return T_MIN; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 24 "expr.l"
+#line 24 "src/monitor/sdb/expr.l"
 { return T_MUL; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 25 "expr.l"
+#line 25 "src/monitor/sdb/expr.l"
 { return T_DIV; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 28 "expr.l"
+#line 28 "src/monitor/sdb/expr.l"
 ECHO;
 	YY_BREAK
-#line 793 "expr.yy.c"
+#line 793 "src/monitor/sdb/expr.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1757,7 +1757,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 28 "expr.l"
+#line 28 "src/monitor/sdb/expr.l"
 
 
 void set_input(const char* str) {
