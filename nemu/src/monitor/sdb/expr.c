@@ -106,7 +106,6 @@ word_t expr(char *e, bool *success) {
 		*success = true;
 		return result;
 	}
-
 	*success = false;
 	return 0;
 }

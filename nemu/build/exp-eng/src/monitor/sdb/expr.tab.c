@@ -496,8 +496,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    30,    30,    33,    36,    45,    46,    47,    48,    49,
-      50,    56,    57
+       0,    30,    30,    33,    36,    46,    47,    48,    49,    50,
+      51,    58,    59
 };
 #endif
 
@@ -1091,66 +1091,68 @@ yyreduce:
             (yyval.num) = isa_reg_str2val((yyvsp[0].reg), &success);
             if (!success) {
                 yyerror(result, "Invalid register name");
+                YYABORT;
             }
         }
-#line 1097 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1098 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
     break;
 
   case 5: /* expr: number  */
-#line 45 "src/monitor/sdb/expr.y"
+#line 46 "src/monitor/sdb/expr.y"
               { (yyval.num) = (yyvsp[0].num); }
-#line 1103 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1104 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
     break;
 
   case 6: /* expr: '*' expr  */
-#line 46 "src/monitor/sdb/expr.y"
+#line 47 "src/monitor/sdb/expr.y"
                            { (yyval.num) = vaddr_read((yyvsp[0].num), 4); }
-#line 1109 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1110 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
     break;
 
   case 7: /* expr: expr '+' expr  */
-#line 47 "src/monitor/sdb/expr.y"
+#line 48 "src/monitor/sdb/expr.y"
                      { (yyval.num) = (yyvsp[-2].num) + (yyvsp[0].num); }
-#line 1115 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1116 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
     break;
 
   case 8: /* expr: expr '-' expr  */
-#line 48 "src/monitor/sdb/expr.y"
+#line 49 "src/monitor/sdb/expr.y"
                      { (yyval.num) = (yyvsp[-2].num) - (yyvsp[0].num); }
-#line 1121 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1122 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
     break;
 
   case 9: /* expr: expr '*' expr  */
-#line 49 "src/monitor/sdb/expr.y"
+#line 50 "src/monitor/sdb/expr.y"
                      {  (yyval.num) = (yyvsp[-2].num) * (yyvsp[0].num); }
-#line 1127 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1128 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
     break;
 
   case 10: /* expr: expr '/' expr  */
-#line 50 "src/monitor/sdb/expr.y"
+#line 51 "src/monitor/sdb/expr.y"
                      { 
             if ((yyvsp[0].num) == 0) {
                 yyerror(result, "Division by zero");
+                YYABORT;
             }
             (yyval.num) = (yyvsp[-2].num) / (yyvsp[0].num); 
         }
-#line 1138 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1140 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
     break;
 
   case 11: /* expr: '-' expr  */
-#line 56 "src/monitor/sdb/expr.y"
+#line 58 "src/monitor/sdb/expr.y"
                            { (yyval.num) = - (yyvsp[0].num); }
-#line 1144 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1146 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
     break;
 
   case 12: /* expr: '(' expr ')'  */
-#line 57 "src/monitor/sdb/expr.y"
+#line 59 "src/monitor/sdb/expr.y"
                     { (yyval.num) = (yyvsp[-1].num); }
-#line 1150 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1152 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
     break;
 
 
-#line 1154 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1156 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
 
       default: break;
     }
@@ -1343,7 +1345,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 60 "src/monitor/sdb/expr.y"
+#line 62 "src/monitor/sdb/expr.y"
 
 
 void yyerror(word_t* result, const char *s) {
