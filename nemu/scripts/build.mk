@@ -3,7 +3,7 @@
 # Add necessary options if the target is a shared library
 ifeq ($(SHARE),1)
 SO = -so
-CFLAGS  += -fPIC -fvisibility=hidden
+CFLAGS  += -fPIC -Ibuild -fvisibility=hidden
 LDFLAGS += -shared -fPIC
 endif
 
@@ -12,6 +12,7 @@ BUILD_DIR = $(WORK_DIR)/build
 
 INC_PATH := $(WORK_DIR)/include $(INC_PATH)
 OBJ_DIR  = $(BUILD_DIR)/obj-$(NAME)$(SO)
+EXPR_ENG_DIR = $(BUILD_DIR)/exp-eng
 BINARY   = $(BUILD_DIR)/$(NAME)$(SO)
 
 # Compilation flags
@@ -27,19 +28,32 @@ INCLUDES = $(addprefix -I, $(INC_PATH))
 CFLAGS  := -O2 -MMD -Wall -Werror $(INCLUDES) $(CFLAGS)
 LDFLAGS := -O2 $(LDFLAGS)
 
-LEX_C = $(BNFS:%.l=%.yy.c)
-PARSER_C = $(BNFS:%.l=%.tab.c)
-OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o) $(CXXSRCS:%.cpp=$(OBJ_DIR)/%.o)
+LEX_C = $(BNFS:%.y=$(EXPR_ENG_DIR)/%.yy.c)
+PARSER_C = $(BNFS:%.y=$(EXPR_ENG_DIR)/%.tab.c)
+LEX_OBJ = $(LEX_C:%.c=%.o)
+PARSER_OBJ = $(PARSER_C:%.c=%.o)
+OBJS =$(PARSER_OBJ) $(LEX_OBJ)  $(SRCS:%.c=$(OBJ_DIR)/%.o) $(CXXSRCS:%.cpp=$(OBJ_DIR)/%.o)
 
 # Compilation patterns
-
-%.tab.c %.tab.h: %.y
+$(EXPR_ENG_DIR)/%.tab.c $(EXPR_ENG_DIR)/%.tab.h: %.y
 	@echo + YACC $<
-	@$(YACC) -d -o $(<:%.y=%.tab.c)  $<
-
-%.yy.c : %.l %.tab.h
+	@mkdir -p $(dir $(<:%.y=$(EXPR_ENG_DIR)/%.tab.c))
+	@$(YACC) -d -o $(<:%.y=$(EXPR_ENG_DIR)/%.tab.c)  $<
+	
+$(EXPR_ENG_DIR)/%.yy.c : %.l $(EXPR_ENG_DIR)/%.tab.h
 	@echo + LEX $<
+	@mkdir -p $(dir $@)
 	@$(LEX) -o $@ $<
+
+$(EXPR_ENG_DIR)/%.yy.o : $(EXPR_ENG_DIR)/%.yy.c
+	@echo + CC $<
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) -c -o $@ $<
+
+$(EXPR_ENG_DIR)/%.tab.o : $(EXPR_ENG_DIR)/%.tab.c
+	@echo + CC $<
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) -c -o $@ $<
 
 $(OBJ_DIR)/%.o: %.c
 	@echo + CC $<

@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_EXPR_TAB_H_INCLUDED
-# define YY_YY_EXPR_TAB_H_INCLUDED
+#ifndef YY_YY_MNT_E_CODE_ICSPA_ICS2024_NEMU_BUILD_EXP_ENG_SRC_MONITOR_SDB_EXPR_TAB_H_INCLUDED
+# define YY_YY_MNT_E_CODE_ICSPA_ICS2024_NEMU_BUILD_EXP_ENG_SRC_MONITOR_SDB_EXPR_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -45,7 +45,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 1 "expr.y"
+#line 1 "src/monitor/sdb/expr.y"
 
     #include <memory/vaddr.h>
     #include <isa.h>
@@ -53,7 +53,7 @@ extern int yydebug;
     int yylex(void);
     void yyerror(word_t* result, const char *s);
 
-#line 57 "expr.tab.h"
+#line 57 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -66,14 +66,8 @@ extern int yydebug;
     YYUNDEF = 257,                 /* "invalid token"  */
     T_REG = 258,                   /* T_REG  */
     T_NUM = 259,                   /* T_NUM  */
-    T_ADD = 260,                   /* T_ADD  */
-    T_MIN = 261,                   /* T_MIN  */
-    T_MUL = 262,                   /* T_MUL  */
-    T_DIV = 263,                   /* T_DIV  */
-    T_LPAR = 264,                  /* T_LPAR  */
-    T_RPAR = 265,                  /* T_RPAR  */
-    NEGM = 266,                    /* NEGM  */
-    DREF = 267                     /* DREF  */
+    NEGM = 260,                    /* NEGM  */
+    DREF = 261                     /* DREF  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -82,12 +76,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 9 "expr.y"
+#line 9 "src/monitor/sdb/expr.y"
 
     word_t num;
     char* reg;
 
-#line 91 "expr.tab.h"
+#line 85 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -102,4 +96,4 @@ extern YYSTYPE yylval;
 int yyparse (word_t* result);
 
 
-#endif /* !YY_YY_EXPR_TAB_H_INCLUDED  */
+#endif /* !YY_YY_MNT_E_CODE_ICSPA_ICS2024_NEMU_BUILD_EXP_ENG_SRC_MONITOR_SDB_EXPR_TAB_H_INCLUDED  */

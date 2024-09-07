@@ -1,6 +1,6 @@
-#line 2 "expr.yy.c"
+#line 2 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.yy.c"
 
-#line 4 "expr.yy.c"
+#line 4 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -449,14 +449,14 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "expr.l"
+#line 1 "src/monitor/sdb/expr.l"
 #define YY_NO_INPUT 1
-#line 5 "expr.l"
+#line 5 "src/monitor/sdb/expr.l"
 #include "expr.tab.h"
 #include <stdlib.h>
 #include <string.h>
-#line 459 "expr.yy.c"
-#line 460 "expr.yy.c"
+#line 459 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.yy.c"
+#line 460 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.yy.c"
 
 #define INITIAL 0
 
@@ -671,10 +671,10 @@ YY_DECL
 		}
 
 	{
-#line 14 "expr.l"
+#line 14 "src/monitor/sdb/expr.l"
 
 
-#line 678 "expr.yy.c"
+#line 678 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -734,32 +734,32 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 16 "expr.l"
+#line 16 "src/monitor/sdb/expr.l"
 { /* ignore */ }
 	YY_BREAK
 case 2:
-#line 18 "expr.l"
+#line 18 "src/monitor/sdb/expr.l"
 case 3:
 YY_RULE_SETUP
-#line 18 "expr.l"
+#line 18 "src/monitor/sdb/expr.l"
 {yylval.num = atoi(yytext); return T_NUM;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 19 "expr.l"
+#line 19 "src/monitor/sdb/expr.l"
 {yylval.num = strtol(yytext, NULL, 16); return T_NUM;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 20 "expr.l"
+#line 20 "src/monitor/sdb/expr.l"
 { return yytext[0]; }       
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 23 "expr.l"
+#line 23 "src/monitor/sdb/expr.l"
 ECHO;
 	YY_BREAK
-#line 763 "expr.yy.c"
+#line 763 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1727,7 +1727,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 23 "expr.l"
+#line 23 "src/monitor/sdb/expr.l"
 
 
 void set_input(const char* str) {
