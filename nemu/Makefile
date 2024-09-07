@@ -39,7 +39,7 @@ SRCS-BLACKLIST-y += $(SRCS-BLACKLIST) $(shell find -L $(DIRS-BLACKLIST-y) -name 
 CXXSRCS-BLACKLIST-y += $(CXXSRCS_BLACKLIST) $(shell find -L $(DIRS-BLACKLIST-y) -name "*.cpp")
 SRCS-y += $(shell find -L $(DIRS-y) -name "*.c")
 CXXSRCS-y += $(shell find -L $(DIRS-y) -name "*.cpp")
-BNFS += $(shell find -L $(DIRS-y) -name "*.l")
+#BNFS += $(shell find -L $(DIRS-y) -name "*.l")
 SRCS = $(filter-out $(SRCS-BLACKLIST-y),$(SRCS-y))
 CXXSRCS = $(filter-out $(CXXSRCS-BLACKLIST-y),$(CXXSRCS-y))
 
