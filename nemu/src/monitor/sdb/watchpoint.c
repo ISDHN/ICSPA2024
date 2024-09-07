@@ -26,7 +26,6 @@ void add_wp(char *e) {
 		printf("Invalid expression\n");
 		return;
 	}
-
 	for (int i = 0; i < NR_WP; i++) {
 		if (wp_pool[i].occupied) {
 			continue;
