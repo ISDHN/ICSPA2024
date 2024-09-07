@@ -33,7 +33,7 @@ void add_wp(char *e) {
 		wp_pool[i].expr = strdup(e);
 		wp_pool[i].val = val;
 		wp_pool[i].occupied = true;
-		printf("Watchpoint No.%d: %s , value is %u\n", i, e, val);
+		printf("Watchpoint No.%d: %s , value is 0x%x\n", i, e, val);
 		return;
 	}
 	printf("No more slot to contain new watchpoint.\n");
@@ -44,7 +44,7 @@ void list_wps() {
 		if (!wp_pool[i].occupied) {
 			continue;
 		}
-		printf("Watchpoint No.%d: %s , value is %u\n", i, wp_pool[i].expr, wp_pool[i].val);
+		printf("Watchpoint No.%d: %s , value is 0x%x\n", i, wp_pool[i].expr, wp_pool[i].val);
 	}
 }
 
@@ -70,7 +70,7 @@ bool check_wps() {
 		word_t val = expr(wp_pool[i].expr, &success);
 		if (val != wp_pool[i].val) {
 			printf("Watchpoint No.%d: %s\n", i, wp_pool[i].expr);
-			printf("Old value: %u, New value: %u\n", wp_pool[i].val, val);
+			printf("Old value: 0x%x, New value: 0x%x\n", wp_pool[i].val, val);
 			wp_pool[i].val = val;
 			changed = true;
 		}

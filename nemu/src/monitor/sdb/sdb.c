@@ -124,7 +124,7 @@ static int cmd_p(char *args) {
 	if (!success) {
 		return 0;
 	}
-	printf("Result: %u\n", res);
+	printf("Result: 0x%x\n", res);
 	return 0;
 }
 
