@@ -99,7 +99,6 @@ extern int yyparse(word_t *result);
 
 // 	return true;
 // }
-
 word_t expr(char *e, bool *success) {
 	word_t result = 0;
 	set_input(e);

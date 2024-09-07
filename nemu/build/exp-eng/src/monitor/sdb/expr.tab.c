@@ -1347,5 +1347,5 @@ yyreturnlab:
 
 
 void yyerror(word_t* result, const char *s) {
-    printf("error: %s\n", s);
+    printf("Error: %s\n", s);
 }
