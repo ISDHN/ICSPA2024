@@ -131,9 +131,9 @@ static int cmd_p(char *args) {
 
 static int cmd_info(char *args) {
 	NEED_ARGS
-	if (strcmp(args, "r")) {
+	if (strcmp(args, "r") == 0) {
 		isa_reg_display();
-	} else if (strcmp(args, "w")) {
+	} else if (strcmp(args, "w") == 0) {
 		list_wps();
 	} else {
 		printf("Unknown SUBCMD\n");
