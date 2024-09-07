@@ -32,6 +32,7 @@ void add_wp(char *e) {
 		}
 		wp_pool[i].expr = strdup(e);
 		wp_pool[i].val = val;
+		wp_pool[i].occupied = true;
 		printf("Watchpoint No.%d: %s , value is %u\n", i, e, val);
 		return;
 	}
