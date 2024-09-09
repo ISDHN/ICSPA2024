@@ -13,23 +13,36 @@
  * See the Mulan PSL v2 for more details.
  ***************************************************************************************/
 
-#ifndef __ISA_RISCV_H__
-#define __ISA_RISCV_H__
+#ifdef __cplusplus
+extern "C" {
+#include "local-include/reg.h"
+#include <isa.h>
+#endif
 
-#include <common.h>
+const char *regs[] = {
+	"$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
+	"s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
+	"a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
+	"s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"};
 
-typedef struct {
-	word_t gpr[MUXDEF(CONFIG_RVE, 16, 32)]; // general purpose registers
-	vaddr_t pc;
-} MUXDEF(CONFIG_RV64, riscv64_CPU_state, riscv32_CPU_state);
+void isa_reg_display() {
+	for (const char *reg : regs) {
+		bool success = false;
+		printf("%-3s: 0x%08x\n", reg, isa_reg_str2val(reg, &success));
+	}
+}
 
-// decode
-typedef struct {
-	union {
-		uint32_t val;
-	} inst;
-} MUXDEF(CONFIG_RV64, riscv64_ISADecodeInfo, riscv32_ISADecodeInfo);
+word_t isa_reg_str2val(const char *s, bool *success) {
+	for (int i = 0; i < ARRLEN(regs); i++) {
+		if (strcmp(s, regs[i]) == 0) {
+			*success = true;
+			return gpr(i);
+		}
+	}
+	*success = false;
+	return 0;
+}
 
-#define isa_mmu_check(vaddr, len, type) (MMU_DIRECT)
-
+#ifdef __cplusplus
+}
 #endif

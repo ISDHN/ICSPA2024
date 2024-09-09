@@ -3,8 +3,9 @@
 !*/
 !Makefile
 !*.mk
-!*.[cSh]
+!*.[cShly]
 !*.cc
+!*.cpp
 !.gitignore
 !README.md
 !Kconfig

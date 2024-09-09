@@ -126,6 +126,9 @@ endmenu
 
 menu "Testing and Debugging"
 
+config WP
+  bool "Enable watchpoint"
+  default y
 
 config TRACE
   bool "Enable tracer"
