@@ -28,32 +28,19 @@ INCLUDES = $(addprefix -I, $(INC_PATH))
 CFLAGS  := -O2 -MMD -Wall -Werror $(INCLUDES) $(CFLAGS)
 LDFLAGS := -O2 $(LDFLAGS)
 
-LEX_C = $(BNFS:%.y=$(EXPR_ENG_DIR)/%.yy.c)
-PARSER_C = $(BNFS:%.y=$(EXPR_ENG_DIR)/%.tab.c)
-LEX_OBJ = $(LEX_C:%.c=%.o)
-PARSER_OBJ = $(PARSER_C:%.c=%.o)
-OBJS =$(PARSER_OBJ) $(LEX_OBJ)  $(SRCS:%.c=$(OBJ_DIR)/%.o) $(CXXSRCS:%.cpp=$(OBJ_DIR)/%.o)
+LEX_C = $(LEXES:%.l=%.yy.c)
+PARSER_C = $(YACCS:%.y=%.tab.c)
+OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o) $(CXXSRCS:%.cpp=$(OBJ_DIR)/%.o)
 
 # Compilation patterns
-$(EXPR_ENG_DIR)/%.tab.c $(EXPR_ENG_DIR)/%.tab.h: %.y
-	@echo + YACC $<
-	@mkdir -p $(dir $(<:%.y=$(EXPR_ENG_DIR)/%.tab.c))
-	@$(YACC) -d -o $(<:%.y=$(EXPR_ENG_DIR)/%.tab.c)  $<
-	
-$(EXPR_ENG_DIR)/%.yy.c : %.l $(EXPR_ENG_DIR)/%.tab.h
+
+%.yy.c: %.l
 	@echo + LEX $<
-	@mkdir -p $(dir $@)
 	@$(LEX) -o $@ $<
 
-$(EXPR_ENG_DIR)/%.yy.o : $(EXPR_ENG_DIR)/%.yy.c
-	@echo + CC $<
-	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -c -o $@ $<
-
-$(EXPR_ENG_DIR)/%.tab.o : $(EXPR_ENG_DIR)/%.tab.c
-	@echo + CC $<
-	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -c -o $@ $<
+%.tab.c %.tab.h: %.y
+	@echo + YACC $<
+	@$(YACC) -d -o $@ $<
 
 $(OBJ_DIR)/%.o: %.c
 	@echo + CC $<
@@ -74,9 +61,11 @@ $(OBJ_DIR)/%.o: %.cpp
 
 .PHONY: app clean
 
-app: $(BINARY)
+flexbison: $(LEX_C) $(PARSER_C)
 
-$(BINARY):: $(LEX_C) $(OBJS) $(ARCHIVES) 
+app: flexbison $(BINARY) 
+
+$(BINARY):: $(OBJS) $(ARCHIVES) 
 	@echo + LD $@
 	@$(LD) -o $@ $(OBJS) $(LDFLAGS) $(ARCHIVES) $(LIBS)
 
@@ -89,3 +78,4 @@ clean_exp_eng:
 	-find . -name "*.tab.h" -exec rm {} \;
 
 clean_all: clean clean_exp_eng
+

@@ -1078,7 +1078,7 @@ yyreduce:
   case 2: /* res: expr  */
 #line 32 "src/monitor/sdb/expr.y"
            { *result = (yyvsp[0].num); }
-#line 1082 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1082 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 3: /* number: T_NUM  */
@@ -1086,7 +1086,7 @@ yyreduce:
                { 
             (yyval.num) = (yyvsp[0].num); 
         }
-#line 1090 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1090 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 4: /* number: T_REG  */
@@ -1099,37 +1099,37 @@ yyreduce:
                 YYABORT;
             }
         }
-#line 1103 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1103 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 5: /* expr: number  */
 #line 48 "src/monitor/sdb/expr.y"
               { (yyval.num) = (yyvsp[0].num); }
-#line 1109 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1109 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 6: /* expr: '*' expr  */
 #line 49 "src/monitor/sdb/expr.y"
                           { (yyval.num) = vaddr_read((yyvsp[0].num), 4); }
-#line 1115 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1115 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 7: /* expr: expr '+' expr  */
 #line 50 "src/monitor/sdb/expr.y"
                     { (yyval.num) = (yyvsp[-2].num) + (yyvsp[0].num); }
-#line 1121 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1121 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 8: /* expr: expr '-' expr  */
 #line 51 "src/monitor/sdb/expr.y"
                     { (yyval.num) = (yyvsp[-2].num) - (yyvsp[0].num); }
-#line 1127 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1127 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 9: /* expr: expr '*' expr  */
 #line 52 "src/monitor/sdb/expr.y"
                     {  (yyval.num) = (yyvsp[-2].num) * (yyvsp[0].num); }
-#line 1133 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1133 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 10: /* expr: expr '/' expr  */
@@ -1141,41 +1141,41 @@ yyreduce:
             }
             (yyval.num) = (yyvsp[-2].num) / (yyvsp[0].num); 
         }
-#line 1145 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1145 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 11: /* expr: '-' expr  */
 #line 60 "src/monitor/sdb/expr.y"
                           { (yyval.num) = - (yyvsp[0].num); }
-#line 1151 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1151 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 12: /* expr: '(' expr ')'  */
 #line 61 "src/monitor/sdb/expr.y"
                    { (yyval.num) = (yyvsp[-1].num); }
-#line 1157 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1157 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 13: /* expr: expr T_EQ expr  */
 #line 62 "src/monitor/sdb/expr.y"
                      { (yyval.num) = (yyvsp[-2].num) == (yyvsp[0].num); }
-#line 1163 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1163 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 14: /* expr: expr T_NE expr  */
 #line 63 "src/monitor/sdb/expr.y"
                      { (yyval.num) = (yyvsp[-2].num) != (yyvsp[0].num); }
-#line 1169 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1169 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 15: /* expr: expr T_LAND expr  */
 #line 64 "src/monitor/sdb/expr.y"
                        { (yyval.num) = (yyvsp[-2].num) && (yyvsp[0].num); }
-#line 1175 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1175 "src/monitor/sdb/expr.tab.c"
     break;
 
 
-#line 1179 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.tab.c"
+#line 1179 "src/monitor/sdb/expr.tab.c"
 
       default: break;
     }
