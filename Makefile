@@ -1,5 +1,6 @@
 STUID = 231250186
 STUNAME = 杨承岳
+TOKEN=puSyC3MK
 
 # DO NOT modify the following code!!!
 
@@ -18,6 +19,6 @@ _default:
 
 submit:
 	git gc
-	STUID=$(STUID) STUNAME=$(STUNAME) bash -c "$$(curl -s http://why.ink:8080/static/submit.sh)"
+	STUID=$(STUID) STUNAME=$(STUNAME) TOKEN=$(TOKEN) bash -c "$$(curl -s http://why.ink:8080/static/submit.sh)"
 
 .PHONY: default submit
