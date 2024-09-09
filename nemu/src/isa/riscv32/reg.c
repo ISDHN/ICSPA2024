@@ -13,11 +13,8 @@
  * See the Mulan PSL v2 for more details.
  ***************************************************************************************/
 
-#ifdef __cplusplus
-extern "C" {
 #include "local-include/reg.h"
 #include <isa.h>
-#endif
 
 const char *regs[] = {
 	"$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
@@ -26,9 +23,9 @@ const char *regs[] = {
 	"s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"};
 
 void isa_reg_display() {
-	for (const char *reg : regs) {
+	for (int i = 0; i < ARRLEN(regs); i++) {
 		bool success = false;
-		printf("%-3s: 0x%08x\n", reg, isa_reg_str2val(reg, &success));
+		printf("%-3s: 0x%08x\n", regs[i], isa_reg_str2val(regs[i], &success));
 	}
 }
 
@@ -42,7 +39,3 @@ word_t isa_reg_str2val(const char *s, bool *success) {
 	*success = false;
 	return 0;
 }
-
-#ifdef __cplusplus
-}
-#endif
