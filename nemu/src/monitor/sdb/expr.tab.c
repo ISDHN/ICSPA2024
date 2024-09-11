@@ -684,7 +684,7 @@ do {                                                                      \
 
 static void
 yy_symbol_value_print (FILE *yyo,
-                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, word_t* result)
+                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, uint64_t* result)
 {
   FILE *yyoutput = yyo;
   YY_USE (yyoutput);
@@ -703,7 +703,7 @@ yy_symbol_value_print (FILE *yyo,
 
 static void
 yy_symbol_print (FILE *yyo,
-                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, word_t* result)
+                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, uint64_t* result)
 {
   YYFPRINTF (yyo, "%s %s (",
              yykind < YYNTOKENS ? "token" : "nterm", yysymbol_name (yykind));
@@ -742,7 +742,7 @@ do {                                                            \
 
 static void
 yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
-                 int yyrule, word_t* result)
+                 int yyrule, uint64_t* result)
 {
   int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
@@ -804,7 +804,7 @@ int yydebug;
 
 static void
 yydestruct (const char *yymsg,
-            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, word_t* result)
+            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, uint64_t* result)
 {
   YY_USE (yyvaluep);
   YY_USE (result);
@@ -834,7 +834,7 @@ int yynerrs;
 `----------*/
 
 int
-yyparse (word_t* result)
+yyparse (uint64_t* result)
 {
     yy_state_fast_t yystate = 0;
     /* Number of tokens to shift before error messages enabled.  */
@@ -1371,6 +1371,6 @@ yyreturnlab:
 #line 67 "src/monitor/sdb/expr.y"
 
 
-void yyerror(word_t* result, const char *s) {
+void yyerror(uint64_t* result, const char *s) {
     printf("Error: %s\n", s);
 }

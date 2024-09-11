@@ -3,15 +3,15 @@
     #include <isa.h>
 
     int yylex(void);
-    void yyerror(word_t* result, const char *s);
+    void yyerror(uint64_t* result, const char *s);
 }
 
 %union {
-    word_t num;
+    uint64_t num;
     char* reg;
 }
 
-%parse-param {word_t* result}
+%parse-param {uint64_t* result}
 
 %token <reg> T_REG
 %token <num> T_NUM
@@ -66,6 +66,6 @@ expr : number { $$ = $1; }
 
 %%
 
-void yyerror(word_t* result, const char *s) {
+void yyerror(uint64_t* result, const char *s) {
     printf("Error: %s\n", s);
 }
