@@ -68,6 +68,7 @@ app: flexbison $(BINARY)
 $(BINARY):: $(OBJS) $(ARCHIVES) 
 	@echo + LD $@
 	@$(LD) -o $@ $(OBJS) $(LDFLAGS) $(ARCHIVES) $(LIBS)
+	@export BIN=$(BINARY)
 
 clean:
 	-rm -rf $(BUILD_DIR)
