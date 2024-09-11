@@ -108,7 +108,7 @@ static int cmd_x(char *args) {
 		return 0;
 	}
 	for (int i = 0; i < length; i++) {
-		printf("0x%08x |  ", addr + i * 4);
+		printf("%#08x |  ", addr + i * 4);
 		for (int j = 0; j < 4; j++) {
 			printf("%02x ", vaddr_read(addr + i * 4 + j, 1));
 		}
@@ -124,7 +124,7 @@ static int cmd_p(char *args) {
 	if (!success) {
 		return 0;
 	}
-	printf("Result: 0x%x\n", res);
+	printf("Result: %#x\n", res);
 	return 0;
 }
 
