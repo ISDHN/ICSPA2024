@@ -14,6 +14,7 @@ INC_PATH := $(WORK_DIR)/include $(INC_PATH)
 OBJ_DIR  = $(BUILD_DIR)/obj-$(NAME)$(SO)
 EXPR_ENG_DIR = $(BUILD_DIR)/exp-eng
 BINARY   = $(BUILD_DIR)/$(NAME)$(SO)
+export BIN=$(BINARY)
 
 # Compilation flags
 ifeq ($(CC),clang)
@@ -68,7 +69,6 @@ app: flexbison $(BINARY)
 $(BINARY):: $(OBJS) $(ARCHIVES) 
 	@echo + LD $@
 	@$(LD) -o $@ $(OBJS) $(LDFLAGS) $(ARCHIVES) $(LIBS)
-	@export BIN=$(BINARY)
 
 clean:
 	-rm -rf $(BUILD_DIR)
