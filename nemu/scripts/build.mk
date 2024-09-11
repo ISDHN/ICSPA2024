@@ -14,7 +14,6 @@ INC_PATH := $(WORK_DIR)/include $(INC_PATH)
 OBJ_DIR  = $(BUILD_DIR)/obj-$(NAME)$(SO)
 EXPR_ENG_DIR = $(BUILD_DIR)/exp-eng
 BINARY   = $(BUILD_DIR)/$(NAME)$(SO)
-export BIN=$(BINARY)
 
 # Compilation flags
 ifeq ($(CC),clang)
