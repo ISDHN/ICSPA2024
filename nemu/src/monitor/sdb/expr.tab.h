@@ -51,7 +51,7 @@ extern int yydebug;
     #include <isa.h>
 
     int yylex(void);
-    void yyerror(uint64_t* result, const char *s);
+    void yyerror(word_t* result, const char *s);
 
 #line 57 "src/monitor/sdb/expr.tab.h"
 
@@ -81,7 +81,7 @@ union YYSTYPE
 {
 #line 9 "src/monitor/sdb/expr.y"
 
-    uint64_t num;
+    word_t num;
     char* reg;
 
 #line 88 "src/monitor/sdb/expr.tab.h"
@@ -96,7 +96,7 @@ typedef union YYSTYPE YYSTYPE;
 extern YYSTYPE yylval;
 
 
-int yyparse (uint64_t* result);
+int yyparse (word_t* result);
 
 
 #endif /* !YY_YY_SRC_MONITOR_SDB_EXPR_TAB_H_INCLUDED  */

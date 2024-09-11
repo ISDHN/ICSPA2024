@@ -120,11 +120,11 @@ static int cmd_x(char *args) {
 static int cmd_p(char *args) {
 	NEED_ARGS
 	bool success = false;
-	uint64_t res = expr(args, &success);
+	word_t res = expr(args, &success);
 	if (!success) {
 		return 0;
 	}
-	printf("Result: %#lx\n", res);
+	printf("Result: %#x\n", res);
 	return 0;
 }
 

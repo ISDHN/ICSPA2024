@@ -16,7 +16,7 @@
 #include <monitor.h>
 
 extern void set_input(const char *str);
-extern int yyparse(uint64_t *result);
+extern int yyparse(word_t *result);
 // static rule rules[] = {
 
 // 	/* TODO: Add more rules.
@@ -96,8 +96,8 @@ extern int yyparse(uint64_t *result);
 // 	}
 // 	return true;
 // }
-uint64_t expr(char *e, bool *success) {
-	uint64_t result = 0;
+word_t expr(char *e, bool *success) {
+	word_t result = 0;
 	set_input(e);
 	if (yyparse(&result) == 0) {
 		*success = true;
