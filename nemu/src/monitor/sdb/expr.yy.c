@@ -1,6 +1,6 @@
-#line 2 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.yy.c"
+#line 2 "src/monitor/sdb/expr.yy.c"
 
-#line 4 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.yy.c"
+#line 4 "src/monitor/sdb/expr.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -461,8 +461,8 @@ char *yytext;
 #include "expr.tab.h"
 #include <stdlib.h>
 #include <string.h>
-#line 465 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.yy.c"
-#line 466 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.yy.c"
+#line 465 "src/monitor/sdb/expr.yy.c"
+#line 466 "src/monitor/sdb/expr.yy.c"
 
 #define INITIAL 0
 
@@ -680,7 +680,7 @@ YY_DECL
 #line 14 "src/monitor/sdb/expr.l"
 
 
-#line 684 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.yy.c"
+#line 684 "src/monitor/sdb/expr.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -783,7 +783,7 @@ YY_RULE_SETUP
 #line 26 "src/monitor/sdb/expr.l"
 ECHO;
 	YY_BREAK
-#line 787 "/mnt/e/Code/icspa/ics2024/nemu/build/exp-eng/src/monitor/sdb/expr.yy.c"
+#line 787 "src/monitor/sdb/expr.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
