@@ -133,6 +133,9 @@ static void execute(uint64_t n) {
 
 #ifdef CONFIG_ITRACE_ERROR
 void itrace_error() {
+	if (g_itrace_ringbuf.count == 0) {
+		return;
+	}
 	for (itrace_node *node = g_itrace_ringbuf.first;;) {
 		if (node->next == NULL) {
 			ColorfulLog(ANSI_BG_RED, "%s", node->inst);
