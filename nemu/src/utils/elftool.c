@@ -27,7 +27,7 @@ int init_elf(const char *exec_file) {
 	}
 	read(elf, &ehdr, 0, sizeof(Elf32_Ehdr));
 	Elf32_Shdr shdrs[ehdr.e_shnum];
-	read(elf, shdrs, ehdr.e_shoff, ehdr.e_shnum * ehdr.e_shentsize);
+	read(elf, (char *)shdrs, ehdr.e_shoff, ehdr.e_shnum * ehdr.e_shentsize);
 	Elf32_Shdr shstrtab = shdrs[ehdr.e_shstrndx];
 
 	return shstrtab.sh_offset;
