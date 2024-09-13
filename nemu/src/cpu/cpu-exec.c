@@ -37,11 +37,32 @@ typedef struct __itrace_node {
 	struct itrace_node *next;
 } itrace_node;
 
-struct {
-	itrace_node *next;
-} head;
+static struct {
+	itrace_node *first;
+	int count;
+	itrace_node *last;
+} g_itrace_ringbuf;
 
-static word_t g_itrace_ringbuf[CONFIG_ITRACE_ERROR_LEN];
+void push_inst(word_t inst) {
+	itrace_node *node = malloc(sizeof(itrace_node));
+	node->inst = inst;
+	node->next = NULL;
+	if (g_itrace_ringbuf.count == CONFIG_ITRACE_ERROR_LEN) {
+		itrace_node *tmp = g_itrace_ringbuf.first;
+		g_itrace_ringbuf.first = tmp->next;
+		free(tmp);
+		g_itrace_ringbuf.count--;
+	}
+	if (g_itrace_ringbuf.count == 0) {
+		g_itrace_ringbuf.first = node;
+		g_itrace_ringbuf.last = node;
+	} else {
+		g_itrace_ringbuf.last->next = node;
+		g_itrace_ringbuf.last = node;
+	}
+	g_itrace_ringbuf.count++;
+}
+
 #endif
 
 void device_update();
@@ -105,10 +126,11 @@ static void execute(uint64_t n) {
 
 #ifdef CONFIG_ITRACE_ERROR
 void itrace_error(word_t val) {
-	static int idx = 0;
-	g_itrace_ringbuf[idx++] = val;
-	if (idx == CONFIG_ITRACE_ERROR_LEN) {
-		idx = 0;
+	for (itrace_node *node = g_itrace_ringbuf.first; node != NULL; node = node->next) {
+		if (node->inst == val) {
+			Log("Instruction " FMT_WORD " is executed twice", val);
+			break;
+		}
 	}
 }
 #endif
