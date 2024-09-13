@@ -20,9 +20,12 @@
 #include <stdio.h>
 #include <utils.h>
 
-#define Log(format, ...)                                    \
-	_Log(ANSI_FMT("[%s:%d %s] " format, ANSI_FG_BLUE) "\n", \
+#define ColorfulLog(color, format, ...)              \
+	_Log(ANSI_FMT("[%s:%d %s] " format, color) "\n", \
 		 __FILE__, __LINE__, __func__, ##__VA_ARGS__)
+
+#define Log(format, ...) \
+	ColorfulLog(ANSI_FG_CYAN, format, ##__VA_ARGS__)
 
 #define Assert(cond, format, ...)                                                                                   \
 	do {                                                                                                            \

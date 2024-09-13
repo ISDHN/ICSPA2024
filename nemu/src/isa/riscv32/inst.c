@@ -17,6 +17,7 @@
 #include <cpu/cpu.h>
 #include <cpu/decode.h>
 #include <cpu/ifetch.h>
+#include <isa.h>
 
 #define R(i) gpr(i)
 #define Mr vaddr_read
@@ -168,7 +169,6 @@ static int decode_exec(Decode *s) {
 	return 0;
 }
 
-int isa_exec_once(Decode *s) {
-	s->isa.inst.val = inst_fetch(&s->snpc, 4);
+int isa_decode_exec_once(Decode *s) {
 	return decode_exec(s);
 }

@@ -16,6 +16,7 @@
 #include <cpu/cpu.h>
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
+#include <cpu/ifetch.h>
 #include <locale.h>
 #include <monitor.h>
 
@@ -87,8 +88,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 static void exec_once(Decode *s, vaddr_t pc) {
 	s->pc = pc;
 	s->snpc = pc;
-	isa_exec_once(s);
-	cpu.pc = s->dnpc;
+	s->isa.inst.val = inst_fetch(&s->snpc, 4);
 #if (defined CONFIG_ITRACE) || (defined CONFIG_ITRACE_ERROR)
 	char *p = s->logbuf;
 	p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
@@ -115,6 +115,8 @@ static void exec_once(Decode *s, vaddr_t pc) {
 #endif
 
 #endif
+	isa_decode_exec_once(s);
+	cpu.pc = s->dnpc;
 }
 
 static void execute(uint64_t n) {
