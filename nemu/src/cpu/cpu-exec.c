@@ -29,7 +29,20 @@
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
-static bool g_print_step = false;
+static bool g_print_step = true;
+#ifdef CONFIG_ITRACE_ERROR
+
+typedef struct __itrace_node {
+	word_t inst;
+	struct itrace_node *next;
+} itrace_node;
+
+struct {
+	itrace_node *next;
+} head;
+
+static word_t g_itrace_ringbuf[CONFIG_ITRACE_ERROR_LEN];
+#endif
 
 void device_update();
 
@@ -90,6 +103,16 @@ static void execute(uint64_t n) {
 	}
 }
 
+#ifdef CONFIG_ITRACE_ERROR
+void itrace_error(word_t val) {
+	static int idx = 0;
+	g_itrace_ringbuf[idx++] = val;
+	if (idx == CONFIG_ITRACE_ERROR_LEN) {
+		idx = 0;
+	}
+}
+#endif
+
 static void statistic() {
 	IFNDEF(CONFIG_TARGET_AM, setlocale(LC_NUMERIC, ""));
 #define NUMBERIC_FMT MUXDEF(CONFIG_TARGET_AM, "%", "%'") PRIu64
@@ -108,7 +131,7 @@ void assert_fail_msg() {
 
 /* Simulate how the CPU works. */
 void cpu_exec(uint64_t n) {
-	g_print_step = (n < MAX_INST_TO_PRINT);
+	// g_print_step = (n < MAX_INST_TO_PRINT);
 	switch (nemu_state.state) {
 		case NEMU_END:
 		case NEMU_ABORT:

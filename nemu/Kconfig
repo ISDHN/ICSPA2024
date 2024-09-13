@@ -153,6 +153,16 @@ config ITRACE_COND
   depends on ITRACE
   string "Only trace instructions when the condition is true"
   default "true"
+  
+config ITRACE_ERROR
+  depends on TRACE
+  bool "Trace back instructions when an error occurs"
+  default y
+
+config ITRACE_ERROR_LEN
+  depends on ITRACE_ERROR
+  int "The length of the trace back"
+  default 16
 
 
 config DIFFTEST
