@@ -19,7 +19,7 @@
 #include <isa.h>
 #include <readline/history.h>
 #include <readline/readline.h>
-#include <strproc.h>
+#include <utils.h>
 
 static int is_batch_mode = false;
 
