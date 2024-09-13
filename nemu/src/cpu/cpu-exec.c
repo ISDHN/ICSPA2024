@@ -133,7 +133,11 @@ static void execute(uint64_t n) {
 
 #ifdef CONFIG_ITRACE_ERROR
 void itrace_error() {
-	for (itrace_node *node = g_itrace_ringbuf.first; node != NULL; node = node->next) {
+	for (itrace_node *node = g_itrace_ringbuf.first;;) {
+		if (node->next == NULL) {
+			ColorfulLog(ANSI_BG_RED, "%s", node->inst);
+			break;
+		}
 		Log("%s", node->inst);
 	}
 }
