@@ -94,7 +94,7 @@ static int parse_args(int argc, char *argv[]) {
 				diff_so_file = optarg;
 				break;
 			case 's':
-				sym_file = optarg;
+				sym_file = strdup(optarg);
 				break;
 			case 1:
 				img_file = optarg;
