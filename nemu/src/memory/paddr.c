@@ -53,7 +53,7 @@ void init_mem() {
 
 word_t paddr_read(paddr_t addr, int len) {
 #ifdef CONFIG_MTRACE
-	if (CONFIG_MTRACE_COND) {
+	if (MTRACE_COND) {
 		Log("paddr_read: addr = " FMT_PADDR ", len = %d", addr, len);
 	}
 #endif
@@ -67,7 +67,7 @@ word_t paddr_read(paddr_t addr, int len) {
 
 void paddr_write(paddr_t addr, int len, word_t data) {
 #ifdef CONFIG_MTRACE
-	if (CONFIG_MTRACE_COND) {
+	if (MTRACE_COND) {
 		Log("paddr_write: addr = " FMT_PADDR ", len = %d, data = " FMT_WORD, addr, len, data);
 	}
 #endif
