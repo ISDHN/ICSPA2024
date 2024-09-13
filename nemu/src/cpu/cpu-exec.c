@@ -139,6 +139,7 @@ void itrace_error() {
 			break;
 		}
 		Log("%s", node->inst);
+		node = node->next;
 	}
 }
 #endif
