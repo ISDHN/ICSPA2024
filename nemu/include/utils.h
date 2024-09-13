@@ -81,3 +81,5 @@ bool is_number_str(char *str);
 char *strstp(char *str);
 
 // ----------- elftool -----------
+
+int init_elf(const char *exec_file);
