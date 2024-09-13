@@ -33,8 +33,8 @@ static bool g_print_step = true;
 #ifdef CONFIG_ITRACE_ERROR
 
 typedef struct __itrace_node {
-	word_t inst;
-	struct itrace_node *next;
+	char inst[DISASM_BUF_SIZE];
+	struct __itrace_node *next;
 } itrace_node;
 
 static struct {
@@ -43,9 +43,9 @@ static struct {
 	itrace_node *last;
 } g_itrace_ringbuf;
 
-void push_inst(word_t inst) {
+void push_inst(char *inst) {
 	itrace_node *node = malloc(sizeof(itrace_node));
-	node->inst = inst;
+	strncpy(node->inst, inst, DISASM_BUF_SIZE);
 	node->next = NULL;
 	if (g_itrace_ringbuf.count == CONFIG_ITRACE_ERROR_LEN) {
 		itrace_node *tmp = g_itrace_ringbuf.first;
@@ -89,7 +89,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 	s->snpc = pc;
 	isa_exec_once(s);
 	cpu.pc = s->dnpc;
-#ifdef CONFIG_ITRACE
+#if (defined CONFIG_ITRACE) || (defined CONFIG_ITRACE_ERROR)
 	char *p = s->logbuf;
 	p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
 	int ilen = s->snpc - s->pc;
@@ -109,6 +109,11 @@ static void exec_once(Decode *s, vaddr_t pc) {
 	void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 	disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
 				MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
+
+#ifdef CONFIG_ITRACE_ERROR
+	push_inst(s->logbuf);
+#endif
+
 #endif
 }
 
@@ -125,12 +130,9 @@ static void execute(uint64_t n) {
 }
 
 #ifdef CONFIG_ITRACE_ERROR
-void itrace_error(word_t val) {
+void itrace_error() {
 	for (itrace_node *node = g_itrace_ringbuf.first; node != NULL; node = node->next) {
-		if (node->inst == val) {
-			Log("Instruction " FMT_WORD " is executed twice", val);
-			break;
-		}
+		Log("%s", node->inst);
 	}
 }
 #endif
@@ -149,6 +151,9 @@ static void statistic() {
 void assert_fail_msg() {
 	isa_reg_display();
 	statistic();
+#ifdef CONFIG_ITRACE_ERROR
+	itrace_error();
+#endif
 }
 
 /* Simulate how the CPU works. */
