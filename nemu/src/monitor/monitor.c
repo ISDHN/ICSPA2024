@@ -144,9 +144,7 @@ void init_monitor(int argc, char *argv[]) {
 	init_sdb();
 
 	/* Initialize the symbol table. */
-	if (sym_file != NULL) {
-		init_elf(sym_file);
-	}
+	init_elf(sym_file);
 
 	/* Initialize the call stack. */
 	init_callstack();

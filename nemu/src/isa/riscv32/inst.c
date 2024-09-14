@@ -75,7 +75,7 @@ void log_jal_r(bool is_register, int rd, word_t dst) {
 #ifdef CONFIG_FTRACE
 	if (is_register && rd == 0) {
 		int ret_from = pop_int(call_stack, &cnt);
-		Log("%#x:%*s%#x@%s return", cpu.pc, (cnt + 1) * CONFIG_FTRANCE_PAD + 4, "", ret_from, find_func_name(ret_from));
+		Log("%#x:%*s%#x@%s return", cpu.pc, cnt * CONFIG_FTRANCE_PAD + 4, "", ret_from, find_func_name(ret_from));
 	} else if (!is_register && rd != 0) {
 		if (cnt == cap) {
 			cap *= 2;

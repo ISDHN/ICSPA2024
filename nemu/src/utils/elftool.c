@@ -25,6 +25,11 @@ int find_tab(const char *name) {
 }
 
 int open_elf(const char *elf_file) {
+	if (elf_file == NULL) {
+		Log("No ELF file specified.");
+	} else {
+		Log("Loading ELF file %s", elf_file);
+	}
 	elf = fopen(elf_file, "rb");
 	if (elf == NULL) {
 		panic("Can't open %s", elf_file);
@@ -89,7 +94,7 @@ char *find_func_name(vaddr_t inst_addr) {
 			return &symstrs[syms[func_list[i]].st_name];
 		}
 	}
-	return "@???";
+	return "Unknown";
 }
 
 void init_elf(const char *exec_file) {
