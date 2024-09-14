@@ -82,4 +82,4 @@ char *strstp(char *str);
 
 // ----------- elftool -----------
 
-int init_elf(const char *exec_file);
+void init_elf(const char *exec_file);
