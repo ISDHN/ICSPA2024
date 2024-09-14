@@ -1,14 +1,14 @@
 #include <elf.h>
 #include <utils.h>
 
-static FILE *elf = NULL;
-static Elf32_Ehdr ehdr;
-static Elf32_Shdr *shdrs = NULL;
-static Elf32_Sym *syms = NULL;
-static char *shstrs = NULL;
-static char *symstrs = NULL;
-static int *func_list = NULL;
-static int func_num = 0;
+FILE *elf = NULL;
+Elf32_Ehdr ehdr;
+Elf32_Shdr *shdrs = NULL;
+Elf32_Sym *syms = NULL;
+char *shstrs = NULL;
+char *symstrs = NULL;
+int *func_list = NULL;
+int func_num = 0;
 
 int readbyte(FILE *fd, void *buf, size_t start, size_t count) {
 	fseek(fd, start, SEEK_SET);

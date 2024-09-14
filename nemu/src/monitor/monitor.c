@@ -23,6 +23,7 @@ void init_mem();
 void init_difftest(char *ref_so_file, long img_size, int port);
 void init_device();
 void init_sdb();
+void init_callstack();
 void init_disasm();
 
 static void welcome() {
@@ -144,6 +145,9 @@ void init_monitor(int argc, char *argv[]) {
 
 	/* Initialize the symbol table. */
 	init_elf(sym_file);
+
+	/* Initialize the call stack. */
+	init_callstack();
 
 	IFDEF(CONFIG_ITRACE, init_disasm());
 

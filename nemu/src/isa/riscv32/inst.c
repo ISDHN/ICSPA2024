@@ -34,6 +34,12 @@ enum {
 	TYPE_N, // none
 };
 
+#ifdef CONFIG_FTRACE
+int cnt = 0;
+int cap = 16;
+int *call_stack = NULL;
+#endif
+
 #define src1R()         \
 	do {                \
 		*src1 = R(rs1); \
@@ -67,12 +73,9 @@ enum {
 
 void log_jal_r(int rd, word_t dst) {
 #ifdef CONFIG_FTRACE
-	static int cnt = 0;
-	static int cap = 16;
-	static int *call_stack = calloc(cap, sizeof(int));
 	if (rd == 0) {
 		int ret_from = pop_int(call_stack, &cnt);
-		Log("%#x:%*s%#x@%s return", cpu.pc, (cnt + 1) * 4, "", ret_from, ftrace_find(ret_from));
+		Log("%#x:%*s%#x@%s return", cpu.pc, (cnt + 1) * 4, "", ret_from, find_func_name(ret_from));
 	} else {
 		if (cnt == cap) {
 			cap *= 2;
@@ -81,7 +84,7 @@ void log_jal_r(int rd, word_t dst) {
 			free(call_stack);
 			call_stack = new;
 		}
-		Log("%#x:%*scall %#x@%s", cpu.pc, cnt * 4, "", dst, ftrace_find(dst));
+		Log("%#x:%*scall %#x@%s", cpu.pc, cnt * 4, "", dst, find_func_name(dst));
 		push_int(call_stack, &cnt, dst);
 	}
 #endif
@@ -194,4 +197,10 @@ static int decode_exec(Decode *s) {
 
 int isa_decode_exec_once(Decode *s) {
 	return decode_exec(s);
+}
+
+void init_callstack() {
+#ifdef CONFIG_FTRACE
+	call_stack = calloc(cap, sizeof(int));
+#endif
 }
