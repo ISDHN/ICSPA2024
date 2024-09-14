@@ -83,5 +83,10 @@ char *strstp(char *str);
 // ----------- elftool -----------
 
 void init_elf(const char *exec_file);
-
 char *find_func_name(vaddr_t inst_addr);
+
+// ------------ stack ------------
+
+void push_int(int *stack, int *len, int val);
+
+int pop_int(int *stack, int *len);

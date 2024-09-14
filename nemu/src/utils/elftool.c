@@ -89,7 +89,7 @@ char *find_func_name(vaddr_t inst_addr) {
 			return &symstrs[syms[func_list[i]].st_name];
 		}
 	}
-	return NULL;
+	return "@???";
 }
 
 void init_elf(const char *exec_file) {
