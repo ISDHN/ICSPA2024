@@ -149,8 +149,9 @@ void init_monitor(int argc, char *argv[]) {
 	/* Initialize the call stack. */
 	init_callstack();
 
-	IFDEF(CONFIG_ITRACE, init_disasm());
-
+#if (defined(CONFIG_ITRACE) || defined(CONFIG_ITRACE_ERROR))
+	init_disasm();
+#endif
 	/* Display welcome message. */
 	welcome();
 }
