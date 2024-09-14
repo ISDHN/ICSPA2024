@@ -75,7 +75,7 @@ void log_jal_r(int rd, word_t dst) {
 #ifdef CONFIG_FTRACE
 	if (rd == 0) {
 		int ret_from = pop_int(call_stack, &cnt);
-		Log("%#x:%*s%#x@%s return", cpu.pc, (cnt + 1) * 4, "", ret_from, find_func_name(ret_from));
+		Log("%#x:%*s%#x@%s return", cpu.pc, 0, "", ret_from, find_func_name(ret_from));
 	} else {
 		if (cnt == cap) {
 			cap *= 2;
@@ -84,7 +84,7 @@ void log_jal_r(int rd, word_t dst) {
 			free(call_stack);
 			call_stack = new;
 		}
-		Log("%#x:%*scall %#x@%s", cpu.pc, cnt * 4, "", dst, find_func_name(dst));
+		Log("%#x:%*scall %#x@%s", cpu.pc, 0, "", dst, find_func_name(dst));
 		push_int(call_stack, &cnt, dst);
 	}
 #endif
