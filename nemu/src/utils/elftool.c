@@ -85,7 +85,7 @@ void read_func() {
 
 char *find_func_name(vaddr_t inst_addr) {
 	for (int i = 0; i < func_num; i++) {
-		if (syms[func_list[i]].st_value <= inst_addr && inst_addr < syms[func_list[i]].st_value + syms[func_list[i]].st_size) {
+		if (syms[func_list[i]].st_value <= inst_addr && inst_addr <= syms[func_list[i]].st_value + syms[func_list[i]].st_size) {
 			return &symstrs[syms[func_list[i]].st_name];
 		}
 	}
