@@ -76,7 +76,6 @@ void log_jal_r(bool is_register, int rd, word_t dst) {
 	if (is_register && rd == 0) {
 		int ret_from = pop_int(call_stack, &cnt);
 		Log("%#x:%*s%#x@%s return", cpu.pc, cnt * CONFIG_FTRANCE_PAD, "", ret_from, find_func_name(ret_from));
-		panic("Test");
 	} else if (!is_register && rd != 0) {
 		if (cnt == cap) {
 			cap *= 2;
