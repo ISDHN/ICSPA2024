@@ -36,6 +36,7 @@ word_t isa_reg_str2val(const char *name, bool *success);
 // exec
 struct Decode;
 int isa_decode_exec_once(struct Decode *s);
+void traceback_display();
 
 // memory
 enum { MMU_DIRECT,

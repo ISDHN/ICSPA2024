@@ -164,6 +164,10 @@ void assert_fail_msg() {
 #ifdef CONFIG_ITRACE_ERROR
 	itrace_error();
 #endif
+
+#ifdef CONFIG_FTRACE
+	traceback_display();
+#endif
 }
 
 /* Simulate how the CPU works. */
