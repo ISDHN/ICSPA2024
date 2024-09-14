@@ -85,7 +85,7 @@ void log_jal_r(bool is_call, bool is_ret, word_t dst) {
 		push_int(call_stack, &cnt, dst);
 	} else if (is_ret) {
 		pop_int(call_stack, &cnt);
-		Log("%#x:%*s%#x@%s return", cpu.pc, cnt * CONFIG_FTRANCE_PAD, "", dst, find_func_name(dst));
+		Log("%#x:%*s%#x@%s return", cpu.pc, cnt * CONFIG_FTRANCE_PAD, "", cpu.pc, find_func_name(cpu.pc));
 	}
 #endif
 }
