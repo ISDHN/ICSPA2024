@@ -84,8 +84,8 @@ void log_jal_r(bool is_call, bool is_ret, word_t dst) {
 		Log("%#x:%*scall %#x@%s", cpu.pc, cnt * CONFIG_FTRANCE_PAD, "", dst, find_func_name(dst));
 		push_int(call_stack, &cnt, dst);
 	} else if (is_ret) {
-		int ret_from = pop_int(call_stack, &cnt);
-		Log("%#x:%*s%#x@%s return", cpu.pc, cnt * CONFIG_FTRANCE_PAD, "", ret_from, find_func_name(ret_from));
+		pop_int(call_stack, &cnt);
+		Log("%#x:%*s%#x@%s return", cpu.pc, cnt * CONFIG_FTRANCE_PAD, "", dst, find_func_name(dst));
 	}
 #endif
 }
