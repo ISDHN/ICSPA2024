@@ -27,7 +27,7 @@ int find_tab(const char *name) {
 int open_elf(const char *elf_file) {
 	if (elf_file == NULL) {
 		Log("No ELF file specified.");
-		return 0;
+		return -1;
 	} else {
 		Log("Loading ELF file %s", elf_file);
 	}
