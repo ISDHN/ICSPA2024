@@ -5,10 +5,8 @@ static FILE *elf = NULL;
 static Elf32_Ehdr ehdr;
 static Elf32_Shdr *shdrs = NULL;
 static Elf32_Sym *syms = NULL;
-static char **shstrs = NULL;
-static char *shstr_buffer = NULL;
-static char **symstrs = NULL;
-static char *symstr_buffer = NULL;
+static char *shstrs = NULL;
+static char *symstrs = NULL;
 
 int readbyte(FILE *fd, void *buf, size_t start, size_t count) {
 	fseek(fd, start, SEEK_SET);
@@ -17,7 +15,7 @@ int readbyte(FILE *fd, void *buf, size_t start, size_t count) {
 
 int find_tab(const char *name) {
 	for (int i = 0; i < ehdr.e_shnum; i++) {
-		if (strcmp(shstrs[shdrs[i].sh_name], name) == 0) {
+		if (strcmp(&shstrs[shdrs[i].sh_name], name) == 0) {
 			return i;
 		}
 	}
@@ -48,7 +46,7 @@ void read_shdrs() {
 	readbyte(elf, shdrs, ehdr.e_shoff, ehdr.e_shnum * ehdr.e_shentsize);
 }
 
-void read_strtab(int tabindex, char **_buffer, char ***_strtab) {
+void read_strtab(int tabindex, char **_buffer) {
 	Elf32_Shdr tab = shdrs[tabindex];
 	if (tab.sh_type != SHT_STRTAB) {
 		panic("The index %d doesn't refer to a valid strtab", tabindex);
@@ -56,20 +54,6 @@ void read_strtab(int tabindex, char **_buffer, char ***_strtab) {
 	}
 	*_buffer = malloc(tab.sh_size);
 	readbyte(elf, *_buffer, tab.sh_offset, tab.sh_size);
-	int strcnt = 0;
-	for (int i = 0; i < tab.sh_size; i++) {
-		if ((*_buffer)[i] == 0) {
-			strcnt++;
-		}
-	}
-	*_strtab = calloc(strcnt, sizeof(char *));
-	(*_strtab)[0] = *_buffer;
-	for (int i = 1, index = 1; i < tab.sh_size; i++) {
-		if ((*_buffer)[i - 1] == 0) {
-			(*_strtab)[index] = &(*_buffer)[i];
-			index++;
-		}
-	}
 }
 
 void read_symtab() {
@@ -93,9 +77,9 @@ void init_elf(const char *exec_file) {
 
 	read_shdrs();
 
-	read_strtab(ehdr.e_shstrndx, &shstr_buffer, &shstrs);
+	read_strtab(ehdr.e_shstrndx, &shstrs);
 
-	read_strtab(find_tab(".strtab"), &symstr_buffer, &symstrs);
+	read_strtab(find_tab(".strtab"), &symstrs);
 
 	read_symtab();
 }
