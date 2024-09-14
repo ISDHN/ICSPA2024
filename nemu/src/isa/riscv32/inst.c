@@ -73,6 +73,7 @@ int *call_stack = NULL;
 
 void log_jal_r(bool is_call, bool is_ret, word_t dst) {
 #ifdef CONFIG_FTRACE
+	// the function which code returns from may not be the one which we calls because of the tail recrusive
 	if (is_call) {
 		if (cnt == cap) {
 			cap *= 2;

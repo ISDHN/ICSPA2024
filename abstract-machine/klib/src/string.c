@@ -5,26 +5,27 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 size_t strlen(const char *s) {
-	for (const char *p = s, *p != 0, p++)
+	const char *p = s;
+	for (; *p != 0; p++)
 		;
-	return p - s
+	return p - s;
 }
 
 char *strcpy(char *dst, const char *src) {
-	size_t index = 0;
-	for (; src[index] != 0; index++) {
+	size_t i = 0;
+	for (; src[i] != 0; i++) {
 		dst[i] = src[i];
 	}
-	dst[index + 1] = 0;
+	dst[i + 1] = 0;
 	return dst;
 }
 
 char *strncpy(char *dst, const char *src, size_t n) {
-	size_t index = 0;
-	for (; index < n && src[index] != 0; index++) {
+	size_t i = 0;
+	for (; i < n && src[i] != 0; i++) {
 		dst[i] = src[i];
 	}
-	for (; index < n; index++) {
+	for (; i < n; i++) {
 		dst[i] = 0;
 	}
 	return dst;
@@ -32,26 +33,27 @@ char *strncpy(char *dst, const char *src, size_t n) {
 
 char *strcat(char *dst, const char *src) {
 	dst += strlen(dst);
-	size_t index = 0;
-	for (; src[index] != 0; index++) {
-		dst[index] = src[index];
+	size_t i = 0;
+	for (; src[i] != 0; i++) {
+		dst[i] = src[i];
 	}
-	dst[index + 1] = 0;
+	dst[i + 1] = 0;
 	return dst;
 }
 
 char *strncat(char *dst, const char *src, size_t n) {
 	dst += strlen(dst);
-	size_t index = 0;
-	for (; i < n && src[index] != 0; i++) {
-		dst[index] = src[i];
+	size_t i = 0;
+	for (; i < n && src[i] != 0; i++) {
+		dst[i] = src[i];
 	}
-	dst[index] = 0;
+	dst[i] = 0;
 	return dst;
 }
 
 int strcmp(const char *s1, const char *s2) {
-	for (size_t i = 0; s1[i] != 0 && s2[i] != 0; i++) {
+	size_t i = 0;
+	for (; s1[i] != 0 && s2[i] != 0; i++) {
 		if (s1[i] != s2[i]) {
 			return s1[i] - s2[i];
 		}
@@ -60,7 +62,8 @@ int strcmp(const char *s1, const char *s2) {
 }
 
 int strncmp(const char *s1, const char *s2, size_t n) {
-	for (size_t i = 0; i < n && s1[i] != 0 && s2[i] != 0; i++) {
+	size_t i = 0;
+	for (; i < n && s1[i] != 0 && s2[i] != 0; i++) {
 		if (s1[i] != s2[i]) {
 			return s1[i] - s2[i];
 		}
