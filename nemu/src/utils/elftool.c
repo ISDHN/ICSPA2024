@@ -49,11 +49,11 @@ void read_shdrs() {
 }
 
 void read_strtab(int tabindex, char **_buffer, char ***_strtab) {
-	if (shdrs[tabindex].sh_type != SHT_STRTAB) {
+	Elf32_Shdr tab = shdrs[tabindex];
+	if (tab.sh_type != SHT_STRTAB) {
 		panic("The index %d doesn't refer to a valid strtab", tabindex);
 		return;
 	}
-	Elf32_Shdr tab = shdrs[tabindex];
 	*_buffer = malloc(tab.sh_size);
 	readbyte(elf, *_buffer, tab.sh_offset, tab.sh_size);
 	int strcnt = 0;
