@@ -71,12 +71,9 @@ int *call_stack = NULL;
 		*imm = (SEXT(BITS(i, 31, 31), 1) << 12) | (BITS(i, 7, 7)) << 11 | (BITS(i, 30, 25) << 5) | (BITS(i, 11, 8) << 1); \
 	} while (0)
 
-void log_jal_r(bool is_register, int rd, word_t dst) {
+void log_jal_r(bool is_call, bool is_ret, word_t dst) {
 #ifdef CONFIG_FTRACE
-	if (is_register && rd == 0) {
-		int ret_from = pop_int(call_stack, &cnt);
-		Log("%#x:%*s%#x@%s return", cpu.pc, cnt * CONFIG_FTRANCE_PAD, "", ret_from, find_func_name(ret_from));
-	} else if (!is_register && rd != 0) {
+	if (is_call) {
 		if (cnt == cap) {
 			cap *= 2;
 			int *new = calloc(cap, sizeof(int));
@@ -86,6 +83,9 @@ void log_jal_r(bool is_register, int rd, word_t dst) {
 		}
 		Log("%#x:%*scall %#x@%s", cpu.pc, cnt * CONFIG_FTRANCE_PAD, "", dst, find_func_name(dst));
 		push_int(call_stack, &cnt, dst);
+	} else if (is_ret) {
+		int ret_from = pop_int(call_stack, &cnt);
+		Log("%#x:%*s%#x@%s return", cpu.pc, cnt * CONFIG_FTRANCE_PAD, "", ret_from, find_func_name(ret_from));
 	}
 #endif
 }
@@ -177,8 +177,12 @@ static int decode_exec(Decode *s) {
 	INSTPAT("0000001 ????? ????? 110 ????? 011 0011", rem, R, R(rd) = (int32_t)src1 % (int32_t)src2);
 	INSTPAT("0000001 ????? ????? 111 ????? 011 0011", remu, R, R(rd) = src1 % src2);
 	// RV32I jmp
-	INSTPAT("??????? ????? ????? ??? ????? 110 1111", jal, J, R(rd) = s->snpc; int dst = s->pc + (imm << 1); s->dnpc = dst; log_jal_r(false, rd, dst));
-	INSTPAT("??????? ????? ????? 000 ????? 110 0111", jalr, I, R(rd) = s->snpc; int dst = (src1 + imm) & ~1; s->dnpc = dst; log_jal_r(true, rd, dst));
+
+	// a function call must have return address in rd
+	// a ret shouldnt have offset
+	// a jal cant be a ret
+	INSTPAT("??????? ????? ????? ??? ????? 110 1111", jal, J, R(rd) = s->snpc; int dst = s->pc + (imm << 1); s->dnpc = dst; log_jal_r(rd != 0, false, dst));
+	INSTPAT("??????? ????? ????? 000 ????? 110 0111", jalr, I, R(rd) = s->snpc; int dst = (src1 + imm) & ~1; s->dnpc = dst; log_jal_r(rd != 0, imm == 0, dst));
 	// RV32I branch
 	INSTPAT("??????? ????? ????? 000 ????? 110 0011", beq, B, if (src1 == src2) s->dnpc = s->pc + imm);
 	INSTPAT("??????? ????? ????? 001 ????? 110 0011", bne, B, if (src1 != src2) s->dnpc = s->pc + imm);
