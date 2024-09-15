@@ -84,6 +84,7 @@ static int parse_args(int argc, char *argv[]) {
 		switch (o) {
 			case 'b':
 				sdb_set_batch_mode();
+				Log("Batch mode is set");
 				break;
 			case 'p':
 				sscanf(optarg, "%d", &difftest_port);
