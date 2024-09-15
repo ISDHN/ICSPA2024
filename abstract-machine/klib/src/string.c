@@ -32,22 +32,17 @@ char *strncpy(char *dst, const char *src, size_t n) {
 }
 
 char *strcat(char *dst, const char *src) {
-	dst += strlen(dst);
-	size_t i = 0;
-	for (; src[i] != 0; i++) {
-		dst[i] = src[i];
-	}
-	dst[i + 1] = 0;
+	strcpy(dst + strlen(dst), src);
 	return dst;
 }
 
 char *strncat(char *dst, const char *src, size_t n) {
-	dst += strlen(dst);
+	char *pos = dst + strlen(dst);
 	size_t i = 0;
 	for (; i < n && src[i] != 0; i++) {
-		dst[i] = src[i];
+		pos[i] = src[i];
 	}
-	dst[i] = 0;
+	pos[i] = 0;
 	return dst;
 }
 
