@@ -17,6 +17,7 @@
 
 extern void set_input(const char *str);
 extern int yyparse(word_t *result);
+
 // static rule rules[] = {
 
 // 	/* TODO: Add more rules.
