@@ -35,6 +35,9 @@ static uint32_t pos_l = 0, pos_r = 0;
 
 void callback(void *userdata, uint8_t *stream, int len) {
 	memset(stream, 0, len);
+	if (pos_r - pos_l < audio_base[reg_samples]) {
+		return;
+	}
 	if (audio_base[reg_init] == 1) {
 		int count = pos_r - pos_l;
 		if (count > len) {
