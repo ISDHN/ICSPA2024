@@ -57,6 +57,7 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
 			spec.samples = audio_base[reg_samples];
 			spec.callback = callback;
 			spec.userdata = NULL;
+			SDL_InitSubSystem(SDL_INIT_AUDIO);
 			SDL_OpenAudio(&spec, NULL);
 			SDL_PauseAudio(0);
 		}
@@ -87,5 +88,4 @@ void init_audio() {
 	sbuf = (uint8_t *)new_space(CONFIG_SB_SIZE);
 	temp_buf = (uint8_t *)new_space(TEMP_BUF_SIZE);
 	add_mmio_map("audio-sbuf", CONFIG_SB_ADDR, temp_buf, TEMP_BUF_SIZE, audio_buffer_handle);
-	SDL_InitSubSystem(SDL_INIT_AUDIO);
 }
