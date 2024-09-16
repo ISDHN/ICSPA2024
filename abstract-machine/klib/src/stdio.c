@@ -62,6 +62,11 @@ int __printf(bool to_string, char *out, uint32_t length, const char *fmt, va_lis
 				}
 				break;
 			}
+			case 'c': {
+				char c = va_arg(ap, int);
+				PUTC(c);
+				break;
+			}
 			default: {
 				break;
 			}
