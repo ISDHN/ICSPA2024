@@ -34,6 +34,6 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
 	while (buffer_size - inl(AUDIO_COUNT_ADDR) < ctl->buf.end - ctl->buf.start)
 		;
 	for (uint8_t *i = ctl->buf.start; i < (uint8_t *)(ctl->buf.end); i++) {
-		outb(AUDIO_SBUF_SIZE_ADDR, *i);
+		outb(AUDIO_SBUF_ADDR, *i);
 	}
 }
