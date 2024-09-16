@@ -6,7 +6,7 @@
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 	uint32_t data = inl(VGACTL_ADDR);
 	*cfg = (AM_GPU_CONFIG_T){
-		.present = true, .has_accel = false, .width = data >> 16, .height = data | 0x0000ffff, .vmemsz = 0};
+		.present = true, .has_accel = false, .width = data >> 16, .height = data & 0x0000ffff, .vmemsz = 0};
 }
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
