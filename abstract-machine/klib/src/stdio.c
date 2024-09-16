@@ -13,20 +13,20 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 int __printf(bool to_string, char *out, uint32_t length, const char *fmt, va_list ap) {
-	int cnt = 0;
 	if (length == 0) {
 		return 0;
 	}
-#define PUTC(ch)             \
-	if (cnt == length - 1) { \
-		*out = 0;            \
-		return cnt;          \
-	}                        \
-	if (to_string) {         \
-		SPUTCHAR(ch);        \
-	} else {                 \
-		PUTCHAR(ch);         \
-	}                        \
+	int cnt = 0;
+#define PUTC(ch)                 \
+	if (to_string) {             \
+		if (cnt == length - 1) { \
+			*out = 0;            \
+			return cnt;          \
+		}                        \
+		SPUTCHAR(ch);            \
+	} else {                     \
+		PUTCHAR(ch);             \
+	}                            \
 	cnt++;
 
 	for (const char *p = fmt; *p != 0; p++) {
@@ -42,10 +42,17 @@ int __printf(bool to_string, char *out, uint32_t length, const char *fmt, va_lis
 					PUTC('-');
 					x = -x;
 				}
+				char buf[12];
+				int i = 0;
 				do {
-					PUTC('0' + x % 10);
+					buf[i] = x % 10 + '0';
+					i++;
 					x /= 10;
 				} while (x);
+				while (i) {
+					i--;
+					PUTC(buf[i]);
+				}
 				break;
 			}
 			case 's': {
@@ -60,7 +67,9 @@ int __printf(bool to_string, char *out, uint32_t length, const char *fmt, va_lis
 			}
 		}
 	}
-	*out = 0;
+	if (to_string) {
+		*out = 0;
+	}
 	return cnt;
 }
 
@@ -79,7 +88,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 int sprintf(char *out, const char *fmt, ...) {
 	va_list ap;
 	va_start(ap, fmt);
-	int cnt = __printf(true, out, -1, fmt, ap);
+	int cnt = vsprintf(out, fmt, ap);
 	va_end(ap);
 	return cnt;
 }
