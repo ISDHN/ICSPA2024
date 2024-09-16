@@ -57,7 +57,7 @@ int __printf(bool to_string, char *out, uint32_t length, const char *fmt, va_lis
 			}
 			case 's': {
 				const char *s = va_arg(ap, const char *);
-				for (; *s != 0; s++) {
+				for (; *s != 0;) {
 					// PUTC(*s);
 				}
 				break;
