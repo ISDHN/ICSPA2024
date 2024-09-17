@@ -35,8 +35,8 @@ static uint32_t pos_l = 0, pos_r = 0;
 
 static void callback(void *userdata, uint8_t *stream, int len) {
 	memset(stream, 0, len);
-	while (pos_r - pos_l < 1024)
-		;
+	// while (pos_r - pos_l < 1024)
+	// 	;
 	int count = pos_r - pos_l;
 	if (count > len) {
 		count = len;
