@@ -47,9 +47,30 @@ $"取指" ->"解析操作码 "->"解析操作数" ->"执行与写入" ->"更新P
 
 - volatile
   - n = (size_after - size_before) / sizeof(int) = (59120 - 57536)/4 = 396
+  - n = (size_after_2 - size_before) / sizeof(int) = (59120 - 57536)/4 = 396
+    - 原因: common.h 和 debug.h相互引用, common.h中的dummy被视为debug.h中的dummy, 或者相反 (隐式的加了extern?)
+  - error: redefinition of ‘dummy’. 赋初值后两处的dummy被视为在两个头中分别定义的变量 (extern变量不能赋初值)
 
 = 了解Makefile
-
+\
+ - 设置 NAME = hello
+ - 设置 SRCS = hello.c
+ - 包含 \$(AM_HOME)/Makefile 并解析
+   - 运行前面的一堆检查
+   - 抽取ISA和平台
+   - 设置 IMAGE
+   - 把每个SRCS拼接成.o文件的路径, 保存到OBJS
+   - 把LIBS加上am和klilb, 去掉重复元素
+   - 设置LINKAGE 为OBJS和\$(AM_HOME)/每个LIBS名字/build/这个LIBS名字-架构.a
+   - 设置INC_PATH 为\$(AM_HOME)/每个LIBS名字/include和当前工作目录下的include
+   - 设置INCFLAGS 为 -I每个INC_PATH, 后面在编译的时候指示去哪找头文件
+   - 调用第一条伪命令 image 而调用 image-dep 而编译\$(LIBS) 和 \$(IMAGE).elf
+   - 编译\$(LIBS)时以archive调用自身脚本, 不包含hello和hello.c
+     - 编译 \$(OBJS)
+       - 用gcc编译每个.c文件, 生成.o文件
+     - 用ar打包成.a文件
+   - 编译 \(IMAGE).elf, 其依赖\$INKAGE, 从而编译其中.o对应的.c
+     - 把.o 和 .a 链接成可执行文件
 
 #line(length: 100%)
 
@@ -57,19 +78,32 @@ $"取指" ->"解析操作码 "->"解析操作数" ->"执行与写入" ->"更新P
   *新发现*
 ])
 
-- 原来strdup是Linux特供, gnuc真神奇
-- %prec以修改终结符的优先级
-- yyparse不能改返回值类型, 还是传出参吧
-- %parse-param不止给yyparse传参, 还给yyerror传参
+- gnuc特供语句表达式
+- 字面量默认进行ZEXT, 在计算mulh时要手动进行SEXT
+- a function call must have return address in rd
+- a ret shouldnt have offset
+- a jal cant be a ret
+- strncat必然末尾补1个0和strncpy只是不够补足0
+- 变长参数会用了
+- make时指定NEMUFLAGS给nemu传参
+- 原来队列这么实现
 
 #line(length: 100%)
 
 #align(center, text(17pt)[
-  *问题*
+  *问题* 未解明
 ])
+\
+- 手册的2.0前言说jal改成了U类型, 但是编译器生成的还是J类型
+- difftest中reg真的有要求寄存器以特定顺序排列吗?
+- TIMER真的有坑吗? 我看了三遍也没发现而且运行均正常
 
-- 为什么watchpoint提供的框架搓了一个数组加链表的东西, 为什么不直接用数组?
-  - 数组: 访问O(1), 删除O(1), 插入看删除的情况, 而且规模也就64甚至32
+#align(center, text(17pt)[
+  *问题* 已解明
+])
+\
+- elf文件的组织格式就是elf.h中的结构体的格式, 嗯读发现没出逝确定的
+- sdl和nemu的读写是异步多线程的, 读到的count不一定对, 在am和nemu里都加上队列容量等待以缓解buffer overflow
 
 #line(length: 100%)
 
@@ -77,12 +111,16 @@ $"取指" ->"解析操作码 "->"解析操作数" ->"执行与写入" ->"更新P
   *思考题*
 ])
 
-- 可以没有寄存器吧, 划分一块内存来用, 可能会慢(?)
-- 从main, 对....对吧? 对吗? 哦对的对的对的.
-- 字符串连接和替换, 但是yzh的宏魔法还是太神奇了
-- kiss, 功能分割, 看起来更清晰
-- 不是命令行? 不是命令行? 不是命令行?
-- 回绕, -1即最大的uint; 不是ub啊, 回绕是明确定义的
-- 模拟器是承载, 调试器是附加
+- 立即数编码: 先加载到高位在加载低位 or 先加载到寄存器然后寄存器和立即数相加
+- 伪指令是指令的特殊变量限定形式
+- AM更类似于驱动 (?
+- 符号是固定且常用的内存空间的表示, 方便寻址. 宏就是文本替换, 局部变量不会大范围访问且不固定没必要成符号
+- 尾函数调用优化
+- 符号是给编译器看的, 运行时直接看地址和偏移
+- 提供klib中对应函数的定义, 使编译器不会默认去找stdlib
+- 如果当前的状态在以前出现过就是死循环
+- 从reg中读到旧的值而非内存中最新的值
+- \#define \_GNU_SOURCE
+- 读到down但没有读到up说明key还在按着
 
 #line(length: 100%)
