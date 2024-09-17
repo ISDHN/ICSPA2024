@@ -25,7 +25,7 @@ LD := $(CXX)
 LEX := flex
 YACC := bison
 INCLUDES = $(addprefix -I, $(INC_PATH))
-CFLAGS  := -O2 -MMD -Wall -Werror $(INCLUDES) $(CFLAGS)
+CFLAGS  := -O2 -MMD  -Werror $(INCLUDES) $(CFLAGS)
 LDFLAGS := -O2 -flto $(LDFLAGS)
 
 LEX_C = $(LEXES:%.l=%.yy.c)
