@@ -35,13 +35,14 @@ $"取指" ->"解析操作码 "->"解析操作数" ->"执行与写入" ->"更新P
   - NEMU: 按键通过SDL读取key并放入key_queue, 收到读取请求时从key_queue中取出放入对应MMIO地址; 根据vmem进行绘制
 
 = 编译与链接
-  
-
-= 了解Makefile
 \
 - static&inline
+ - 去掉static: 会导致链接时找不到符号
 
-- volatile
+- volatile  
+
+= 了解Makefile
+
 
 #line(length: 100%)
 
