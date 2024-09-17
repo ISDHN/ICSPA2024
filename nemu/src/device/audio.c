@@ -33,9 +33,13 @@ static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
 static uint32_t pos_l = 0, pos_r = 0;
 
+static inline int get_count() {
+	return pos_r >= pos_l ? pos_r - pos_l : pos_r + CONFIG_SB_SIZE - pos_l;
+}
+
 static void callback(void *userdata, uint8_t *stream, int len) {
 	memset(stream, 0, len);
-	int count = pos_r - pos_l;
+	int count = get_count();
 	if (count > len) {
 		count = len;
 	}
@@ -60,7 +64,7 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
 			SDL_PauseAudio(0);
 		}
 	} else {
-		audio_base[reg_count] = pos_r >= pos_l ? pos_r - pos_l : pos_r + CONFIG_SB_SIZE - pos_l;
+		audio_base[reg_count] = get_count();
 	}
 }
 
