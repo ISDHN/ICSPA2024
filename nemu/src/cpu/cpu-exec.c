@@ -16,6 +16,7 @@
 #include <cpu/cpu.h>
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
+#include <cpu/ifetch.h>
 #include <locale.h>
 #include <monitor.h>
 
@@ -29,7 +30,41 @@
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
-static bool g_print_step = false;
+static bool g_print_step = true;
+#ifdef CONFIG_ITRACE_ERROR
+
+typedef struct __itrace_node {
+	char inst[DISASM_BUF_SIZE];
+	struct __itrace_node *next;
+} itrace_node;
+
+static struct {
+	itrace_node *first;
+	int count;
+	itrace_node *last;
+} g_itrace_ringbuf;
+
+void push_inst(char *inst) {
+	itrace_node *node = malloc(sizeof(itrace_node));
+	strncpy(node->inst, inst, DISASM_BUF_SIZE);
+	node->next = NULL;
+	if (g_itrace_ringbuf.count == CONFIG_ITRACE_ERROR_LEN) {
+		itrace_node *tmp = g_itrace_ringbuf.first;
+		g_itrace_ringbuf.first = tmp->next;
+		free(tmp);
+		g_itrace_ringbuf.count--;
+	}
+	if (g_itrace_ringbuf.count == 0) {
+		g_itrace_ringbuf.first = node;
+		g_itrace_ringbuf.last = node;
+	} else {
+		g_itrace_ringbuf.last->next = node;
+		g_itrace_ringbuf.last = node;
+	}
+	g_itrace_ringbuf.count++;
+}
+
+#endif
 
 void device_update();
 
@@ -53,9 +88,8 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 static void exec_once(Decode *s, vaddr_t pc) {
 	s->pc = pc;
 	s->snpc = pc;
-	isa_exec_once(s);
-	cpu.pc = s->dnpc;
-#ifdef CONFIG_ITRACE
+	s->isa.inst.val = inst_fetch(&s->snpc, 4);
+#if (defined CONFIG_ITRACE) || (defined CONFIG_ITRACE_ERROR)
 	char *p = s->logbuf;
 	p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
 	int ilen = s->snpc - s->pc;
@@ -75,7 +109,14 @@ static void exec_once(Decode *s, vaddr_t pc) {
 	void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 	disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
 				MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
+
+#ifdef CONFIG_ITRACE_ERROR
+	push_inst(s->logbuf);
 #endif
+
+#endif
+	isa_decode_exec_once(s);
+	cpu.pc = s->dnpc;
 }
 
 static void execute(uint64_t n) {
@@ -89,6 +130,22 @@ static void execute(uint64_t n) {
 		IFDEF(CONFIG_DEVICE, device_update());
 	}
 }
+
+#ifdef CONFIG_ITRACE_ERROR
+void itrace_error() {
+	if (g_itrace_ringbuf.count == 0) {
+		return;
+	}
+	for (itrace_node *node = g_itrace_ringbuf.first;;) {
+		if (node->next == NULL) {
+			ColorfulLog(ANSI_BG_RED, "%s", node->inst);
+			break;
+		}
+		Log("%s", node->inst);
+		node = node->next;
+	}
+}
+#endif
 
 static void statistic() {
 	IFNDEF(CONFIG_TARGET_AM, setlocale(LC_NUMERIC, ""));
@@ -104,11 +161,18 @@ static void statistic() {
 void assert_fail_msg() {
 	isa_reg_display();
 	statistic();
+#ifdef CONFIG_ITRACE_ERROR
+	itrace_error();
+#endif
+
+#ifdef CONFIG_FTRACE
+	traceback_display();
+#endif
 }
 
 /* Simulate how the CPU works. */
 void cpu_exec(uint64_t n) {
-	g_print_step = (n < MAX_INST_TO_PRINT);
+	// g_print_step = (n < MAX_INST_TO_PRINT);
 	switch (nemu_state.state) {
 		case NEMU_END:
 		case NEMU_ABORT:

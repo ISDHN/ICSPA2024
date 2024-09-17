@@ -17,10 +17,10 @@
 
 extern void set_input(const char *str);
 extern int yyparse(word_t *result);
+
 // static rule rules[] = {
 
 // 	/* TODO: Add more rules.
-// 	 * Pay attention to the precedence level of different rules.
 // 	 */
 
 // 	{" +", TK_NOTYPE}, // spaces
