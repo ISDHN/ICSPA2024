@@ -62,7 +62,7 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
 			SDL_PauseAudio(0);
 		}
 	} else {
-		audio_base[reg_count] = pos_r > pos_l ? pos_r - pos_l : pos_r + CONFIG_SB_SIZE - pos_l;
+		audio_base[reg_count] = pos_r >= pos_l ? pos_r - pos_l : pos_r + CONFIG_SB_SIZE - pos_l;
 	}
 }
 
