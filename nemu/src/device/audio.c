@@ -73,8 +73,9 @@ static void audio_buffer_handle(uint32_t offset, int len, bool is_write) {
 	assert(offset == 0);
 	if (is_write) {
 		sbuf[pos_r] = temp_buf[0];
-		while (CONFIG_SB_SIZE - get_count() <= 0)
-			;
+		while (CONFIG_SB_SIZE - get_count() <= 256) {
+			Log("audio buffer near overflow");
+		}
 		pos_r = (pos_r + 1) % CONFIG_SB_SIZE;
 		temp_buf[0] = 0;
 	}
