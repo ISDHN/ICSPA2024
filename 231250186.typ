@@ -38,7 +38,7 @@ $"取指" ->"解析操作码 "->"解析操作数" ->"执行与写入" ->"更新P
 \
 - static&inline
  - 去掉static: 没有任何影响 ???
- - 去掉inline: error: ‘inst_fetch’ defined but not used
+ - 去掉inline: error: ‘inst_fetch’ defined but not used, 关掉Wall没有任何影响 ???
 
 - volatile  
 
