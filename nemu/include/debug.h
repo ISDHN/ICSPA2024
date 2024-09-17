@@ -27,6 +27,9 @@
 #define Log(format, ...) \
 	ColorfulLog(ANSI_FG_CYAN, format, ##__VA_ARGS__)
 
+#define Warning(format, ...) \
+	ColorfulLog(ANSI_FG_YELLOW, format, ##__VA_ARGS__)
+
 #define Assert(cond, format, ...)                                                                                   \
 	do {                                                                                                            \
 		if (!(cond)) {                                                                                              \

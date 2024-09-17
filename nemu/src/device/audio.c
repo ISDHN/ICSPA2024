@@ -38,7 +38,6 @@ static inline int get_count() {
 }
 
 static void callback(void *userdata, uint8_t *stream, int len) {
-	memset(stream, 0, len);
 	int count = get_count();
 	if (count > len) {
 		count = len;
@@ -47,6 +46,7 @@ static void callback(void *userdata, uint8_t *stream, int len) {
 		stream[i] = sbuf[pos_l];
 		pos_l = (pos_l + 1) % CONFIG_SB_SIZE;
 	}
+	memset(stream + count, 0, len - count);
 }
 
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
@@ -74,7 +74,7 @@ static void audio_buffer_handle(uint32_t offset, int len, bool is_write) {
 	if (is_write) {
 		sbuf[pos_r] = temp_buf[0];
 		while (CONFIG_SB_SIZE - get_count() <= 256) {
-			Log("audio buffer near overflow");
+			Warning("audio buffer near overflow");
 		}
 		pos_r = (pos_r + 1) % CONFIG_SB_SIZE;
 		temp_buf[0] = 0;
