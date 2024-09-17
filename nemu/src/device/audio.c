@@ -62,7 +62,7 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
 			SDL_PauseAudio(0);
 		}
 	} else {
-		audio_base[reg_count] = pos_r - pos_l;
+		audio_base[reg_count] = pos_r > pos_l ? pos_r - pos_l : pos_r + CONFIG_SB_SIZE - pos_l;
 	}
 }
 
@@ -72,6 +72,7 @@ static void audio_buffer_handle(uint32_t offset, int len, bool is_write) {
 	if (is_write) {
 		sbuf[pos_r] = temp_buf[0];
 		pos_r = (pos_r + 1) % CONFIG_SB_SIZE;
+		Assert(pos_r == pos_l, "audio buffer overflow!");
 		temp_buf[0] = 0;
 	}
 }
