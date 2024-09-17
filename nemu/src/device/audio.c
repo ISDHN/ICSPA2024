@@ -73,7 +73,7 @@ static void audio_buffer_handle(uint32_t offset, int len, bool is_write) {
 	assert(offset == 0);
 	if (is_write) {
 		sbuf[pos_r] = temp_buf[0];
-		while (get_count() >= CONFIG_SB_SIZE)
+		while (CONFIG_SB_SIZE - get_count() < 1024)
 			;
 		pos_r = (pos_r + 1) % CONFIG_SB_SIZE;
 		temp_buf[0] = 0;
