@@ -107,6 +107,10 @@ config SB_SIZE
   hex "Size of the audio stream buffer"
   default 0x10000
 
+config WARN_OVERFLOW
+  bool "Warn when audio buffer near overflows"
+  default n
+
 config AUDIO_CTL_PORT
   depends on HAS_PORT_IO
   hex "Port address of the audio controller"
