@@ -3,7 +3,7 @@ obj := build
 SRCS += confdata.c expr.c preprocess.c symbol.c util.c
 SRCS += $(obj)/lexer.lex.c $(obj)/parser.tab.c
 CC = gcc
-CFLAGS += -DYYDEBUG
+CFLAGS += -DYYDEBUG -O2 -flto=auto
 INC_PATH += .
 DISTRO = $(shell cat /etc/os-release | grep PRETTY_NAME | sed 's/PRETTY_NAME=//')
 
