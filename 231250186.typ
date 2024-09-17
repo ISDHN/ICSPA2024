@@ -37,8 +37,13 @@ $"取指" ->"解析操作码 "->"解析操作数" ->"执行与写入" ->"更新P
 = 编译与链接
 \
 - static&inline
- - 去掉static: 没有任何影响 ???
- - 去掉inline: error: ‘inst_fetch’ defined but not used, 关掉Wall没有任何影响 ???
+  - 去掉static: 没有任何影响 ???
+  - 去掉inline: error: ‘inst_fetch’ defined but not used, 关掉Wall没有任何影响 ???
+  - 全去掉:  multiple definition of 'inst_fetch'
+  - 我的解释:
+    - 有 inline 的函数会被编译器在调用处展开, 不存在符号表中, 所以不会有重复定义
+    - static 函数只在当前文件中可见, 但是链接的时候连了过去, 所以也不会有重复定义, 且能正常调用
+  - 证明: 查符号表
 
 - volatile  
 
