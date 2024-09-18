@@ -55,7 +55,7 @@ enum csr_kind_cst {
 	mro = 15
 };
 
-#define CSR(imm) cpu.csr[imm >> 8][imm | 0xff]
+#define CSR(imm) cpu.csr[imm >> 8][imm & 0xff]
 
 #define isa_mmu_check(vaddr, len, type) (MMU_DIRECT)
 
