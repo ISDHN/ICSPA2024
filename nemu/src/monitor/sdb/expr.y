@@ -37,7 +37,12 @@ number : T_NUM {
         }
         | T_REG { 
             bool success = false;
-            $$ = isa_reg_str2val($1, &success);
+            if(strcmp($1,"pc") == 0) {
+                $$ = cpu.pc;
+                success = true;
+            }else{
+                $$ = isa_reg_str2val($1, &success);
+            }
             if (!success) {
                 yyerror(result, "Invalid register name");
                 YYABORT;

@@ -21,7 +21,6 @@ extern int yyparse(word_t *result);
 // static rule rules[] = {
 
 // 	/* TODO: Add more rules.
-// 	 */
 
 // 	{" +", TK_NOTYPE}, // spaces
 // 	{"\\+", '+'},	   // plus
