@@ -177,11 +177,16 @@ config MTRACE_COND
 config DTRACE
     depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
     bool "Enable device tracer"
-    default y
+    default n
 
 config FTRACE
     depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
     bool "Enable function calling tracer"
+    default y
+
+config ETRACE
+    depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
+    bool "Enable exception tracer"
     default y
 
 config FTRANCE_PAD
