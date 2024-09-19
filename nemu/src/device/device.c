@@ -86,11 +86,11 @@ void init_device() {
 	init_map();
 
 	struct sigevent sev;
-	// init sigevent
+
+	memset(&sev, 0, sizeof(sev));
 	sev.sigev_notify = SIGEV_THREAD;
 	sev.sigev_notify_function = alarm_handle;
 	sev.sigev_value.sival_ptr = &timer;
-	memset(&sev, 0, sizeof(sev));
 	timer_create(CLOCK_REALTIME, &sev, &timer);
 
 	struct itimerspec its;
