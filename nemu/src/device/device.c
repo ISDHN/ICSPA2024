@@ -16,6 +16,8 @@
 #include <common.h>
 #include <utils.h>
 #include <device/alarm.h>
+#include <time.h>
+#include <signal.h>
 #ifndef CONFIG_TARGET_AM
 #include <SDL2/SDL.h>
 #endif
@@ -33,14 +35,18 @@ void init_alarm();
 void send_key(uint8_t, bool);
 void vga_update_screen();
 
+bool need_update = false;
+timer_t timer;
+
+void alarm_handle(sigval_t val) {
+	need_update = true;
+}
+
 void device_update() {
-	static uint64_t last = 0;
-	uint64_t now = get_time();
-	if (now - last < 1000000 / TIMER_HZ) {
+	if (!need_update) {
 		return;
 	}
-	last = now;
-
+	need_update = false;
 	IFDEF(CONFIG_HAS_VGA, vga_update_screen());
 
 #ifndef CONFIG_TARGET_AM
@@ -78,6 +84,21 @@ void sdl_clear_event_queue() {
 void init_device() {
 	IFDEF(CONFIG_TARGET_AM, ioe_init());
 	init_map();
+
+	struct sigevent sev;
+	// init sigevent
+	sev.sigev_notify = SIGEV_THREAD;
+	sev.sigev_notify_function = alarm_handle;
+	sev.sigev_value.sival_ptr = &timer;
+	memset(&sev, 0, sizeof(sev));
+	timer_create(CLOCK_REALTIME, &sev, &timer);
+
+	struct itimerspec its;
+	its.it_interval.tv_sec = 0;
+	its.it_interval.tv_nsec = 1000000000 / TIMER_HZ;
+	its.it_value.tv_sec = 0;
+	its.it_value.tv_nsec = 1000000000 / TIMER_HZ;
+	timer_settime(timer, 0, &its, NULL);
 
 	IFDEF(CONFIG_HAS_SERIAL, init_serial());
 	IFDEF(CONFIG_HAS_TIMER, init_timer());
