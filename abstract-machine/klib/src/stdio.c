@@ -36,18 +36,27 @@ int __printf(bool to_string, char *out, uint32_t length, const char *fmt, va_lis
 		}
 		p++;
 		switch (*p) {
+			case 'x':
+			case 'u':
 			case 'd': {
-				int x = va_arg(ap, int);
-				if (x < 0) {
-					PUTC('-');
-					x = -x;
+				bool hex = *p == 'x';
+				bool sign = *p == 'd';
+				unsigned int x = va_arg(ap, unsigned int);
+				if (sign) {
+					int signval = x;
+					if (signval < 0) {
+						PUTC('-');
+						x = -signval;
+					}
 				}
+				int base = hex ? 16 : 10;
 				char buf[12];
 				int i = 0;
 				do {
-					buf[i] = x % 10 + '0';
+					int bit = x % base;
+					buf[i] = bit < 10 ? '0' + bit : 'a' + bit - 10;
 					i++;
-					x /= 10;
+					x /= base;
 				} while (x);
 				while (i) {
 					i--;
