@@ -21,10 +21,10 @@
 #include <memory/vaddr.h>
 #include <monitor.h>
 
-#define NEED_ARGS                   \
-	if (args == NULL) {             \
-		printf("No index given\n"); \
-		return 0;                   \
+#define NEED_ARGS                      \
+	if (args == NULL) {                \
+		printf("No argument given\n"); \
+		return 0;                      \
 	}
 
 #endif
