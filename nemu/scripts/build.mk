@@ -1,4 +1,4 @@
-SHELL := $(NEMU_HOME)/time_report.sh
+# SHELL := $(NEMU_HOME)/time_report.sh
 
 .DEFAULT_GOAL = app
 
