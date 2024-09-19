@@ -3,14 +3,13 @@
 
 /* Uncomment these macros to enable corresponding functionality. */
 #define HAS_CTE
-
 // #define HAS_VME
 // #define MULTIPROGRAM
 // #define TIME_SHARING
 
 #include <am.h>
-#include <debug.h>
 #include <klib-macros.h>
 #include <klib.h>
+#include <debug.h>
 
 #endif
