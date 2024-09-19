@@ -33,9 +33,8 @@ int atoi(const char *nptr) {
 	return x;
 }
 
-void *current = NULL;
-
 void *malloc(size_t size) {
+	static void *current = NULL;
 	if (current == NULL) {
 		current = heap.start;
 	}
