@@ -1,3 +1,5 @@
+SHELL := $(NEMU_HOME)/time_report.sh
+
 .DEFAULT_GOAL = app
 
 # Add necessary options if the target is a shared library
