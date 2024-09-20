@@ -18,7 +18,7 @@
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 	cpu.csr[mrw][mepc] = epc;
 #ifdef CONFIG_ETRACE
-	Log("Interrupt: NO = %d, epc = %#x", NO, epc);
+	Log("Interrupt: NO = %d, epc = %#x, mcause = %#x", NO, epc, cpu.csr[mrw][mcause]);
 	Log("Go to interrupt handler: %#x", cpu.csr[mrw][mtvec]);
 #endif
 	return cpu.csr[mrw][mtvec];
