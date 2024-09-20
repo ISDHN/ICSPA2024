@@ -21,6 +21,7 @@
 #include <utils.h>
 
 #define R(i) gpr(i)
+#define GPR1 gpr(17) // a7
 #define Mr vaddr_read
 #define Mw vaddr_write
 
@@ -201,7 +202,7 @@ static int decode_exec(Decode *s) {
 	INSTPAT("??????? ????? ????? 101 ????? 000 0011", lhu, I, R(rd) = Mr(src1 + imm, 2));
 	INSTPAT("??????? ????? ????? 010 ????? 000 0011", lw, I, R(rd) = Mr(src1 + imm, 4));
 	// Trap and Exception
-	INSTPAT("0000000 00000 00000 000 00000 111 0011", ecall, N, s->dnpc = isa_raise_intr(0, s->pc));
+	INSTPAT("0000000 00000 00000 000 00000 111 0011", ecall, N, s->dnpc = isa_raise_intr(GPR1, s->pc));
 	INSTPAT("0000000 00001 00000 000 00000 111 0011", ebreak, N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
 	INSTPAT("??????? ????? ????? 001 ????? 111 0011", csrrw, I, if (rd != 0) R(rd) = CSR(imm); CSR(imm) = src1);
 	INSTPAT("??????? ????? ????? 010 ????? 111 0011", csrrs, I, R(rd) = CSR(imm); if (src1 != 0) CSR(imm) |= src1);
