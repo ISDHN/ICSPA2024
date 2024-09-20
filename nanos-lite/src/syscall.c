@@ -38,6 +38,6 @@ void do_syscall(Context *c) {
 			panic("Unhandled syscall ID = %d", a[0]);
 	}
 #ifdef STRACE
-	Log("%s(%d, %d, %d, %d) = %d", syscall_name[a[0]], a[0], a[1], a[2], a[3], c->GPRx);
+	Log("%s(%d, %d, %d) = %d", syscall_name[a[0]], a[1], a[2], a[3], c->GPRx);
 #endif
 }
