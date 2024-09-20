@@ -38,8 +38,9 @@ int __printf(bool to_string, char *out, uint32_t length, const char *fmt, va_lis
 		switch (*p) {
 			case 'x':
 			case 'u':
+			case 'p':
 			case 'd': {
-				bool hex = *p == 'x';
+				bool hex = *p == 'x' | *p == 'p';
 				bool sign = *p == 'd';
 				unsigned int x = va_arg(ap, unsigned int);
 				if (sign) {
@@ -48,6 +49,10 @@ int __printf(bool to_string, char *out, uint32_t length, const char *fmt, va_lis
 						PUTC('-');
 						x = -signval;
 					}
+				}
+				if (*p == 'p') {
+					PUTC('0');
+					PUTC('x');
 				}
 				int base = hex ? 16 : 10;
 				char buf[12];

@@ -81,12 +81,8 @@ void sdl_clear_event_queue() {
 #endif
 }
 
-void init_device() {
-	IFDEF(CONFIG_TARGET_AM, ioe_init());
-	init_map();
-
+void init_hpet() {
 	struct sigevent sev;
-
 	memset(&sev, 0, sizeof(sev));
 	sev.sigev_notify = SIGEV_THREAD;
 	sev.sigev_notify_function = alarm_handle;
@@ -99,6 +95,13 @@ void init_device() {
 	its.it_value.tv_sec = 0;
 	its.it_value.tv_nsec = 1000000000 / TIMER_HZ;
 	timer_settime(timer, 0, &its, NULL);
+}
+
+void init_device() {
+	IFDEF(CONFIG_TARGET_AM, ioe_init());
+	init_map();
+
+	init_hpet();
 
 	IFDEF(CONFIG_HAS_SERIAL, init_serial());
 	IFDEF(CONFIG_HAS_TIMER, init_timer());
