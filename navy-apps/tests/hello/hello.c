@@ -7,8 +7,8 @@ int main() {
 	volatile int j = 0;
 	while (1) {
 		j++;
-		write(1, "again\n", 6);
 		if (j == 10000) {
+			write(1, "again\n", 6);
 			printf("Hello World from Navy-apps for the %dth time!\n", i++);
 			j = 0;
 		}
