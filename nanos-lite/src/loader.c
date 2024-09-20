@@ -28,7 +28,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	Elf_Ehdr ehdr;
 	ramdisk_read(&ehdr, 0, sizeof(Elf_Ehdr));
 
-	Log("The img have %d segment", ehdr.e_phnum);
 	Elf_Phdr phdrs[ehdr.e_phnum];
 	ramdisk_read(phdrs, ehdr.e_phoff, ehdr.e_phnum * ehdr.e_phentsize);
 	for (int i = 0; i < ehdr.e_phnum; i++) {
