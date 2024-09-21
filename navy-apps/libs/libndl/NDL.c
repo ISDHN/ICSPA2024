@@ -9,6 +9,8 @@ static int evtdev = -1;
 static int fbdev = -1;
 static int screen_w = 0, screen_h = 0;
 
+extern int open(const char *pathname, int flags, int mode);
+
 uint32_t NDL_GetTicks() {
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
@@ -64,6 +66,8 @@ int NDL_QueryAudio() {
 int NDL_Init(uint32_t flags) {
 	if (getenv("NWM_APP")) {
 		evtdev = 3;
+	} else {
+		evtdev = open("/dev/events", 0, 0);
 	}
 	return 0;
 }

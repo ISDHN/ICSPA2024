@@ -25,7 +25,9 @@ void init_proc() {
 	Log("Initializing processes...");
 
 	// load program here
-	naive_uload(NULL, "/bin/event-test");
+	char *filename = "/bin/event-test";
+	Log("Loading program from %s", filename);
+	naive_uload(NULL, filename);
 }
 
 Context *schedule(Context *prev) {
