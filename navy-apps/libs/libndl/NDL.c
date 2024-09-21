@@ -8,6 +8,7 @@
 static int evtdev = -1;
 static int fbdev = -1;
 static int screen_w = 0, screen_h = 0;
+static int display_w = 0, display_h = 0;
 
 extern int open(const char *pathname, int flags, int mode);
 
@@ -24,6 +25,7 @@ int NDL_PollEvent(char *buf, int len) {
 }
 
 void NDL_OpenCanvas(int *w, int *h) {
+	printf("NDL_OpenCanvas,screen w:%d, screen h:%d\n", screen_w, screen_h);
 	if (getenv("NWM_APP")) {
 		int fbctl = 4;
 		fbdev = 5;
@@ -69,6 +71,10 @@ int NDL_Init(uint32_t flags) {
 	} else {
 		evtdev = open("/dev/events", 0, 0);
 	}
+	int disp_fd = open("/proc/dispinfo", 0, 0);
+	char buf[128];
+	read(disp_fd, buf, sizeof(buf));
+	sscanf(buf, "WIDTH:%dHEIGHT:%d", &display_w, &display_h);
 	return 0;
 }
 
