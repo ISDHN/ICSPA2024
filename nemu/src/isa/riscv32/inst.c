@@ -83,9 +83,15 @@ void log_jal_r(bool is_call, bool is_ret, word_t dst) {
 			free(call_stack);
 			call_stack = new;
 		}
+		char *func_name = find_func_name(dst);
+		if (strcmp(func_name, "putch") == 0)
+			return;
 		Log("%#x:%*scall %#x@%s", cpu.pc, cnt * CONFIG_FTRANCE_PAD, "", dst, find_func_name(dst));
 		push_int(call_stack, &cnt, dst);
 	} else if (is_ret) {
+		char *func_name = find_func_name(cpu.pc);
+		if (strcmp(func_name, "putch") == 0)
+			return;
 		pop_int(call_stack, &cnt);
 		Log("%#x:%*s%#x@%s return", cpu.pc, cnt * CONFIG_FTRANCE_PAD, "", cpu.pc, find_func_name(cpu.pc));
 	}
