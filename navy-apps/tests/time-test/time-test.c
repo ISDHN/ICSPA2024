@@ -11,7 +11,7 @@ int main() {
 		struct timeval now;
 		_gettimeofday(&now, NULL);
 		if (now.tv_sec * 10 + now.tv_usec / 100000 - last.tv_sec * 10 - last.tv_usec / 100000 > 5) {
-			printf("tick");
+			printf("tick\n");
 		}
 	}
 
