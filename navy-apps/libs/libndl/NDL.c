@@ -52,6 +52,8 @@ void NDL_OpenCanvas(int *w, int *h) {
 				break;
 		}
 		close(fbctl);
+	} else {
+		fbdev = open("/dev/fb", 0, 0);
 	}
 }
 
