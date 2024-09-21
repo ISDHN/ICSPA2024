@@ -8,6 +8,16 @@
 		c->GPRx = sys_##name(__VA_ARGS__); \
 		break
 
+struct timeval {
+	long tv_sec;  /* seconds */
+	long tv_usec; /* microseconds */
+};
+
+struct timezone {
+	int tz_minuteswest; /* Minutes west of GMT.  */
+	int tz_dsttime;		/* Nonzero if DST is ever in effect.  */
+};
+
 int sys_yield() {
 	yield();
 }
@@ -36,6 +46,17 @@ int sys_close(int fd) {
 	return fs_close(fd);
 }
 
+int sys_gettimeofday(struct timeval *tv, struct timezone *tz) {
+	if (tv != NULL) {
+		AM_TIMER_UPTIME_T uptime = io_read(AM_TIMER_UPTIME);
+		tv->tv_sec = uptime.us / 1000000;
+		tv->tv_usec = uptime.us % 1000000;
+	}
+	if (tz != NULL) {
+	}
+	return 0;
+}
+
 void do_syscall(Context *c) {
 	uintptr_t a[4];
 	a[0] = c->GPR1;
@@ -52,8 +73,9 @@ void do_syscall(Context *c) {
 			SYS_DISPATCH(read, a[1], (char *)a[2], a[3]);
 			SYS_DISPATCH(lseek, a[1], a[2], a[3]);
 			SYS_DISPATCH(brk, a[1]);
-			SYS_DISPATCH(open, (const char *)a[1], a[2], a[3]);
+			SYS_DISPATCH(open, (const char *)(a[1]), a[2], a[3]);
 			SYS_DISPATCH(close, a[1]);
+			SYS_DISPATCH(gettimeofday, (struct timeval *)(a[1]), (struct timezone *)(a[2]));
 		default:
 			panic("Unhandled syscall ID = %d", a[0]);
 	}

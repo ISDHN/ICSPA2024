@@ -2,11 +2,15 @@
 #define __FS_H__
 
 #include <common.h>
+#include <device.h>
+#include <ramdisk.h>
 
 #ifndef SEEK_SET
-enum { SEEK_SET,
-	   SEEK_CUR,
-	   SEEK_END };
+enum {
+	SEEK_SET,
+	SEEK_CUR,
+	SEEK_END
+};
 #endif
 
 int fs_open(const char *pathname, int flags, int mode);
