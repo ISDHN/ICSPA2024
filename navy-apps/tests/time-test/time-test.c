@@ -3,6 +3,7 @@
 #include <NDL.h>
 
 int main() {
+	NDL_Init(0);
 	uint32_t last = NDL_GetTicks();
 	while (1) {
 		uint32_t now = NDL_GetTicks();
