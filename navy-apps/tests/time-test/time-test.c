@@ -10,7 +10,7 @@ int main() {
 	while (1) {
 		struct timeval now;
 		_gettimeofday(&now, NULL);
-		if (now.tv_sec * 10 + now.tv_usec / 100000 - last.tv_sec * 10 - last.tv_usec / 100000 > 5) {
+		if (now.tv_sec * 10 + now.tv_usec / 100000 - last.tv_sec * 10 - last.tv_usec / 100000 > 50) {
 			printf("tick\n");
 		}
 	}
