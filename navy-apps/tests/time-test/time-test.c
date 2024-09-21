@@ -6,7 +6,7 @@ int main() {
 	uint32_t last = NDL_GetTicks();
 	while (1) {
 		uint32_t now = NDL_GetTicks();
-		if (now - last >= 5000) {
+		if (now - last >= 500) {
 			printf("tick\n");
 			last = now;
 		}
