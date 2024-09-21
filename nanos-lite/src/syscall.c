@@ -2,7 +2,7 @@
 #include "syscall.h"
 #include <fs.h>
 
-// #define STRACE
+#define STRACE
 #define SYS_DISPATCH(name, ...)            \
 	case SYS_##name:                       \
 		c->GPRx = sys_##name(__VA_ARGS__); \
