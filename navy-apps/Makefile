@@ -142,8 +142,9 @@ endif
 
 copy : app
 	cp $(APP) $(NANOSL_HOME)/build/
+	
+replace : copy
 	mv $(APP) $(NANOSL_HOME)/build/ramdisk.img
-
 ### Build order control
 app: $(LIBS) $(APP)
 archive: $(LIBS) $(ARCHIVE)
