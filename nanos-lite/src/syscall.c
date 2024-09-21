@@ -21,6 +21,10 @@ long sys_write(int fd, const void *buf, size_t count) {
 	return count;
 }
 
+int sys_brk(int new_brk) {
+	return 0;
+}
+
 void do_syscall(Context *c) {
 	uintptr_t a[4];
 	a[0] = c->GPR1;
@@ -34,6 +38,7 @@ void do_syscall(Context *c) {
 			break;
 			SYS_DISPATCH(yield);
 			SYS_DISPATCH(write, a[1], (const char *)a[2], a[3]);
+			SYS_DISPATCH(brk, a[1]);
 		default:
 			panic("Unhandled syscall ID = %d", a[0]);
 	}
