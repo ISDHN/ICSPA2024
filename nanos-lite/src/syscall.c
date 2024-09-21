@@ -1,5 +1,6 @@
 #include <common.h>
 #include "syscall.h"
+#include <fs.h>
 
 // #define STRACE
 #define SYS_DISPATCH(name, ...)            \
@@ -12,13 +13,19 @@ int sys_yield() {
 }
 
 long sys_write(int fd, const void *buf, size_t count) {
-	if (fd != 1 && fd != 2) {
-		return -1;
-	}
-	for (size_t i = 0; i < count; i++) {
-		putch(((char *)buf)[i]);
-	}
-	return count;
+	return fs_write(fd, buf, count);
+}
+
+long sys_read(int fd, void *buf, size_t count) {
+	return fs_read(fd, buf, count);
+}
+
+int sys_open(const char *pathname, int flags, int mode) {
+	return fs_open(pathname, flags, mode);
+}
+
+int sys_lseek(int fd, int offset, int whence) {
+	return fs_lseek(fd, offset, whence);
 }
 
 int sys_brk(int new_brk) {
@@ -38,7 +45,10 @@ void do_syscall(Context *c) {
 			break;
 			SYS_DISPATCH(yield);
 			SYS_DISPATCH(write, a[1], (const char *)a[2], a[3]);
+			SYS_DISPATCH(read, a[1], (char *)a[2], a[3]);
+			SYS_DISPATCH(lseek, a[1], a[2], a[3]);
 			SYS_DISPATCH(brk, a[1]);
+			SYS_DISPATCH(open, (const char *)a[1], a[2], a[3]);
 		default:
 			panic("Unhandled syscall ID = %d", a[0]);
 	}
