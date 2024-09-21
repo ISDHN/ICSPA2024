@@ -1,16 +1,12 @@
 #include <unistd.h>
 #include <stdio.h>
-#include <time.h>
-#include <sys/time.h>
-
-extern int _gettimeofday(struct timeval *tv, struct timezone *tz);
+#include <NDL.h>
 
 int main() {
-	struct timeval last = {0, 0};
+	uint32_t last = NDL_GetTicks();
 	while (1) {
-		struct timeval now;
-		_gettimeofday(&now, NULL);
-		if (now.tv_sec * 10 + now.tv_usec / 100000 - last.tv_sec * 10 - last.tv_usec / 100000 > 5) {
+		uint32_t now = NDL_GetTicks();
+		if (now - last >= 5000) {
 			printf("tick\n");
 			last = now;
 		}
