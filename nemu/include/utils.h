@@ -88,5 +88,4 @@ char *find_func_name(vaddr_t inst_addr);
 // ------------ stack ------------
 
 void push_int(int *stack, int *len, int val);
-
 int pop_int(int *stack, int *len);

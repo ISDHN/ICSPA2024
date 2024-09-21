@@ -44,7 +44,10 @@ void sdb_set_batch_mode();
 static char *log_file = NULL;
 static char *diff_so_file = NULL;
 static char *img_file = NULL;
-static char *sym_file = NULL;
+
+static char *sym_files[8] = {0};
+int sym_cnt = 0;
+
 static int difftest_port = 1234;
 
 static long load_img() {
@@ -96,7 +99,10 @@ static int parse_args(int argc, char *argv[]) {
 				diff_so_file = optarg;
 				break;
 			case 's':
-				sym_file = strdup(optarg);
+				if (sym_cnt >= 8) {
+					panic("Too many symbol files\n");
+				}
+				sym_files[sym_cnt++] = strdup(optarg);
 				break;
 			case 1:
 				img_file = optarg;
@@ -145,7 +151,9 @@ void init_monitor(int argc, char *argv[]) {
 	init_sdb();
 
 	/* Initialize the symbol table. */
-	init_elf(sym_file);
+	for (int i = 0; i < sym_cnt; i++) {
+		init_elf(sym_files[i]);
+	}
 
 	/* Initialize the call stack. */
 	init_callstack();

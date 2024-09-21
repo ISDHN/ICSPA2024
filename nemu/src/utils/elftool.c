@@ -1,37 +1,42 @@
 #include <elf.h>
 #include <utils.h>
 
-FILE *elf = NULL;
-Elf32_Ehdr ehdr;
-Elf32_Shdr *shdrs = NULL;
-Elf32_Sym *syms = NULL;
-char *shstrs = NULL;
-char *symstrs = NULL;
-int *func_list = NULL;
-int func_num = 0;
+typedef struct __Elf_Info {
+	FILE *elf;
+	Elf32_Ehdr ehdr;
+	Elf32_Shdr *shdrs;
+	Elf32_Sym *syms;
+	char *shstrs;
+	char *symstrs;
+	int *func_list;
+	int func_num;
+} Elf_Info;
+
+Elf_Info elfs[8];
+int elf_cnt = 0;
 
 int readbyte(FILE *fd, void *buf, size_t start, size_t count) {
 	fseek(fd, start, SEEK_SET);
 	return fread(buf, 1, count, fd);
 }
 
-int find_tab(const char *name) {
-	for (int i = 0; i < ehdr.e_shnum; i++) {
-		if (strcmp(&shstrs[shdrs[i].sh_name], name) == 0) {
+int find_tab(Elf_Info *elf, const char *name) {
+	for (int i = 0; i < elf->ehdr.e_shnum; i++) {
+		if (strcmp(&(elf->shstrs[elf->shdrs[i].sh_name]), name) == 0) {
 			return i;
 		}
 	}
 	return -1;
 }
 
-int open_elf(const char *elf_file) {
+int open_elf(const char *elf_file, Elf_Info *elf_info) {
 	if (elf_file == NULL) {
 		Log("No ELF file specified.");
 		return -1;
 	} else {
 		Log("Loading ELF file %s", elf_file);
 	}
-	elf = fopen(elf_file, "rb");
+	FILE *elf = fopen(elf_file, "rb");
 	if (elf == NULL) {
 		panic("Can't open %s", elf_file);
 		return -1;
@@ -46,74 +51,79 @@ int open_elf(const char *elf_file) {
 		panic("Unsupported ELF file class");
 		return -1;
 	}
+	elf_info->elf = elf;
 	return 0;
 }
 
-void read_shdrs() {
-	shdrs = calloc(ehdr.e_shnum, sizeof(Elf32_Shdr));
-	readbyte(elf, shdrs, ehdr.e_shoff, ehdr.e_shnum * ehdr.e_shentsize);
+void read_shdrs(Elf_Info *elf_info) {
+	elf_info->shdrs = calloc(elf_info->ehdr.e_shnum, sizeof(Elf32_Shdr));
+	readbyte(elf_info->elf, elf_info->shdrs, elf_info->ehdr.e_shoff, elf_info->ehdr.e_shnum * elf_info->ehdr.e_shentsize);
 }
 
-void read_strtab(int tabindex, char **_buffer) {
-	Elf32_Shdr tab = shdrs[tabindex];
+void read_strtab(Elf_Info *elf_info, int tabindex, char **_buffer) {
+	Elf32_Shdr tab = elf_info->shdrs[tabindex];
 	if (tab.sh_type != SHT_STRTAB) {
 		panic("The index %d doesn't refer to a valid strtab", tabindex);
 		return;
 	}
 	*_buffer = malloc(tab.sh_size);
-	readbyte(elf, *_buffer, tab.sh_offset, tab.sh_size);
+	readbyte(elf_info->elf, *_buffer, tab.sh_offset, tab.sh_size);
 }
 
-void read_func() {
-	int symtab_index = find_tab(".symtab");
+void read_func(Elf_Info *elf_info) {
+	int symtab_index = find_tab(elf_info, ".symtab");
 	if (symtab_index == -1) {
 		panic("No symbol table found");
 		return;
 	}
-	Elf32_Shdr symtab = shdrs[symtab_index];
+	Elf32_Shdr symtab = elf_info->shdrs[symtab_index];
 	int symnum = symtab.sh_size / sizeof(Elf32_Sym);
-	syms = malloc(symtab.sh_size);
-	readbyte(elf, syms, symtab.sh_offset, symtab.sh_size);
+	elf_info->syms = malloc(symtab.sh_size);
+	readbyte(elf_info->elf, elf_info->syms, symtab.sh_offset, symtab.sh_size);
 
 	for (int i = 0; i < symnum; i++) {
-		if (ELF32_ST_TYPE(syms[i].st_info) == STT_FUNC) {
-			func_num++;
+		if (ELF32_ST_TYPE(elf_info->syms[i].st_info) == STT_FUNC) {
+			elf_info->func_num++;
 		}
 	}
-	func_list = calloc(func_num, sizeof(int));
+	elf_info->func_list = calloc(elf_info->func_num, sizeof(int));
 	for (int i = 0, j = 0; i < symnum; i++) {
-		if (ELF32_ST_TYPE(syms[i].st_info) == STT_FUNC) {
-			func_list[j] = i;
+		if (ELF32_ST_TYPE(elf_info->syms[i].st_info) == STT_FUNC) {
+			elf_info->func_list[j] = i;
 			j++;
 		}
 	}
 }
 
 char *find_func_name(vaddr_t inst_addr) {
-	if (elf == NULL) {
-		return "Unknown";
-	}
-	for (int i = 0; i < func_num; i++) {
-		if (syms[func_list[i]].st_value <= inst_addr && inst_addr < syms[func_list[i]].st_value + syms[func_list[i]].st_size) {
-			return &symstrs[syms[func_list[i]].st_name];
+	for (int i = 0; i < elf_cnt; i++) {
+		Elf_Info *elf_info = &elfs[i];
+		for (int j = 0; j < elf_info->func_num; j++) {
+			Elf32_Sym sym = elf_info->syms[elf_info->func_list[j]];
+			if (sym.st_value <= inst_addr && inst_addr < sym.st_value + sym.st_size) {
+				return &elf_info->symstrs[sym.st_name];
+			}
 		}
 	}
 	return "Unknown";
 }
 
 void init_elf(const char *exec_file) {
+	Elf_Info *elf = &elfs[elf_cnt];
 
-	if (open_elf(exec_file)) {
+	if (open_elf(exec_file, elf)) {
 		return;
 	}
 
-	readbyte(elf, &ehdr, 0, sizeof(Elf32_Ehdr));
+	elf_cnt++;
 
-	read_shdrs();
+	readbyte(elf->elf, &elf->ehdr, 0, sizeof(Elf32_Ehdr));
 
-	read_strtab(ehdr.e_shstrndx, &shstrs);
+	read_shdrs(elf);
 
-	read_strtab(find_tab(".strtab"), &symstrs);
+	read_strtab(elf, elf->ehdr.e_shstrndx, &elf->shstrs);
 
-	read_func();
+	read_strtab(elf, find_tab(elf, ".strtab"), &elf->symstrs);
+
+	read_func(elf);
 }

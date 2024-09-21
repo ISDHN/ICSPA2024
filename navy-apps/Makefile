@@ -141,6 +141,7 @@ ifeq ($(wildcard $(NAVY_HOME)/libs/libc/Makefile),)
 endif
 
 copy : app
+	cp $(APP) $(NANOSL_HOME)/build/
 	mv $(APP) $(NANOSL_HOME)/build/ramdisk.img
 
 ### Build order control
