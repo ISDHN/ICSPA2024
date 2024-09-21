@@ -49,6 +49,7 @@ void do_syscall(Context *c) {
 			SYS_DISPATCH(lseek, a[1], a[2], a[3]);
 			SYS_DISPATCH(brk, a[1]);
 			SYS_DISPATCH(open, (const char *)a[1], a[2], a[3]);
+			SYS_DISPATCH(close, a[1]);
 		default:
 			panic("Unhandled syscall ID = %d", a[0]);
 	}
