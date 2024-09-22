@@ -18,8 +18,9 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 	if (ctl->pixels != NULL) {
 		int x, y;
 		for (y = 0; y < ctl->h; y++) {
+			uint32_t screen_y = y + ctl->y;
 			for (x = 0; x < ctl->w; x++) {
-				fb[(y + ctl->y) * w + x + ctl->x] = src[y * ctl->w + x];
+				fb[screen_y * w + x + ctl->x] = src[y * ctl->w + x];
 			}
 		}
 	}
