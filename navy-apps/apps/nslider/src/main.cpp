@@ -58,7 +58,6 @@ int main() {
 	while (1) {
 		SDL_Event e;
 		SDL_WaitEvent(&e);
-
 		if (e.type == SDL_KEYDOWN) {
 			switch (e.key.keysym.sym) {
 				case SDLK_0:
@@ -93,12 +92,14 @@ int main() {
 					break;
 				case SDLK_J:
 				case SDLK_DOWN:
+					printf("down\n");
 					next(rep);
 					rep = 0;
 					g = 0;
 					break;
 				case SDLK_K:
 				case SDLK_UP:
+					printf("up\n");
 					prev(rep);
 					rep = 0;
 					g = 0;

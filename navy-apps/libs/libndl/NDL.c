@@ -64,7 +64,6 @@ void NDL_OpenCanvas(int *w, int *h) {
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
-
 	if (fbdev == -1) {
 		printf("NDL_DrawRect: frame buffer not initialized\n");
 		return;
