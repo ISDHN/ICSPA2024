@@ -65,7 +65,8 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
 		printf("NDL_DrawRect: frame buffer not initialized\n");
 		return;
 	}
-	printf("NDL_DrawRect: %d %d %d %d\n", x, y, w, h);
+	int x_bias = (display_w - screen_w) >> 1;
+	int y_bias = (display_h - screen_h) >> 1;
 	for (int i = 0; i < h; i++) {
 		lseek(fbdev, (x + (y + i) * display_w) * sizeof(uint32_t), SEEK_SET);
 		write(fbdev, pixels + i * w, w * sizeof(uint32_t));
