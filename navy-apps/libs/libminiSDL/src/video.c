@@ -32,9 +32,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 		w = srcrect->w;
 		h = srcrect->h;
 	}
-	printf("SDL_BlitSurface, w:%d, h:%d\n", w, h);
 	for (int i = 0; i < h; i++) {
-		printf("SDL_BlitSurface, i:%d\n", i);
 		memcpy(dst->pixels + (dsty + i) * dst->pitch + dstx * dst->format->BytesPerPixel,
 			   src->pixels + (srcy + i) * src->pitch + srcx * src->format->BytesPerPixel,
 			   w * src->format->BytesPerPixel);
