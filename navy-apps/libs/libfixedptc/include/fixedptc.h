@@ -150,7 +150,7 @@ static inline fixedpt fixedpt_abs(fixedpt A) {
 }
 
 static inline fixedpt fixedpt_floor(fixedpt A) {
-	if (!A & FIXEDPT_FMASK) {
+	if (!(A & FIXEDPT_FMASK)) {
 		return A;
 	}
 
@@ -162,7 +162,7 @@ static inline fixedpt fixedpt_floor(fixedpt A) {
 }
 
 static inline fixedpt fixedpt_ceil(fixedpt A) {
-	if (!A & FIXEDPT_FMASK) {
+	if (!(A & FIXEDPT_FMASK)) {
 		return A;
 	}
 

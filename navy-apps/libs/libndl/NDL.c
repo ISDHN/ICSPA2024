@@ -29,8 +29,8 @@ int NDL_PollEvent(char *buf, int len) {
 }
 
 void NDL_OpenCanvas(int *w, int *h) {
-	if (*w >= display_w || *h >= display_h) {
-		printf("NDL_OpenCanvas: window size too large\n");
+	if (*w > display_w || *h > display_h) {
+		printf("NDL_OpenCanvas: window size too large: w:%d, h%d\n", *w, *h);
 		exit(-1);
 	} else if (*w == 0 && *h == 0) {
 		screen_w = display_w;
