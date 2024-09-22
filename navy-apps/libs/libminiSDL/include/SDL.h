@@ -62,8 +62,8 @@ typedef uint64_t Uint64;
 #define SDLK_y SDLK_Y
 #define SDLK_z SDLK_Z
 
-#define TODO()                                                         \
-	printf("Not implement yet! In line %d of %s", __LINE__, __FILE__); \
+#define TODO()                                                           \
+	printf("Not implement yet! In line %d of %s\n", __LINE__, __FILE__); \
 	exit(1);
 
 #endif
