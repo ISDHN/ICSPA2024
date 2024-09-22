@@ -68,7 +68,7 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
 	int x_bias = (display_w - screen_w) >> 1;
 	int y_bias = (display_h - screen_h) >> 1;
 	for (int i = 0; i < h; i++) {
-		lseek(fbdev, (x + (y + i) * display_w) * sizeof(uint32_t), SEEK_SET);
+		lseek(fbdev, (x + x_bias + (y + y_bias + i) * display_w) * sizeof(uint32_t), SEEK_SET);
 		write(fbdev, pixels + i * w, w * sizeof(uint32_t));
 	}
 }
