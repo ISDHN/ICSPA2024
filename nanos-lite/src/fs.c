@@ -19,7 +19,8 @@ enum {
 	FD_EVT,
 	FD_DSPINFO,
 	FD_FB,
-
+	FD_SBCTL,
+	FD_SB,
 };
 
 size_t invalid_read(void *buf, size_t offset, size_t len) {
@@ -40,12 +41,13 @@ static Finfo file_table[] __attribute__((used)) = {
 	[FD_EVT] = {"/dev/events", 0, 0, 0, events_read, invalid_write},
 	[FD_DSPINFO] = {"/proc/dispinfo", 128, 0, 0, dispinfo_read, invalid_write},
 	[FD_FB] = {"/dev/fb", 0, 0, 0, invalid_read, fb_write},
+	[FD_SBCTL] = {"/dev/sbctl", 0, 0, 0, sbctrl_read, sbctrl_write},
+	[FD_SB] = {"/dev/sb", 0, 0, 0, invalid_read, sb_write},
 
 #include "files.h"
 };
 
 void init_fs() {
-	// TODO: initialize the size of /dev/fb
 	file_table[FD_FB].size = io_read(AM_GPU_CONFIG).width * io_read(AM_GPU_CONFIG).height * sizeof(uint32_t);
 
 	for (int i = 0; i < sizeof(file_table) / sizeof(file_table[0]); i++) {

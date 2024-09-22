@@ -7,8 +7,12 @@
 
 static int evtdev = -1;
 static int fbdev = -1;
-static int screen_w = 0, screen_h = 0;
-static int display_w = 0, display_h = 0;
+static int sbdev = -1;
+static int sbctldev = -1;
+static int screen_w = 0;
+static int screen_h = 0;
+static int display_w = 0;
+static int display_h = 0;
 
 extern int open(const char *pathname, int flags, int mode);
 
@@ -74,17 +78,21 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {
+	uint32_t args[3] = {freq, channels, samples};
+	write(sbctldev, args, 3 * sizeof(uint32_t));
 }
 
 void NDL_CloseAudio() {
 }
 
 int NDL_PlayAudio(void *buf, int len) {
-	return 0;
+	return write(sbdev, buf, len);
 }
 
 int NDL_QueryAudio() {
-	return 0;
+	int free_space = 0;
+	read(sbctldev, &free_space, sizeof(free_space));
+	return free_space;
 }
 
 int NDL_Init(uint32_t flags) {
@@ -97,6 +105,9 @@ int NDL_Init(uint32_t flags) {
 	char buf[128];
 	read(disp_fd, buf, sizeof(buf));
 	sscanf(buf, "WIDTH:%d HEIGHT:%d", &display_w, &display_h);
+
+	sbctldev = open("/dev/sbctl", 0, 0);
+	sbdev = open("/dev/sb", 0, 0);
 	return 0;
 }
 
