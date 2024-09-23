@@ -8,34 +8,34 @@
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
 	assert(dst && src);
 	assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
-	int w, h;
+	int srcx, srcy, srcw, srch;
+	int dstx, dsty, dstw, dsth;
 
-#define OPT(sd, xy) \
-	int sd##xy = (sd##rect == NULL ? 0 : sd##rect->xy);
+#define EXCT(obj, name, suffix) \
+	obj##name = obj##suffix->name
 
-	OPT(src, x);
-	OPT(src, y);
-	OPT(dst, x);
-	OPT(dst, y);
-
-	if (srcrect == NULL && dstrect != NULL) {
-		w = dstrect->w;
-		h = dstrect->h;
-	} else if (srcrect != NULL && dstrect == NULL) {
-		w = srcrect->w;
-		h = srcrect->h;
-	} else if (srcrect == NULL && dstrect == NULL) {
-		w = src->w;
-		h = src->h;
-	} else {
-		assert(srcrect->w == dstrect->w && srcrect->h == dstrect->h);
-		w = srcrect->w;
-		h = srcrect->h;
+#define OPT(sd)             \
+	if (sd##rect == NULL) { \
+		sd##x = 0;          \
+		sd##y = 0;          \
+		EXCT(sd, w, );      \
+		EXCT(sd, h, );      \
+	} else {                \
+		EXCT(sd, x, rect);  \
+		EXCT(sd, y, rect);  \
+		EXCT(sd, w, rect);  \
+		EXCT(sd, h, rect);  \
 	}
-	for (int i = 0; i < h; i++) {
+
+	OPT(src);
+	OPT(dst);
+
+	assert(srcw == dstw && srch == dsth);
+
+	for (int i = 0; i < srch; i++) {
 		memcpy(dst->pixels + (dsty + i) * dst->pitch + dstx * dst->format->BytesPerPixel,
 			   src->pixels + (srcy + i) * src->pitch + srcx * src->format->BytesPerPixel,
-			   w * src->format->BytesPerPixel);
+			   srcw * src->format->BytesPerPixel);
 	}
 }
 
