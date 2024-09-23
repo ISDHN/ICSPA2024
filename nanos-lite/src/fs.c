@@ -92,6 +92,7 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
 
 size_t fs_read(int fd, void *buf, size_t len) {
 	Finfo *f = &file_table[fd];
+	printf("read: %s\n", f->name);
 	size_t count = f->read(buf, f->disk_offset + f->open_offset, len);
 	f->open_offset += count;
 	return count;
@@ -99,6 +100,7 @@ size_t fs_read(int fd, void *buf, size_t len) {
 
 size_t fs_write(int fd, const void *buf, size_t len) {
 	Finfo *f = &file_table[fd];
+	printf("write: %s\n", f->name);
 	size_t count = f->write(buf, f->disk_offset + f->open_offset, len);
 	f->open_offset += count;
 	return count;
