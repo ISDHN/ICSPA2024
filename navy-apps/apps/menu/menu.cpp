@@ -17,6 +17,7 @@
 
 #define W 400
 #define H 300
+#define BG 0x00ffffff
 
 const char *font_fname = "/share/fonts/Courier-7.bdf";
 static BDF_Font *font;
@@ -67,7 +68,7 @@ static void prev() {
 }
 
 static void clear_display(void) {
-	SDL_FillRect(screen, NULL, 0x00ff0000);
+	SDL_FillRect(screen, NULL, BG);
 }
 
 int main(int argc, char *argv[], char *envp[]) {
@@ -162,13 +163,13 @@ static void draw_str(BDF_Font *font, int x, int y, char *str, uint32_t fp, uint3
 static void draw_text_row(char *s, int r) {
 	r += 3;
 	puts(s);
-	draw_str(font, 0, r * font->h, s, 0x123456, 0x00ff0000);
+	draw_str(font, 0, r * font->h, s, 0x123456, BG);
 }
 
 static void display_menu(int n) {
 	clear_display();
 
-	SDL_Rect rect = {.x = screen->w - logo_sf->w, .y = 0};
+	SDL_Rect rect = {.x = screen->w - logo_sf->w, .y = 0, .w = logo_sf->w, .h = logo_sf->h};
 	SDL_BlitSurface(logo_sf, NULL, screen, &rect);
 	SDL_UpdateRect(screen, 0, 0, 0, 0);
 
