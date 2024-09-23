@@ -58,8 +58,6 @@ void init_fs() {
 			file_table[i].write = ramdisk_write;
 		}
 	}
-
-	printf("size: %d", get_ramdisk_size());
 }
 
 int fs_open(const char *pathname, int flags, int mode) {
