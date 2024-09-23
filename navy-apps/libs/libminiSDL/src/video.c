@@ -11,7 +11,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 	int w, h;
 
 #define OPT(sd, xy) \
-	int sd##xy = sd##rect == NULL ? 0 : sd##rect->xy;
+	int sd##xy = (sd##rect == NULL ? 0 : sd##rect->xy);
 
 	OPT(src, x);
 	OPT(src, y);
@@ -40,7 +40,25 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
-	TODO()
+	assert(dst);
+	int x, y, w, h;
+	if (dstrect == NULL) {
+		x = 0;
+		y = 0;
+		w = dst->w;
+		h = dst->h;
+	} else {
+		x = dstrect->x;
+		y = dstrect->y;
+		w = dstrect->w;
+		h = dstrect->h;
+	}
+	uint32_t *pure_color = malloc(sizeof(uint32_t) * w * h);
+	for (int i = 0; i < w * h; i++) {
+		pure_color[i] = color;
+	}
+	NDL_DrawRect(pure_color, x, y, w, h);
+	free(pure_color);
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
