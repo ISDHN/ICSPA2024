@@ -2,7 +2,7 @@
 #include "syscall.h"
 #include <fs.h>
 
-// #define STRACE
+#define STRACE
 #define SYS_DISPATCH(name, ...)            \
 	case SYS_##name:                       \
 		c->GPRx = sys_##name(__VA_ARGS__); \
@@ -56,7 +56,9 @@ void do_syscall(Context *c) {
 	a[1] = c->GPR2;
 	a[2] = c->GPR3;
 	a[3] = c->GPR4;
-
+#ifdef STRACE
+	Log("%s(%d, %d, %d): ", syscall_name[a[0]], a[1], a[2], a[3]);
+#endif
 	switch (a[0]) {
 		case SYS_exit:
 			halt(a[1]);
@@ -73,6 +75,6 @@ void do_syscall(Context *c) {
 			panic("Unhandled syscall ID = %d", a[0]);
 	}
 #ifdef STRACE
-	Log("%s(%d, %d, %d) = %d", syscall_name[a[0]], a[1], a[2], a[3], c->GPRx);
+	Log("Result: %d", c->GPRx);
 #endif
 }
