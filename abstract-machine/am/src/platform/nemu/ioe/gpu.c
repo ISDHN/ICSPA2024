@@ -15,15 +15,11 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 	uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
 	uint32_t *src = ctl->pixels;
-	int h = ctl->h;
-	int w = ctl->w;
-	if (src != NULL) {
-		for (int y = 0; y < h; y++) {
-			uint32_t screen_y = y + ctl->y;
-			uint32_t screen_pixel_row = screen_y * w;
-			uint32_t src_pixel_row = y * w;
-			for (int x = 0; x < w; x++) {
-				fb[screen_pixel_row + x + ctl->x] = src[src_pixel_row + x];
+	if (ctl->pixels != NULL) {
+		int x, y;
+		for (y = 0; y < ctl->h; y++) {
+			for (x = 0; x < ctl->w; x++) {
+				fb[(y + ctl->y) * w + x + ctl->x] = src[y * ctl->w + x];
 			}
 		}
 	}
