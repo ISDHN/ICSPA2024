@@ -1,4 +1,5 @@
 #include <fs.h>
+#include <ramdisk.h>
 
 typedef size_t (*ReadFn)(void *buf, size_t offset, size_t len);
 typedef size_t (*WriteFn)(const void *buf, size_t offset, size_t len);
@@ -21,6 +22,7 @@ enum {
 	FD_FB,
 	FD_SBCTL,
 	FD_SB,
+	FD_FILESTART
 };
 
 size_t invalid_read(void *buf, size_t offset, size_t len) {
@@ -56,6 +58,8 @@ void init_fs() {
 			file_table[i].write = ramdisk_write;
 		}
 	}
+
+	printf("size: %d", get_ramdisk_size());
 }
 
 int fs_open(const char *pathname, int flags, int mode) {
@@ -92,7 +96,11 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
 
 size_t fs_read(int fd, void *buf, size_t len) {
 	Finfo *f = &file_table[fd];
-	printf("read: %s\n", f->name);
+	if (fd >= FD_FILESTART) {
+		if (f->open_offset + len >= f->size) {
+			len = f->size - f->open_offset;
+		}
+	}
 	size_t count = f->read(buf, f->disk_offset + f->open_offset, len);
 	f->open_offset += count;
 	return count;
@@ -100,7 +108,11 @@ size_t fs_read(int fd, void *buf, size_t len) {
 
 size_t fs_write(int fd, const void *buf, size_t len) {
 	Finfo *f = &file_table[fd];
-	printf("write: %s\n", f->name);
+	if (fd >= FD_FILESTART) {
+		if (f->open_offset + len >= f->size) {
+			len = f->size - f->open_offset;
+		}
+	}
 	size_t count = f->write(buf, f->disk_offset + f->open_offset, len);
 	f->open_offset += count;
 	return count;
