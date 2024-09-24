@@ -68,6 +68,7 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	for (int i = 0; i < h; i++) {
 		memset(dst->pixels + (y + i) * dst->pitch + x * dst->format->BytesPerPixel, color, w * dst->format->BytesPerPixel);
 	}
+	audio_callback_caller();
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
@@ -76,6 +77,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 		h = s->h;
 	}
 	NDL_DrawRect((uint32_t *)s->pixels, x, y, w, h);
+	audio_callback_caller();
 }
 
 // APIs below are already implemented.

@@ -66,4 +66,6 @@ typedef uint64_t Uint64;
 	printf("Not implement yet! In line %d of %s\n", __LINE__, __FILE__); \
 	exit(1);
 
+void audio_callback_caller();
+
 #endif

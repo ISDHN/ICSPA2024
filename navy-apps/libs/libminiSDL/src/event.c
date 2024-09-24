@@ -34,6 +34,7 @@ int SDL_PollEvent(SDL_Event *ev) {
 		Classify_Keyboard_Event(buf, ev);
 		return 1;
 	}
+	audio_callback_caller();
 	return 0;
 }
 

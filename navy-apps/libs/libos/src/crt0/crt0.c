@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-#define AM
+// #define AM
 
 #ifdef AM
 int main(const char *args);
