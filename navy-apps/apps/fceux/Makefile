@@ -14,8 +14,6 @@ else
 libam: ;
 endif
 
-
-
 default $(MAKECMDGOALS): libam
 	AM_HOME=$(NAVY_HOME) LIBS=libam $(MAKE) -C $(FCEUX_PATH) $(MAKECMDGOALS)
 
