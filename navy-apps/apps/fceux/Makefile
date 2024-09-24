@@ -1,4 +1,5 @@
 FCEUX_PATH = $(AM_HOME)/../fceux-am
+mainargs=mario
 ifeq ($(wildcard $(FCEUX_PATH)/src/x6502.cpp),)
   $(error Please set $$FCEUX_PATH in the Makefile to a valid path of a FCEUX repo)
 else
@@ -12,6 +13,8 @@ libam:
 else
 libam: ;
 endif
+
+
 
 default $(MAKECMDGOALS): libam
 	AM_HOME=$(NAVY_HOME) LIBS=libam $(MAKE) -C $(FCEUX_PATH) $(MAKECMDGOALS)
