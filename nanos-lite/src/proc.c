@@ -25,7 +25,7 @@ void init_proc() {
 	Log("Initializing processes...");
 
 	// load program here
-	char *filename = "/bin/bad-apple";
+	char *filename = "/bin/microbench";
 	Log("Loading program from %s", filename);
 	naive_uload(NULL, filename);
 }
