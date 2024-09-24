@@ -1,7 +1,7 @@
 #include <NDL.h>
 #include <SDL.h>
 
-int start_time = 0;
+static int start_time = 0;
 
 int SDL_Init(uint32_t flags) {
 	start_time = NDL_GetTicks();

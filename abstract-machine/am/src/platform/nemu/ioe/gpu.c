@@ -34,7 +34,6 @@ void __am_gpu_status(AM_GPU_STATUS_T *status) {
 }
 
 void __am_gpu_init() {
-	int i;
 	AM_GPU_CONFIG_T cfg;
 	__am_gpu_config(&cfg);
 	gpu_w = cfg.width;
