@@ -8,17 +8,18 @@ Area heap = RANGE(&_heap_start, PMEM_END);
 static const char mainargs[MAINARGS_MAX_LEN] = MAINARGS_PLACEHOLDER; // defined in CFLAGS
 
 void putch(char ch) {
-  outb(SERIAL_PORT, ch);
+	outb(SERIAL_PORT, ch);
 }
 
 void halt(int code) {
-  nemu_trap(code);
+	nemu_trap(code);
 
-  // should not reach here
-  while (1);
+	// should not reach here
+	while (1)
+		;
 }
 
 void _trm_init() {
-  int ret = main(mainargs);
-  halt(ret);
+	int ret = main(mainargs);
+	halt(ret);
 }
