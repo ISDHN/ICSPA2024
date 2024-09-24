@@ -25,7 +25,7 @@ void init_proc() {
 	Log("Initializing processes...");
 
 	// load program here
-	char *filename = "/bin/nterm";
+	char *filename = "/bin/nslider";
 	Log("Loading program from %s", filename);
 	naive_uload(NULL, filename);
 }
