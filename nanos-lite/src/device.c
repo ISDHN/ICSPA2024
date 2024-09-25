@@ -32,10 +32,11 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 	return snprintf(buf, len, "WIDTH: %d\nHEIGHT: %d\n", io_read(AM_GPU_CONFIG).width, io_read(AM_GPU_CONFIG).height);
 }
 
+static int screen_w;
+
 size_t fb_write(const void *buf, size_t offset, size_t len) {
-	int w = io_read(AM_GPU_CONFIG).width;
-	int x = offset / sizeof(uint32_t) % w;
-	int y = offset / sizeof(uint32_t) / w;
+	int x = offset / sizeof(uint32_t) % screen_w;
+	int y = offset / sizeof(uint32_t) / screen_w;
 	int l = len / sizeof(uint32_t);
 
 	io_write(AM_GPU_FBDRAW, x, y, (uint32_t *)buf, l, 1, true);
@@ -69,4 +70,5 @@ size_t sb_write(const void *buf, size_t offset, size_t len) {
 void init_device() {
 	Log("Initializing devices...");
 	ioe_init();
+	screen_w = io_read(AM_GPU_CONFIG).width;
 }

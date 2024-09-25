@@ -64,9 +64,9 @@ void do_syscall(Context *c) {
 		case SYS_exit:
 			halt(a[1]);
 			break;
-			SYS_DISPATCH(yield);
 			SYS_DISPATCH(write, a[1], (const char *)a[2], a[3]);
 			SYS_DISPATCH(read, a[1], (char *)a[2], a[3]);
+			SYS_DISPATCH(yield);
 			SYS_DISPATCH(lseek, a[1], a[2], a[3]);
 			SYS_DISPATCH(brk, a[1]);
 			SYS_DISPATCH(open, (const char *)(a[1]), a[2], a[3]);
