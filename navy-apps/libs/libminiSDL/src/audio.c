@@ -14,7 +14,7 @@ void audio_callback_caller() {
 		return;
 	}
 	int now = NDL_GetTicks();
-	if (now - last_time < spec.samples * 1000 / spec.freq) {
+	if (now - last_time < spec.samples * 10 / spec.freq) {
 		return;
 	}
 	last_time = now;
