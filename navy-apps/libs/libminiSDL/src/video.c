@@ -6,9 +6,16 @@
 #include <stdlib.h>
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
+	audio_callback_caller();
 	assert(dst && src);
+
+	audio_callback_caller();
 	assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
+
+	audio_callback_caller();
 	int srcx, srcy, srcw, srch;
+
+	audio_callback_caller();
 	int dstx, dsty, dstw, dsth;
 
 #define EXCT(obj, name, suffix) \
@@ -27,24 +34,43 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 		EXCT(sd, h, rect);  \
 	}
 
+	audio_callback_caller();
 	OPT(src);
+
+	audio_callback_caller();
 	OPT(dst);
 
+	audio_callback_caller();
 	int w, h;
 
+	audio_callback_caller();
 	if (srcw + srch == 0 && dstw + dsth != 0) {
+
+		audio_callback_caller();
 		w = dstw;
+
+		audio_callback_caller();
 		h = dsth;
 	} else if (srcw + srch != 0 && dstw + dsth == 0) {
+		audio_callback_caller();
 		w = srcw;
+
+		audio_callback_caller();
 		h = srch;
 	} else {
+
+		audio_callback_caller();
 		assert(srcw == dstw && dsth == srch);
+
+		audio_callback_caller();
 		w = srcw;
+
+		audio_callback_caller();
 		h = srch;
 	}
 
 	for (int i = 0; i < srch; i++) {
+		audio_callback_caller();
 		memcpy(dst->pixels + (dsty + i) * dst->pitch + dstx * dst->format->BytesPerPixel,
 			   src->pixels + (srcy + i) * src->pitch + srcx * src->format->BytesPerPixel,
 			   srcw * src->format->BytesPerPixel);
@@ -52,38 +78,79 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
+	audio_callback_caller();
 	assert(dst);
+
+	audio_callback_caller();
 	int x, y, w, h;
+
+	audio_callback_caller();
 	if (dstrect == NULL) {
+
+		audio_callback_caller();
 		x = 0;
+
+		audio_callback_caller();
 		y = 0;
+
+		audio_callback_caller();
 		w = dst->w;
+
+		audio_callback_caller();
 		h = dst->h;
 	} else {
+		audio_callback_caller();
 		x = dstrect->x;
+
+		audio_callback_caller();
 		y = dstrect->y;
+
+		audio_callback_caller();
 		w = dstrect->w;
+
+		audio_callback_caller();
 		h = dstrect->h;
 	}
 	for (int i = 0; i < h; i++) {
+		audio_callback_caller();
 		memset(dst->pixels + (y + i) * dst->pitch + x * dst->format->BytesPerPixel, color, w * dst->format->BytesPerPixel);
 	}
 	audio_callback_caller();
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
+
+	audio_callback_caller();
 	if (x == 0 && y == 0 && w == 0 && h == 0) {
+
+		audio_callback_caller();
 		w = s->w;
+
+		audio_callback_caller();
 		h = s->h;
 	}
+
+	audio_callback_caller();
 	if (s->format->palette != NULL) {
+
+		audio_callback_caller();
 		uint32_t *pixels = calloc(w * h, sizeof(uint32_t));
+
+		audio_callback_caller();
 		for (int i = 0; i < w * h; i++) {
+
+			audio_callback_caller();
 			SDL_Color color = s->format->palette->colors[((uint8_t *)s->pixels)[i]];
+
+			audio_callback_caller();
 			pixels[i] = color.r << 16 | color.g << 8 | color.b;
 		}
+
+		audio_callback_caller();
 		NDL_DrawRect(pixels, x, y, w, h);
 	} else {
+
+		audio_callback_caller();
 		NDL_DrawRect((uint32_t *)s->pixels, x, y, w, h);
 	}
 	audio_callback_caller();

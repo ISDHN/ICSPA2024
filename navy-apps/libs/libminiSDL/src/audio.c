@@ -9,12 +9,12 @@ bool is_pause = true;
 SDL_AudioCallback callback;
 
 void audio_callback_caller() {
-	static int last_time = 0;
 	if (is_pause) {
 		return;
 	}
+	static int last_time = 0;
 	int now = NDL_GetTicks();
-	if (now - last_time < spec.samples / spec.freq) {
+	if (now - last_time < spec.samples * 256 / spec.freq) {
 		return;
 	}
 	last_time = now;

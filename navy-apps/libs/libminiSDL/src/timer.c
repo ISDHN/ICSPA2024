@@ -22,7 +22,11 @@ uint32_t SDL_GetTicks() {
 }
 
 void SDL_Delay(uint32_t ms) {
+
+	audio_callback_caller();
 	int start = NDL_GetTicks();
+
+	audio_callback_caller();
 	while (NDL_GetTicks() - start < ms)
-		;
+		audio_callback_caller();
 }
