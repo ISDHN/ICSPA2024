@@ -48,6 +48,7 @@ static char *rl_gets() {
 
 static int cmd_r(char *args) {
 	restart();
+	nemu_state.state = NEMU_RUNNING;
 	cpu_exec(-1);
 	return 0;
 }
