@@ -3,6 +3,7 @@
 #include <string.h>
 
 #define key(k) [SDLK_##k] = #k "\n", // there in \n in the original code
+#define init_keystate(k) [SDLK_##k] = 0,
 
 #define ACT_IND 1
 #define KEY_IND 3
@@ -10,6 +11,9 @@
 static const char *keyname[] = {
 	"NONE",
 	_KEYS(key)}; // there in \n in the original code
+
+static uint8_t key_state[] = {
+	_KEYS(init_keystate)};
 
 int SDL_PushEvent(SDL_Event *ev) {
 	TODO()
@@ -49,6 +53,7 @@ int SDL_PollEvent(SDL_Event *ev) {
 
 		audio_callback_caller();
 		Classify_Keyboard_Event(buf, ev);
+		key_state[ev->key.keysym.sym] = ev->type == SDL_KEYDOWN ? 1 : 0;
 
 		audio_callback_caller();
 		return 1;
@@ -61,15 +66,11 @@ int SDL_PollEvent(SDL_Event *ev) {
 int SDL_WaitEvent(SDL_Event *event) {
 
 	audio_callback_caller();
-	char buf[32] = {0};
-
-	audio_callback_caller();
-	while (!NDL_PollEvent(buf, sizeof(buf))) {
+	while (!SDL_PollEvent(event)) {
 		audio_callback_caller();
 	}
 
 	audio_callback_caller();
-	Classify_Keyboard_Event(buf, event);
 	return 1;
 }
 
@@ -80,7 +81,8 @@ int SDL_PeepEvents(SDL_Event *ev, int numevents, int action, uint32_t mask) {
 }
 
 uint8_t *SDL_GetKeyState(int *numkeys) {
-	TODO()
-
-	return NULL;
+	SDL_Event event;
+	while (SDL_PollEvent(&event))
+		;
+	return key_state;
 }
