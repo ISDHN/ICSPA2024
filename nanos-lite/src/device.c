@@ -34,7 +34,6 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
 	int w = io_read(AM_GPU_CONFIG).width;
-	int h = io_read(AM_GPU_CONFIG).height;
 	int x = offset / sizeof(uint32_t) % w;
 	int y = offset / sizeof(uint32_t) / w;
 	int l = len / sizeof(uint32_t);
@@ -58,6 +57,7 @@ size_t sbctrl_write(const void *buf, size_t offset, size_t len) {
 		return 0;
 	}
 	io_write(AM_AUDIO_CTRL, ((int *)buf)[0], ((int *)buf)[1], ((int *)buf)[2]);
+	return 3 * sizeof(int);
 }
 
 size_t sb_write(const void *buf, size_t offset, size_t len) {

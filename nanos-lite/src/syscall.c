@@ -15,6 +15,7 @@ struct timeval {
 
 int sys_yield() {
 	yield();
+	return 0;
 }
 
 long sys_write(int fd, const void *buf, size_t count) {
