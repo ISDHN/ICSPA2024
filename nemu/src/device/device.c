@@ -36,9 +36,8 @@ void send_key(uint8_t, bool);
 void vga_update_screen();
 
 bool need_update = false;
-timer_t timer;
 
-void alarm_handle(sigval_t val) {
+void alarm_handle() {
 	need_update = true;
 }
 
@@ -81,27 +80,9 @@ void sdl_clear_event_queue() {
 #endif
 }
 
-void init_hpet() {
-	struct sigevent sev;
-	memset(&sev, 0, sizeof(sev));
-	sev.sigev_notify = SIGEV_THREAD;
-	sev.sigev_notify_function = alarm_handle;
-	sev.sigev_value.sival_ptr = &timer;
-	timer_create(CLOCK_REALTIME, &sev, &timer);
-
-	struct itimerspec its;
-	its.it_interval.tv_sec = 0;
-	its.it_interval.tv_nsec = 1000000000 / TIMER_HZ;
-	its.it_value.tv_sec = 0;
-	its.it_value.tv_nsec = 1000000000 / TIMER_HZ;
-	timer_settime(timer, 0, &its, NULL);
-}
-
 void init_device() {
 	IFDEF(CONFIG_TARGET_AM, ioe_init());
 	init_map();
-
-	init_hpet();
 
 	IFDEF(CONFIG_HAS_SERIAL, init_serial());
 	IFDEF(CONFIG_HAS_TIMER, init_timer());
@@ -112,4 +93,6 @@ void init_device() {
 	IFDEF(CONFIG_HAS_SDCARD, init_sdcard());
 
 	IFNDEF(CONFIG_TARGET_AM, init_alarm());
+
+	add_alarm_handle(alarm_handle);
 }
