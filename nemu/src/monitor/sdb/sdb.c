@@ -46,6 +46,12 @@ static char *rl_gets() {
 	return line_read;
 }
 
+static int cmd_r(char *args) {
+	restart();
+	cpu_exec(-1);
+	return 0;
+}
+
 static int cmd_c(char *args) {
 	cpu_exec(-1);
 	return 0;
@@ -155,6 +161,7 @@ static struct {
 	{"d", "Delete a watchpoint", cmd_d},
 	{"x", "Scan memory", cmd_x},
 	{"p", "Evaluate an expression", cmd_p},
+	{"r", "Restart the program", cmd_r},
 	{"info", "Print program state", cmd_info},
 	/* TODO: Add more commands */
 
