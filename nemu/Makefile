@@ -44,6 +44,10 @@ LEXES += $(shell find -L $(DIRS-y) -name "*.l")
 SRCS = $(filter-out $(SRCS-BLACKLIST-y),$(SRCS-y))
 CXXSRCS = $(filter-out $(CXXSRCS-BLACKLIST-y),$(CXXSRCS-y))
 
+ifdef CONFIG_PG
+CFLAGS_BUILD += -pg
+endif
+
 # Extract compiler and options from menuconfig
 ifneq ($(CONFIG_CC),)
 CC = $(call remove_quote,$(CONFIG_CC))
