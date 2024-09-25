@@ -40,7 +40,7 @@ int __printf(bool to_string, char *out, uint32_t length, const char *fmt, va_lis
 			case 'u':
 			case 'p':
 			case 'd': {
-				bool hex = *p == 'x' | *p == 'p';
+				bool hex = (*p == 'x') | (*p == 'p');
 				bool sign = *p == 'd';
 				unsigned int x = va_arg(ap, unsigned int);
 				if (sign) {
