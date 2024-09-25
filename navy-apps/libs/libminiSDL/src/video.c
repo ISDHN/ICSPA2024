@@ -120,7 +120,7 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 
-	audio_callback_caller();
+	// audio_callback_caller();
 	if (x == 0 && y == 0 && w == 0 && h == 0) {
 
 		// audio_callback_caller();
@@ -130,19 +130,19 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 		h = s->h;
 	}
 
-	audio_callback_caller();
+	// audio_callback_caller();
 	if (s->format->palette != NULL) {
 
 		// audio_callback_caller();
 		uint32_t *pixels = calloc(w * h, sizeof(uint32_t));
 
-		audio_callback_caller();
+		// audio_callback_caller();
 		for (int i = 0; i < w * h; i++) {
 
 			// audio_callback_caller();
 			SDL_Color color = s->format->palette->colors[((uint8_t *)s->pixels)[i]];
 
-			audio_callback_caller();
+			// audio_callback_caller();
 			pixels[i] = color.r << 16 | color.g << 8 | color.b;
 		}
 
