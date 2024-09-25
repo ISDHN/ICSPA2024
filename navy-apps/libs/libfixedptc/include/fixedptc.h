@@ -142,15 +142,19 @@ static inline fixedpt fixedpt_mul(fixedpt A, fixedpt B) {
 
 /* Divides two fixedpt numbers, returns the result. */
 static inline fixedpt fixedpt_div(fixedpt A, fixedpt B) {
-	return (fixedpt)(((fixedptd)A) << FIXEDPT_FBITS / (fixedptd)B);
+	return (fixedpt)(((fixedptd)A / (fixedptd)B) << FIXEDPT_FBITS);
 }
 
 static inline fixedpt fixedpt_abs(fixedpt A) {
 	return 0x7fffffff & A;
 }
 
+static inline int is_integer(fixedpt A) {
+	return !(A & FIXEDPT_FMASK);
+}
+
 static inline fixedpt fixedpt_floor(fixedpt A) {
-	if (!(A & FIXEDPT_FMASK)) {
+	if (is_integer(A)) {
 		return A;
 	}
 
@@ -158,11 +162,11 @@ static inline fixedpt fixedpt_floor(fixedpt A) {
 	if (A < 0) {
 		bias = -1;
 	}
-	return ((A >> FIXEDPT_WBITS) + bias) << FIXEDPT_WBITS;
+	return ((A >> FIXEDPT_FBITS) + bias) << FIXEDPT_FBITS;
 }
 
 static inline fixedpt fixedpt_ceil(fixedpt A) {
-	if (!(A & FIXEDPT_FMASK)) {
+	if (is_integer(A)) {
 		return A;
 	}
 
@@ -170,7 +174,7 @@ static inline fixedpt fixedpt_ceil(fixedpt A) {
 	if (A < 0) {
 		bias = 0;
 	}
-	return ((A >> FIXEDPT_WBITS) + bias) << FIXEDPT_WBITS;
+	return ((A >> FIXEDPT_FBITS) + bias) << FIXEDPT_FBITS;
 }
 
 /*
