@@ -76,7 +76,16 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 		w = s->w;
 		h = s->h;
 	}
-	NDL_DrawRect((uint32_t *)s->pixels, x, y, w, h);
+	if (s->format->palette != NULL) {
+		uint32_t *pixels = calloc(w * h, sizeof(uint32_t));
+		for (int i = 0; i < w * h; i++) {
+			SDL_Color color = s->format->palette->colors[((uint8_t *)s->pixels)[i]];
+			pixels[i] = color.r << 16 | color.g << 8 | color.b;
+		}
+		NDL_DrawRect(pixels, x, y, w, h);
+	} else {
+		NDL_DrawRect((uint32_t *)s->pixels, x, y, w, h);
+	}
 	audio_callback_caller();
 }
 

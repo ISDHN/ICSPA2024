@@ -18,6 +18,7 @@ int SDL_PushEvent(SDL_Event *ev) {
 }
 
 static void Classify_Keyboard_Event(const char *buf, SDL_Event *event) {
+	audio_callback_caller();
 	event->type = buf[ACT_IND] == 'd' ? SDL_KEYDOWN : SDL_KEYUP;
 	for (int i = 0; i < sizeof(keyname) / sizeof(keyname[0]); i++) {
 		if (strcmp(keyname[i], buf + KEY_IND) == 0) {
@@ -40,8 +41,9 @@ int SDL_PollEvent(SDL_Event *ev) {
 
 int SDL_WaitEvent(SDL_Event *event) {
 	char buf[32] = {0};
-	while (!NDL_PollEvent(buf, sizeof(buf)))
-		;
+	while (!NDL_PollEvent(buf, sizeof(buf))) {
+		audio_callback_caller();
+	}
 	Classify_Keyboard_Event(buf, event);
 	return 1;
 }
