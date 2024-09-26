@@ -43,16 +43,27 @@ void init_proc() {
 	// naive_uload(NULL, filename);
 }
 
+PCB *get_next_proc() {
+	for (int i = 0; i < MAX_NR_PROC; i++) {
+		if (&pcb[i] == current) {
+			if (i == MAX_NR_PROC - 1) {
+				return &pcb[0];
+			} else {
+				return &pcb[i + 1];
+			}
+		}
+	}
+	return NULL; // boot pcb
+}
+
 Context *schedule(Context *prev) {
 	current->cp = prev;
-	for (int i = 0; i < MAX_NR_PROC; i++) {
-		if (pcb[i].cp == prev) {
-			if (i == MAX_NR_PROC - 1) {
-				current = &pcb[0];
-			} else {
-				current = &pcb[i + 1];
-			}
-			break;
+	PCB *next = get_next_proc();
+	if (next != NULL) {
+		current = next;
+	} else {
+		if (pcb[0].cp != NULL) {
+			current = &pcb[0];
 		}
 	}
 	return current->cp;
