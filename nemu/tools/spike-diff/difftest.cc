@@ -20,6 +20,29 @@
 
 #define NR_GPR MUXDEF(CONFIG_RVE, 16, 32)
 
+enum mt_csr_cst { // mechine trap csr
+	mstatus = 0,
+	misa,
+	medeleg,
+	mideleg,
+	mie,
+	mtvec,
+	mcounteren,
+	mstatush,
+	mscratch = 0x40,
+	mepc,
+	mcause,
+	mtval,
+	mip,
+	mtinst,
+	mtval2
+};
+
+enum csr_kind_cst {
+	mrw = 3,
+	mro = 15
+};
+
 static std::vector<std::pair<reg_t, abstract_device_t *>> difftest_plugin_devices;
 static std::vector<std::string> difftest_htif_args;
 static std::vector<std::pair<reg_t, mem_t *>> difftest_mem(
