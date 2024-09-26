@@ -32,12 +32,12 @@ uint8_t *new_space(int size) {
 	return p;
 }
 
-static void check_bound(IOMap *map, paddr_t addr) {
+static void check_bound(IOMap *map, paddr_t addr, bool write) {
 	if (map == NULL) {
-		Assert(map != NULL, "address (" FMT_PADDR ") is out of bound at pc = " FMT_WORD, addr, cpu.pc);
+		Assert(map != NULL, "%s address (" FMT_PADDR ") is out of bound at pc = " FMT_WORD, write ? "write" : "read", addr, cpu.pc);
 	} else {
 		Assert(addr <= map->high && addr >= map->low,
-			   "address (" FMT_PADDR ") is out of bound {%s} [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
+			   "%s address (" FMT_PADDR ") is out of bound {%s} [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD, write ? "write" : "read",
 			   addr, map->name, map->low, map->high, cpu.pc);
 	}
 }
@@ -56,7 +56,7 @@ void init_map() {
 
 word_t map_read(paddr_t addr, int len, IOMap *map) {
 	assert(len >= 1 && len <= 8);
-	check_bound(map, addr);
+	check_bound(map, addr, false);
 	paddr_t offset = addr - map->low;
 #ifdef CONFIG_DTRACE
 	Log("read from %s at offset = " FMT_PADDR ", len = %d", map->name, offset, len);
@@ -68,7 +68,7 @@ word_t map_read(paddr_t addr, int len, IOMap *map) {
 
 void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
 	assert(len >= 1 && len <= 8);
-	check_bound(map, addr);
+	check_bound(map, addr, true);
 	paddr_t offset = addr - map->low;
 #ifdef CONFIG_DTRACE
 	Log("write to %s at offset = " FMT_PADDR ", len = %d, data = " FMT_WORD, map->name, offset, len, data);
