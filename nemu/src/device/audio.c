@@ -34,7 +34,7 @@ static uint32_t *audio_base = NULL;
 static uint32_t pos_l = 0, pos_r = 0;
 
 static inline int get_count() {
-	return pos_r - pos_l + (pos_r < pos_l) ? CONFIG_SB_SIZE : 0;
+	return pos_r - pos_l + (pos_r > pos_l) ? CONFIG_SB_SIZE : 0;
 }
 
 static void callback(void *userdata, uint8_t *stream, int len) {
