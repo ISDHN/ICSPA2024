@@ -42,7 +42,7 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
 	// 	return;
 	// }
 	// i -= 4;
-	for (; i < buf_size; i += 2) {
-		outw(AUDIO_SBUF_ADDR, *((uint16_t *)(ctl->buf.start) + i));
+	for (; i < buf_size; i += 1) {
+		outb(AUDIO_SBUF_ADDR, *((uint8_t *)(ctl->buf.start) + i));
 	}
 }
