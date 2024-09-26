@@ -75,7 +75,7 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
 static void audio_buffer_handle(uint32_t offset, int len, bool is_write) {
 	assert(offset == 0);
 	if (is_write) {
-		while (CONFIG_SB_SIZE - get_count() <= 8) {
+		while (CONFIG_SB_SIZE - get_count() <= 128) {
 #ifdef CONFIG_WARN_OVERFLOW
 			Warning("audio buffer near overflow");
 #endif
