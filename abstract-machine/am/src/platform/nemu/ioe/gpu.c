@@ -3,8 +3,9 @@
 
 #define SYNC_ADDR (VGACTL_ADDR + 4)
 
-int gpu_w;
-int gpu_h;
+static int gpu_w;
+static int gpu_h;
+static uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
 
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 	uint32_t data = inl(VGACTL_ADDR);
@@ -13,7 +14,6 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 }
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
-	uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
 	uint32_t *src = ctl->pixels;
 	int w = ctl->w, h = ctl->h;
 	if (ctl->pixels != NULL) {

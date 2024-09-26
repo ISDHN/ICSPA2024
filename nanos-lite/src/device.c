@@ -35,12 +35,13 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 static int screen_w;
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
-	int x = offset / sizeof(uint32_t) % screen_w;
-	int y = offset / sizeof(uint32_t) / screen_w;
+	int pix_idx = offset / sizeof(uint32_t);
+	int x = pix_idx % screen_w;
+	int y = pix_idx / screen_w;
 	int l = len / sizeof(uint32_t);
 
 	io_write(AM_GPU_FBDRAW, x, y, (uint32_t *)buf, l, 1, true);
-	return 0;
+	return len;
 }
 
 size_t sbctrl_read(void *buf, size_t offset, size_t len) {

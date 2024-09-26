@@ -33,6 +33,12 @@ int atoi(const char *nptr) {
 	return x;
 }
 
+void *calloc(size_t __size, size_t __n) {
+	void *ret = malloc(__size * __n);
+	memset(ret, 0, __size * __n);
+	return ret;
+}
+
 void *malloc(size_t size) {
 	static void *current = NULL;
 	if (current == NULL) {

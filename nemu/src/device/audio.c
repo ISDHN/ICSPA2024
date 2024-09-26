@@ -17,7 +17,7 @@
 #include <common.h>
 #include <device/map.h>
 
-#define TEMP_BUF_SIZE 1
+#define TEMP_BUF_SIZE 4
 enum {
 	reg_freq,
 	reg_channels,
@@ -42,10 +42,14 @@ static void callback(void *userdata, uint8_t *stream, int len) {
 	if (count > len) {
 		count = len;
 	}
-	for (int i = 0; i < count; i++) {
-		stream[i] = sbuf[pos_l];
-		pos_l = (pos_l + 1) % CONFIG_SB_SIZE;
+	if (pos_l + count > CONFIG_SB_SIZE) {
+		int first_stage = CONFIG_SB_SIZE - pos_l;
+		memcpy(stream, sbuf + pos_l, first_stage);
+		memcpy(stream + first_stage, sbuf, count - (first_stage));
+	} else {
+		memcpy(stream, sbuf + pos_l, count);
 	}
+	pos_l = (pos_l + count) % CONFIG_SB_SIZE;
 	memset(stream + count, 0, len - count);
 }
 
@@ -69,17 +73,17 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
 }
 
 static void audio_buffer_handle(uint32_t offset, int len, bool is_write) {
-	assert(len == 1);
 	assert(offset == 0);
 	if (is_write) {
-		sbuf[pos_r] = temp_buf[0];
-		while (CONFIG_SB_SIZE - get_count() <= 256) {
+		while (CONFIG_SB_SIZE - get_count() <= 8) {
 #ifdef CONFIG_WARN_OVERFLOW
 			Warning("audio buffer near overflow");
 #endif
 		}
-		pos_r = (pos_r + 1) % CONFIG_SB_SIZE;
-
+		for (int i = 0; i < len; i++) {
+			sbuf[pos_r] = temp_buf[i];
+			pos_r = (pos_r + 4) % CONFIG_SB_SIZE;
+		}
 #ifdef CONFIG_WARN_OVERFLOW
 		if (pos_r == pos_l) {
 			Warning("audio buffer near overflow");

@@ -27,6 +27,7 @@ int strncmp(const char *s1, const char *s2, size_t n);
 void srand(unsigned int seed);
 int rand(void);
 void *malloc(size_t size);
+void *calloc(size_t __size, size_t __n);
 void free(void *ptr);
 int abs(int x);
 int atoi(const char *nptr);

@@ -1,5 +1,6 @@
 #include <proc.h>
 #include <common.h>
+#include <klib.h>
 #include <elf.h>
 #include <fs.h>
 
@@ -37,7 +38,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	Elf_Ehdr ehdr;
 	readbytes(fd, &ehdr, 0, sizeof(Elf_Ehdr));
 
-	Elf_Phdr phdrs[ehdr.e_phnum];
+	Elf_Phdr *phdrs = calloc(sizeof(Elf_Phdr), ehdr.e_phnum);
 	readbytes(fd, phdrs, ehdr.e_phoff, ehdr.e_phnum * sizeof(Elf_Phdr));
 	for (int i = 0; i < ehdr.e_phnum; i++) {
 		Elf_Phdr phdr = phdrs[i];
@@ -47,6 +48,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		readbytes(fd, (void *)phdr.p_vaddr, phdr.p_offset, phdr.p_filesz);
 		memset((void *)(phdr.p_vaddr + phdr.p_filesz), 0, phdr.p_memsz - phdr.p_filesz);
 	}
+	free(phdrs);
 	return ehdr.e_entry;
 }
 
