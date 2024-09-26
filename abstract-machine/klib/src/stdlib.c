@@ -44,6 +44,9 @@ void *malloc(size_t size) {
 	if (current == NULL) {
 		current = heap.start;
 	}
+	if (current + size > heap.end) {
+		return NULL;
+	}
 	void *ret = current;
 	current += size;
 	return ret;
