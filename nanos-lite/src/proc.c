@@ -5,10 +5,10 @@
 
 static PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
 static PCB pcb_boot = {};
+static int pcb_count = 0;
 PCB *current = NULL;
 
 void context_kload(thread_entry func, void *arg) {
-	static int pcb_count = 0;
 	if (pcb_count >= MAX_NR_PROC) {
 		Log("No more PCB space");
 		return;
@@ -44,13 +44,9 @@ void init_proc() {
 }
 
 PCB *get_next_proc() {
-	for (int i = 0; i < MAX_NR_PROC; i++) {
-		if (&pcb[i] == current) {
-			if (i == MAX_NR_PROC - 1) {
-				return &pcb[0];
-			} else {
-				return &pcb[i + 1];
-			}
+	for (int i = 0; i < pcb_count; i++) {
+		if (pcb + i == current) {
+			return pcb + (i + 1) % pcb_count;
 		}
 	}
 	return NULL; // boot pcb
@@ -63,7 +59,7 @@ Context *schedule(Context *prev) {
 		current = next;
 	} else {
 		if (pcb[0].cp != NULL) {
-			current = &pcb[0];
+			current = pcb;
 		}
 	}
 	return current->cp;
