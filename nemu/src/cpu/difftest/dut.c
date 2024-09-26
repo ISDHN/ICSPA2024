@@ -37,6 +37,7 @@ void difftest_attach() {
 	attatched = true;
 	ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
 	ref_difftest_memcpy(RESET_VECTOR, guest_to_host(RESET_VECTOR), CONFIG_MSIZE, DIFFTEST_TO_REF);
+	isa_difftest_attach();
 }
 
 void difftest_detach() {

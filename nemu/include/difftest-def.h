@@ -18,6 +18,7 @@
 
 #include <stdint.h>
 #include <macro.h>
+#include <isa.h>
 #include <generated/autoconf.h>
 
 #define __EXPORT __attribute__((visibility("default")))
