@@ -35,13 +35,13 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
 	while (buffer_size - inl(AUDIO_COUNT_ADDR) < buf_size)
 		;
 	int i = 0;
-	for (; i < buf_size; i += 4) {
-		outl(AUDIO_SBUF_ADDR, *(uint32_t *)(ctl->buf.start + i));
-	}
-	if (i == buf_size) {
-		return;
-	}
-	i -= 4;
+	// for (; i < buf_size; i += 4) {
+	// 	outl(AUDIO_SBUF_ADDR, *(uint32_t *)(ctl->buf.start + i));
+	// }
+	// if (i == buf_size) {
+	// 	return;
+	// }
+	// i -= 4;
 	for (; i < buf_size; i++) {
 		outb(AUDIO_SBUF_ADDR, *(uint8_t *)(ctl->buf.start + i));
 	}
