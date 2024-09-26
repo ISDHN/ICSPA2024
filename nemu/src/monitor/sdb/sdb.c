@@ -60,6 +60,7 @@ static int cmd_save(char *args) {
 	fwrite(&cpu, sizeof(cpu), 1, fp);
 	extern uint8_t pmem[];
 	fwrite(pmem, CONFIG_MSIZE, 1, fp);
+	fclose(fp);
 	return 0;
 }
 
@@ -74,6 +75,7 @@ static int cmd_load(char *args) {
 	fread(&cpu, sizeof(cpu), 1, fp);
 	extern uint8_t pmem[];
 	fread(pmem, CONFIG_MSIZE, 1, fp);
+	fclose(fp);
 	return 0;
 }
 #pragma GCC diagnostic pop

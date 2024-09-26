@@ -1,5 +1,6 @@
 #include <common.h>
 #include "syscall.h"
+#include <proc.h>
 #include <fs.h>
 
 // #define STRACE
@@ -51,6 +52,11 @@ int sys_gettimeofday(struct timeval *tv, void *tz) {
 	return 0;
 }
 
+int sys_execve(const char *pathname, const char *const argv[], const char *const envp[]) {
+	naive_uload(NULL, pathname);
+	return 0;
+}
+
 void do_syscall(Context *c) {
 	uintptr_t a[4];
 	a[0] = c->GPR1;
@@ -62,7 +68,7 @@ void do_syscall(Context *c) {
 #endif
 	switch (a[0]) {
 		case SYS_exit:
-			halt(a[1]);
+			sys_execve("/bin/nemu", NULL, NULL);
 			break;
 			SYS_DISPATCH(write, a[1], (const char *)a[2], a[3]);
 			SYS_DISPATCH(read, a[1], (char *)a[2], a[3]);
@@ -72,6 +78,7 @@ void do_syscall(Context *c) {
 			SYS_DISPATCH(open, (const char *)(a[1]), a[2], a[3]);
 			SYS_DISPATCH(close, a[1]);
 			SYS_DISPATCH(gettimeofday, (struct timeval *)a[1], (void *)a[2]);
+			SYS_DISPATCH(execve, (const char *)a[1], (const char **)a[2], (const char **)a[3]);
 		default:
 			panic("Unhandled syscall ID = %d", a[0]);
 	}
