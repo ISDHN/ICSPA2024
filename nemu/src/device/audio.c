@@ -72,8 +72,8 @@ static void audio_buffer_handle(uint32_t offset, int len, bool is_write) {
 	assert(len == 1);
 	assert(offset == 0);
 	if (is_write) {
-		while (CONFIG_SB_SIZE - get_count() < 256)
-			printf("w");
+		while (CONFIG_SB_SIZE - get_count() < audio_base[reg_samples] * 16)
+			;
 
 		sbuf[pos_r] = temp_buf[0];
 		pos_r = (pos_r + 1) % CONFIG_SB_SIZE;
