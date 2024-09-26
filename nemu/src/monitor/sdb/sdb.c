@@ -16,6 +16,7 @@
 #include "sdb.h"
 #include <common.h>
 #include <cpu/cpu.h>
+#include <cpu/difftest.h>
 #include <isa.h>
 #include <readline/history.h>
 #include <readline/readline.h>
@@ -135,6 +136,18 @@ static int cmd_p(char *args) {
 	return 0;
 }
 
+#ifdef CONFIG_DIFFTEST
+static int cmd_attatch(char *args) {
+	difftest_attach();
+	return 0;
+}
+
+static int cmd_detach(char *args) {
+	difftest_detach();
+	return 0;
+}
+#endif
+
 static int cmd_info(char *args) {
 	NEED_ARGS
 	if (strcmp(args, "r") == 0) {
@@ -163,7 +176,12 @@ static struct {
 	{"x", "Scan memory", cmd_x},
 	{"p", "Evaluate an expression", cmd_p},
 	{"r", "Restart the program", cmd_r},
+#ifdef CONFIG_DIFFTEST
+	{"attatch", "Attatch to difftest", cmd_attatch},
+	{"detach", "Detach from difftest", cmd_detach},
+#endif
 	{"info", "Print program state", cmd_info},
+
 	/* TODO: Add more commands */
 
 };
