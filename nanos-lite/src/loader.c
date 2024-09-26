@@ -21,6 +21,9 @@ size_t readbytes(int fd, void *buf, size_t offset, size_t len) {
 static uintptr_t loader(PCB *pcb, const char *filename) {
 	unsigned char ident[EI_NIDENT] = {0};
 	int fd = fs_open(filename, 0, 0);
+	if (fd == -1) {
+		return 0; // null
+	}
 	readbytes(fd, ident, 0, EI_NIDENT);
 	if (ident[EI_MAG0] != ELFMAG0 || ident[EI_MAG1] != ELFMAG1 || ident[EI_MAG2] != ELFMAG2 || ident[EI_MAG3] != ELFMAG3) {
 		Log("Not an ELF file");

@@ -28,7 +28,11 @@ long sys_read(int fd, void *buf, size_t count) {
 }
 
 int sys_open(const char *pathname, int flags, int mode) {
-	return fs_open(pathname, flags, mode);
+	int res = fs_open(pathname, flags, mode);
+	if (res == -1) {
+		panic("file not found: %s", pathname);
+	}
+	return res;
 }
 
 int sys_lseek(int fd, int offset, int whence) {
