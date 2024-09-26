@@ -39,7 +39,7 @@ static inline int get_count() {
 
 static void callback(void *userdata, uint8_t *stream, int len) {
 	int count = get_count();
-	Log("count = %d", count);
+	Log("pos_l = %d, pos_r = %d, count = %d", pos_l, pos_r, count);
 	if (count > len) {
 		count = len;
 	}
