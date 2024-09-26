@@ -19,10 +19,10 @@ Context *__am_irq_handle(Context *c) {
 		}
 
 		c = user_handler(ev, c);
-		printf("c: %p\n", c->mepc);
+
 		assert(c != NULL);
 	}
-
+	printf("c: %p\n", c->mepc);
 	return c;
 }
 
