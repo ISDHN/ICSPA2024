@@ -34,7 +34,7 @@ static uint32_t *audio_base = NULL;
 static uint32_t pos_l = 0, pos_r = 0;
 
 static inline int get_count() {
-	return pos_r - pos_l + (pos_r < pos_l) * CONFIG_SB_SIZE;
+	return pos_r - pos_l + (pos_r < pos_l) ? CONFIG_SB_SIZE : 0;
 }
 
 static void callback(void *userdata, uint8_t *stream, int len) {
@@ -73,15 +73,10 @@ static void audio_buffer_handle(uint32_t offset, int len, bool is_write) {
 	assert(offset == 0);
 	if (is_write) {
 		sbuf[pos_r] = temp_buf[0];
-		while (CONFIG_SB_SIZE - get_count() <= 256) {
-#ifdef CONFIG_WARN_OVERFLOW
-			Warning("audio buffer near overflow");
-#endif
-		}
 		pos_r = (pos_r + 1) % CONFIG_SB_SIZE;
 #ifdef CONFIG_WARN_OVERFLOW
 		if (pos_r == pos_l) {
-			Warning("audio buffer near overflow");
+			Warning("audio buffer  overflow");
 		}
 #endif
 	}
