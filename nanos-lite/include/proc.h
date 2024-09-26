@@ -16,8 +16,11 @@ typedef union {
 	};
 } PCB;
 
+typedef void (*thread_entry)(void *arg);
+
 extern PCB *current;
 
 #endif
 
+Context *schedule(Context *prev);
 int naive_uload(PCB *pcb, const char *filename);
