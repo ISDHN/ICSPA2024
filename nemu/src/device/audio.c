@@ -17,7 +17,7 @@
 #include <common.h>
 #include <device/map.h>
 
-#define TEMP_BUF_SIZE 4
+#define TEMP_BUF_SIZE 1
 enum {
 	reg_freq,
 	reg_channels,
@@ -75,15 +75,13 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
 static void audio_buffer_handle(uint32_t offset, int len, bool is_write) {
 	assert(offset == 0);
 	if (is_write) {
-		while (CONFIG_SB_SIZE - get_count() <= 128) {
+		while (CONFIG_SB_SIZE - get_count() <= 8) {
 #ifdef CONFIG_WARN_OVERFLOW
 			Warning("audio buffer near overflow");
 #endif
 		}
-		for (int i = 0; i < len; i++) {
-			sbuf[pos_r] = temp_buf[i];
-		}
-		pos_r = (pos_r + len) % CONFIG_SB_SIZE;
+		sbuf[pos_r] = *temp_buf;
+		pos_r = (pos_r + 1) % CONFIG_SB_SIZE;
 #ifdef CONFIG_WARN_OVERFLOW
 		if (pos_r == pos_l) {
 			Warning("audio buffer near overflow");
