@@ -84,7 +84,7 @@ static void audio_buffer_handle(uint32_t offset, int len, bool is_write) {
 		pos_r = (pos_r + 1) % CONFIG_SB_SIZE;
 #ifdef CONFIG_WARN_OVERFLOW
 		if (pos_r == pos_l) {
-			Warning("audio buffer near overflow");
+			Warning("audio buffer overflow");
 		}
 #endif
 	}
