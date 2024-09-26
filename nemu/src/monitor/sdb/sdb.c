@@ -58,7 +58,7 @@ static int cmd_save(char *args) {
 	}
 	fwrite(&nemu_state, sizeof(nemu_state), 1, fp);
 	fwrite(&cpu, sizeof(cpu), 1, fp);
-	extern uint8_t *pmem;
+	extern uint8_t pmem[];
 	fwrite(pmem, CONFIG_MSIZE, 1, fp);
 	return 0;
 }
@@ -72,7 +72,7 @@ static int cmd_load(char *args) {
 	}
 	fread(&nemu_state, sizeof(nemu_state), 1, fp);
 	fread(&cpu, sizeof(cpu), 1, fp);
-	extern uint8_t *pmem;
+	extern uint8_t pmem[];
 	fread(pmem, CONFIG_MSIZE, 1, fp);
 	return 0;
 }
