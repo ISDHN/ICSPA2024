@@ -35,7 +35,7 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
 	uint8_t *buf = ctl->buf.start;
 	while (buffer_size - inl(AUDIO_COUNT_ADDR) < buf_size)
 		;
-	for (int i = 0; i < buf_size; i += 1) {
+	for (int i = 0; i < buf_size; i++) {
 		outb(AUDIO_SBUF_ADDR, buf[i]);
 	}
 }

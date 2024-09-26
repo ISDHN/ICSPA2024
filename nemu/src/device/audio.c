@@ -42,14 +42,10 @@ static void callback(void *userdata, uint8_t *stream, int len) {
 	if (count > len) {
 		count = len;
 	}
-	if (pos_l + count > CONFIG_SB_SIZE) {
-		int first_stage = CONFIG_SB_SIZE - pos_l;
-		memcpy(stream, sbuf + pos_l, first_stage);
-		memcpy(stream + first_stage, sbuf, count - (first_stage));
-	} else {
-		memcpy(stream, sbuf + pos_l, count);
+	for (int i = 0; i < count; i++) {
+		stream[i] = sbuf[pos_l];
+		pos_l = (pos_l + 1) % CONFIG_SB_SIZE;
 	}
-	pos_l = (pos_l + count) % CONFIG_SB_SIZE;
 	memset(stream + count, 0, len - count);
 }
 
@@ -73,6 +69,7 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
 }
 
 static void audio_buffer_handle(uint32_t offset, int len, bool is_write) {
+	assert(len == 1);
 	assert(offset == 0);
 	if (is_write) {
 		while (CONFIG_SB_SIZE - get_count() <= 256) {
@@ -80,11 +77,11 @@ static void audio_buffer_handle(uint32_t offset, int len, bool is_write) {
 			Warning("audio buffer near overflow");
 #endif
 		}
-		sbuf[pos_r] = *temp_buf;
+		sbuf[pos_r] = temp_buf[0];
 		pos_r = (pos_r + 1) % CONFIG_SB_SIZE;
 #ifdef CONFIG_WARN_OVERFLOW
 		if (pos_r == pos_l) {
-			Warning("audio buffer overflow");
+			Warning("audio buffer near overflow");
 		}
 #endif
 	}
