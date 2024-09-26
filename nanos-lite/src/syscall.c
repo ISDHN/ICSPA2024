@@ -53,8 +53,7 @@ int sys_gettimeofday(struct timeval *tv, void *tz) {
 }
 
 int sys_execve(const char *pathname, const char *const argv[], const char *const envp[]) {
-	naive_uload(NULL, pathname);
-	return 0;
+	return naive_uload(NULL, pathname);
 }
 
 void do_syscall(Context *c) {

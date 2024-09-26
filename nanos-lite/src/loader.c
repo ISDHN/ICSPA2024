@@ -47,11 +47,13 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	return ehdr.e_entry;
 }
 
-void naive_uload(PCB *pcb, const char *filename) {
+int naive_uload(PCB *pcb, const char *filename) {
 	uintptr_t entry = loader(pcb, filename);
 	if (!entry) {
-		return;
+		return 1;
 	}
 	Log("Jump to entry = %p", entry);
 	((void (*)())entry)();
+
+	return 0;
 }

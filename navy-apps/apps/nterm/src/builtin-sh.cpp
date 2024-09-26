@@ -53,7 +53,9 @@ static void sh_handle_cmd(const char *cmd) {
 			return;
 		}
 	}
-	sh_printf("'%s' is not recognized as an internal or external command,operable program or batch file.\n", program);
+	if (execve(program, NULL, NULL)) {
+		sh_printf("'%s' is not recognized as an internal or external command,operable program or batch file.\n", program);
+	}
 }
 
 void builtin_sh_run() {
