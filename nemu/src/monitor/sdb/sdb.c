@@ -47,6 +47,37 @@ static char *rl_gets() {
 	return line_read;
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+static int cmd_save(char *args) {
+	NEED_ARGS
+	FILE *fp = fopen(args, "wb");
+	if (fp == NULL) {
+		printf("Failed to open file '%s'\n", args);
+		return 0;
+	}
+	fwrite(&nemu_state, sizeof(nemu_state), 1, fp);
+	fwrite(&cpu, sizeof(cpu), 1, fp);
+	extern uint8_t *pmem;
+	fwrite(pmem, CONFIG_MSIZE, 1, fp);
+	return 0;
+}
+
+static int cmd_load(char *args) {
+	NEED_ARGS
+	FILE *fp = fopen(args, "rb");
+	if (fp == NULL) {
+		printf("Failed to open file '%s'\n", args);
+		return 0;
+	}
+	fread(&nemu_state, sizeof(nemu_state), 1, fp);
+	fread(&cpu, sizeof(cpu), 1, fp);
+	extern uint8_t *pmem;
+	fread(pmem, CONFIG_MSIZE, 1, fp);
+	return 0;
+}
+#pragma GCC diagnostic pop
+
 static int cmd_r(char *args) {
 	restart();
 	nemu_state.state = NEMU_RUNNING;
@@ -181,6 +212,8 @@ static struct {
 	{"detach", "Detach from difftest", cmd_detach},
 #endif
 	{"info", "Print program state", cmd_info},
+	{"save", "Save the current state to a file", cmd_save},
+	{"load", "Load the state from a file", cmd_load},
 
 	/* TODO: Add more commands */
 
