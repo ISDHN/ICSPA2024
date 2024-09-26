@@ -39,7 +39,6 @@ static inline int get_count() {
 
 static void callback(void *userdata, uint8_t *stream, int len) {
 	int count = get_count();
-	Log("pos_l = %d, pos_r = %d, count = %d", pos_l, pos_r, count);
 	if (count > len) {
 		count = len;
 	}
@@ -73,6 +72,9 @@ static void audio_buffer_handle(uint32_t offset, int len, bool is_write) {
 	assert(len == 1);
 	assert(offset == 0);
 	if (is_write) {
+		while (CONFIG_SB_SIZE - get_count() < 256)
+			printf("w");
+
 		sbuf[pos_r] = temp_buf[0];
 		pos_r = (pos_r + 1) % CONFIG_SB_SIZE;
 #ifdef CONFIG_WARN_OVERFLOW
