@@ -58,7 +58,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 	printf("string_buffer_size: %d\n", string_buffer_size);
 
 #define PUSH_STR(s)          \
-	int len = strlen(s) + 1; \
+	int len = strlen(s) + 2; \
 	str_buffer -= len;       \
 	strcpy(str_buffer, s);
 
