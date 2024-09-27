@@ -31,9 +31,9 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 	pcb[pcb_count].cp = ucontext(NULL, (Area){pcb[pcb_count].stack, pcb[pcb_count].stack + STACK_SIZE}, entry);
 	char *ustack = heap.end;
 
-#define PUSH(x)          \
-	ustack -= sizeof(x); \
-	*ustack = x;
+#define PUSH(x, type)       \
+	ustack -= sizeof(type); \
+	*(type *)ustack = x;
 
 #define PUSH_STR(s)          \
 	int len = strlen(s) + 1; \
@@ -48,9 +48,9 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 			envc++;
 	}
 
-	PUSH(0);
+	PUSH(0, int);
 	for (int i = envc - 1; i >= 0; i--) {
-		PUSH((uintptr_t)envp[i]);
+		PUSH(envp[i], char *);
 		printf("envp[%d]: %s\n", i, envp[i]);
 	}
 
@@ -61,13 +61,14 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 			argc++;
 	}
 
-	PUSH(0);
+	PUSH(0, int);
 	for (int i = argc - 1; i >= 0; i--) {
-		PUSH((uintptr_t)argv[i]);
+		PUSH(argv[i], char *);
 		printf("argv[%d]: %s\n", i, argv[i]);
 	}
 	printf("ustack: %p\n", ustack);
-	PUSH(argc);
+	ustack -= 4;
+	*(int *)ustack = argc;
 
 	printf("argc: %d\n", argc);
 	pcb[pcb_count].cp->GPRx = (uintptr_t)ustack;
