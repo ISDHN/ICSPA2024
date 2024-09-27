@@ -49,7 +49,7 @@ void hello_fun(void *arg) {
 
 void init_proc() {
 	context_kload(hello_fun, "Welcome");
-	context_kload(hello_fun, "OS");
+	context_uload("/bin/pal");
 	switch_boot_pcb();
 
 	Log("Initializing processes...");
