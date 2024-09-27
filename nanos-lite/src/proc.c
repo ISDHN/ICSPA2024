@@ -34,6 +34,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 	}
 	pcb[pcb_count].cp = ucontext(NULL, (Area){pcb[pcb_count].stack, pcb[pcb_count].stack + STACK_SIZE}, entry);
 	char *ustack = new_page(8);
+	printf("OS: ustack = %p\n", ustack);
 	char *str_buffer = ustack;
 
 #define PUSH(x, type)       \
@@ -84,7 +85,6 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 	// PUSH(filename_ptr, char *);
 	PUSH(argc, int); // and the program name
 
-	printf("OS: argc = %d\n", argc);
 	pcb[pcb_count].cp->GPRx = (uintptr_t)ustack;
 	pcb_count++;
 	switch_boot_pcb();
