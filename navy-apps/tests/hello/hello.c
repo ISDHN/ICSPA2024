@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 int main(int argc, char *argv[]) {
+	printf("%d %p", argc, argv);
 	write(1, "Hello World!\n", 13);
 	int i = 2;
 	volatile int j = 0;
