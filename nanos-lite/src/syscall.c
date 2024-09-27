@@ -58,8 +58,8 @@ int sys_gettimeofday(struct timeval *tv, void *tz) {
 
 int sys_execve(const char *pathname, char *const argv[], char *const envp[]) {
 	int res = context_uload(pathname, argv, envp);
-	printf("res = %d\n", res);
 	if (!res) {
+		printf("yield!\n");
 		yield();
 	}
 	return res;
