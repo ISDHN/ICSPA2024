@@ -68,7 +68,6 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 	}
 	ustack = str_buffer - string_buffer_size;
 	PUSH(0, int);
-	printf("string_buffer_size: %d\n", string_buffer_size);
 
 	for (int i = envc - 1; i >= 0; i--) {
 		PUSH_STR(envp[i]);
