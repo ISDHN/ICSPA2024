@@ -8,6 +8,10 @@ static PCB pcb_boot = {};
 static int pcb_count = 0;
 PCB *current = NULL;
 
+void switch_boot_pcb() {
+	current = &pcb_boot;
+}
+
 int context_kload(thread_entry func, void *arg) {
 	if (pcb_count >= MAX_NR_PROC) {
 		Log("No more PCB space");
@@ -29,7 +33,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 		return 1;
 	}
 	pcb[pcb_count].cp = ucontext(NULL, (Area){pcb[pcb_count].stack, pcb[pcb_count].stack + STACK_SIZE}, entry);
-	char *ustack = heap.end;
+	char *ustack = new_page(8);
 	char *str_buffer = ustack;
 #define PUSH(x, type)       \
 	ustack -= sizeof(type); \
@@ -78,11 +82,8 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 
 	pcb[pcb_count].cp->GPRx = (uintptr_t)ustack;
 	pcb_count++;
+	switch_boot_pcb();
 	return 0;
-}
-
-void switch_boot_pcb() {
-	current = &pcb_boot;
 }
 
 void hello_fun(void *arg) {
@@ -95,8 +96,7 @@ void hello_fun(void *arg) {
 }
 
 void init_proc() {
-	context_kload(hello_fun, "Welcome");
-	context_uload("/bin/pal", (char *[]){"--skip", NULL}, NULL);
+	context_uload("/bin/exec-test", (char *[]){"/bin/pal", NULL}, NULL);
 	switch_boot_pcb();
 
 	Log("Initializing processes...");
@@ -122,7 +122,7 @@ Context *schedule(Context *prev) {
 	if (next != NULL) {
 		current = next;
 	} else {
-		if (pcb[0].cp != NULL) {
+		if (pcb[pcb_count].cp != NULL) {
 			current = pcb;
 		}
 	}

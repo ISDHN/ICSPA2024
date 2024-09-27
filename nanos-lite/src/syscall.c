@@ -56,8 +56,12 @@ int sys_gettimeofday(struct timeval *tv, void *tz) {
 	return 0;
 }
 
-int sys_execve(const char *pathname, const char *const argv[], const char *const envp[]) {
-	return naive_uload(NULL, pathname);
+int sys_execve(const char *pathname, char *const argv[], char *const envp[]) {
+	int res = context_uload(pathname, argv, envp);
+	if (!res) {
+		yield();
+	}
+	return res;
 }
 
 void do_syscall(Context *c) {
@@ -81,7 +85,7 @@ void do_syscall(Context *c) {
 			SYS_DISPATCH(open, (const char *)(a[1]), a[2], a[3]);
 			SYS_DISPATCH(close, a[1]);
 			SYS_DISPATCH(gettimeofday, (struct timeval *)a[1], (void *)a[2]);
-			SYS_DISPATCH(execve, (const char *)a[1], (const char **)a[2], (const char **)a[3]);
+			SYS_DISPATCH(execve, (const char *)a[1], (char **)a[2], (char **)a[3]);
 		default:
 			panic("Unhandled syscall ID = %d", a[0]);
 	}
