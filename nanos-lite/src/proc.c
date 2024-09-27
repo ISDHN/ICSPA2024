@@ -82,6 +82,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 
 	pcb[pcb_count].cp->GPRx = (uintptr_t)ustack;
 	pcb_count++;
+	switch_boot_pcb();
 	return 0;
 }
 
@@ -122,7 +123,7 @@ Context *schedule(Context *prev) {
 		printf("next pcb:%d\n", next - pcb);
 		current = next;
 	} else {
-		if (pcb[pcb_count].cp != NULL) {
+		if (pcb[pcb_count - 1].cp != NULL) {
 			printf("next pcb:%d\n", pcb_count);
 			current = pcb;
 		}
