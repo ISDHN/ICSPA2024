@@ -47,8 +47,8 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 	str_buffer -= len;       \
 	strcpy(str_buffer, s);
 
-	PUSH_STR(filename);
-	char *filename_ptr = str_buffer; // save the program name
+	// PUSH_STR(filename);
+	// char *filename_ptr = str_buffer; // save the program name
 
 	char *const *p = envp;
 	int envc = 0;
@@ -81,8 +81,8 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 		PUSH(str_buffer, char *);
 		printf("argv[%d]: %s\n", i, str_buffer);
 	}
-	PUSH(filename_ptr, char *);
-	PUSH(argc + 1, int); // and the program name
+	// PUSH(filename_ptr, char *);
+	// PUSH(argc + 1, int); // and the program name
 
 	pcb[pcb_count].cp->GPRx = (uintptr_t)ustack;
 	pcb_count++;
@@ -100,7 +100,7 @@ void hello_fun(void *arg) {
 }
 
 void init_proc() {
-	context_uload("/bin/exec-test", (char *[]){NULL}, NULL);
+	context_uload("/bin/exec-test", (char *[]){"/bin/exec-test", NULL}, NULL);
 	switch_boot_pcb();
 
 	Log("Initializing processes...");
