@@ -42,37 +42,37 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 	strcpy(ustack, s);       \
 	*p = ustack;
 
-	char *const *p = envp;
-	int envc = 0;
-	if (envp) {
-		for (; *p; p++)
-			envc++;
-	}
+	// 	char *const *p = envp;
+	// 	int envc = 0;
+	// 	if (envp) {
+	// 		for (; *p; p++)
+	// 			envc++;
+	// 	}
 
-	PUSH(0);
-	for (int i = envc - 1; i >= 0; i--) {
-		PUSH((uintptr_t)envp[i]);
-		printf("envp[%d]: %s\n", i, envp[i]);
-	}
+	// 	PUSH(0);
+	// 	for (int i = envc - 1; i >= 0; i--) {
+	// 		PUSH((uintptr_t)envp[i]);
+	// 		printf("envp[%d]: %s\n", i, envp[i]);
+	// 	}
 
-	p = argv;
-	int argc = 0;
-	if (argv) {
-		for (; *p; p++)
-			argc++;
-	}
+	// 	p = argv;
+	// 	int argc = 0;
+	// 	if (argv) {
+	// 		for (; *p; p++)
+	// 			argc++;
+	// 	}
 
-	PUSH(0);
-	for (int i = argc - 1; i >= 0; i--) {
-		PUSH((uintptr_t)argv[i]);
-		printf("argv[%d]: %s\n", i, argv[i]);
-	}
-	PUSH(argc);
+	// 	PUSH(0);
+	// 	for (int i = argc - 1; i >= 0; i--) {
+	// 		PUSH((uintptr_t)argv[i]);
+	// 		printf("argv[%d]: %s\n", i, argv[i]);
+	// 	}
+	// 	PUSH(argc);	printf("%d %d\n", envc, argc);
 
 	pcb[pcb_count].cp->GPRx = (uintptr_t)ustack;
 	printf("ustack: %p\n", ustack);
 	pcb_count++;
-	printf("%d %d\n", envc, argc);
+
 	return 0;
 }
 
