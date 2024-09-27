@@ -124,12 +124,11 @@ PCB *get_next_proc() {
 Context *schedule(Context *prev) {
 	current->cp = prev;
 	PCB *next = get_next_proc();
-	if (next != NULL) {
-		current = next;
-	} else {
+	if (next == NULL) {
 		if (pcb[pcb_count - 1].cp != NULL) {
-			current = pcb;
+			next = pcb + pcb_count - 1;
 		}
 	}
+	current = next;
 	return current->cp;
 }
