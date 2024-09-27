@@ -55,6 +55,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 	}
 	ustack -= string_buffer_size;
 	PUSH(0, int);
+	printf("string_buffer_size: %d\n", string_buffer_size);
 
 #define PUSH_STR(s)          \
 	int len = strlen(s) + 1; \
