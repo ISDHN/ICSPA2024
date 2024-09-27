@@ -151,7 +151,8 @@ static int cmd_x(char *args) {
 	for (int i = 0; i < length; i++) {
 		printf("%#08x |  ", addr + i * 4);
 		for (int j = 0; j < 4; j++) {
-			printf("%02x ", vaddr_read(addr + i * 4 + j, 1));
+			word_t val = vaddr_read(addr + i * 4 + j, 1);
+			printf("%02x (%c) ", val, val >= 32 && val <= 126 ? val : '.');
 		}
 		printf("\n");
 	}
