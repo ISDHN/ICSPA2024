@@ -15,14 +15,14 @@ extern void __libc_init_array(void);
 
 void call_main(uintptr_t *args) {
 	printf("argc in call main: ");
-	int argc = *(int *)args;
-	char **argv = (char **)(args + 1);
-	environ = argv + argc + 1;
+	// int argc = *(int *)args;
+	// char **argv = (char **)(args + 1);
+	// environ = argv + argc + 1;
 	__libc_init_array();
 #ifdef AM
 	exit(main(am_arg));
 #else
-	exit(main(0, argv, environ));
+	exit(main(0, NULL, NULL));
 #endif
 	assert(0);
 }
