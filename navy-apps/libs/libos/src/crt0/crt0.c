@@ -19,9 +19,9 @@ void call_main(uintptr_t args) {
 	// environ = argv + argc + 1;
 	__libc_init_array();
 #ifdef AM
-	exit(main(am_arg));
+	exit(main(am_arg))
 #else
-	exit(main(0, argv, NULL));
+	exit(main(argc, argv, NULL));
 #endif
-	assert(0);
+		assert(0);
 }
