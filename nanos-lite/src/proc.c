@@ -30,6 +30,7 @@ int context_uload(const char *filename) {
 	}
 	pcb[pcb_count].cp = ucontext(NULL, (Area){pcb[pcb_count].stack, pcb[pcb_count].stack + STACK_SIZE}, entry);
 	pcb[pcb_count].cp->GPRx = (uintptr_t)heap.end;
+	printf("%p", heap.end);
 	pcb_count++;
 	return 0;
 }
