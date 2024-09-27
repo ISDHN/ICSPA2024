@@ -499,8 +499,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    32,    32,    35,    38,    48,    49,    50,    51,    52,
-      53,    60,    61,    62,    63,    64
+       0,    32,    32,    35,    38,    53,    54,    55,    56,    57,
+      58,    65,    66,    67,    68,    69
 };
 #endif
 
@@ -1093,47 +1093,52 @@ yyreduce:
 #line 38 "src/monitor/sdb/expr.y"
                 { 
             bool success = false;
-            (yyval.num) = isa_reg_str2val((yyvsp[0].reg), &success);
+            if(strcmp((yyvsp[0].reg),"pc") == 0) {
+                (yyval.num) = cpu.pc;
+                success = true;
+            }else{
+                (yyval.num) = isa_reg_str2val((yyvsp[0].reg), &success);
+            }
             if (!success) {
                 yyerror(result, "Invalid register name");
                 YYABORT;
             }
         }
-#line 1103 "src/monitor/sdb/expr.tab.c"
+#line 1108 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 5: /* expr: number  */
-#line 48 "src/monitor/sdb/expr.y"
+#line 53 "src/monitor/sdb/expr.y"
               { (yyval.num) = (yyvsp[0].num); }
-#line 1109 "src/monitor/sdb/expr.tab.c"
+#line 1114 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 6: /* expr: '*' expr  */
-#line 49 "src/monitor/sdb/expr.y"
+#line 54 "src/monitor/sdb/expr.y"
                           { (yyval.num) = vaddr_read((yyvsp[0].num), 4); }
-#line 1115 "src/monitor/sdb/expr.tab.c"
+#line 1120 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 7: /* expr: expr '+' expr  */
-#line 50 "src/monitor/sdb/expr.y"
+#line 55 "src/monitor/sdb/expr.y"
                     { (yyval.num) = (yyvsp[-2].num) + (yyvsp[0].num); }
-#line 1121 "src/monitor/sdb/expr.tab.c"
+#line 1126 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 8: /* expr: expr '-' expr  */
-#line 51 "src/monitor/sdb/expr.y"
+#line 56 "src/monitor/sdb/expr.y"
                     { (yyval.num) = (yyvsp[-2].num) - (yyvsp[0].num); }
-#line 1127 "src/monitor/sdb/expr.tab.c"
+#line 1132 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 9: /* expr: expr '*' expr  */
-#line 52 "src/monitor/sdb/expr.y"
+#line 57 "src/monitor/sdb/expr.y"
                     {  (yyval.num) = (yyvsp[-2].num) * (yyvsp[0].num); }
-#line 1133 "src/monitor/sdb/expr.tab.c"
+#line 1138 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 10: /* expr: expr '/' expr  */
-#line 53 "src/monitor/sdb/expr.y"
+#line 58 "src/monitor/sdb/expr.y"
                     { 
             if ((yyvsp[0].num) == 0) {
                 yyerror(result, "Division by zero");
@@ -1141,41 +1146,41 @@ yyreduce:
             }
             (yyval.num) = (yyvsp[-2].num) / (yyvsp[0].num); 
         }
-#line 1145 "src/monitor/sdb/expr.tab.c"
+#line 1150 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 11: /* expr: '-' expr  */
-#line 60 "src/monitor/sdb/expr.y"
+#line 65 "src/monitor/sdb/expr.y"
                           { (yyval.num) = - (yyvsp[0].num); }
-#line 1151 "src/monitor/sdb/expr.tab.c"
+#line 1156 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 12: /* expr: '(' expr ')'  */
-#line 61 "src/monitor/sdb/expr.y"
+#line 66 "src/monitor/sdb/expr.y"
                    { (yyval.num) = (yyvsp[-1].num); }
-#line 1157 "src/monitor/sdb/expr.tab.c"
+#line 1162 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 13: /* expr: expr T_EQ expr  */
-#line 62 "src/monitor/sdb/expr.y"
+#line 67 "src/monitor/sdb/expr.y"
                      { (yyval.num) = (yyvsp[-2].num) == (yyvsp[0].num); }
-#line 1163 "src/monitor/sdb/expr.tab.c"
+#line 1168 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 14: /* expr: expr T_NE expr  */
-#line 63 "src/monitor/sdb/expr.y"
+#line 68 "src/monitor/sdb/expr.y"
                      { (yyval.num) = (yyvsp[-2].num) != (yyvsp[0].num); }
-#line 1169 "src/monitor/sdb/expr.tab.c"
+#line 1174 "src/monitor/sdb/expr.tab.c"
     break;
 
   case 15: /* expr: expr T_LAND expr  */
-#line 64 "src/monitor/sdb/expr.y"
+#line 69 "src/monitor/sdb/expr.y"
                        { (yyval.num) = (yyvsp[-2].num) && (yyvsp[0].num); }
-#line 1175 "src/monitor/sdb/expr.tab.c"
+#line 1180 "src/monitor/sdb/expr.tab.c"
     break;
 
 
-#line 1179 "src/monitor/sdb/expr.tab.c"
+#line 1184 "src/monitor/sdb/expr.tab.c"
 
       default: break;
     }
@@ -1368,7 +1373,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 67 "src/monitor/sdb/expr.y"
+#line 72 "src/monitor/sdb/expr.y"
 
 
 void yyerror(word_t* result, const char *s) {
