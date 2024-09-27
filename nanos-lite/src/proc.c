@@ -18,7 +18,7 @@ int context_kload(thread_entry func, void *arg) {
 	return 0;
 }
 
-int context_uload(const char *filename) {
+int context_uload(const char *filename, char *const argv[], char *const envp[]) {
 	if (pcb_count >= MAX_NR_PROC) {
 		Log("No more PCB space");
 		return 2;
@@ -29,8 +29,44 @@ int context_uload(const char *filename) {
 		return 1;
 	}
 	pcb[pcb_count].cp = ucontext(NULL, (Area){pcb[pcb_count].stack, pcb[pcb_count].stack + STACK_SIZE}, entry);
-	pcb[pcb_count].cp->GPRx = (uintptr_t)heap.end;
-	printf("%p", heap.end);
+	char *ustack = heap.end;
+
+#define PUSH(x)          \
+	ustack -= sizeof(x); \
+	*ustack = x;
+
+#define PUSH_STR(s)          \
+	int len = strlen(s) + 1; \
+	ustack -= len;           \
+	strcpy(ustack, s);       \
+	*p = ustack;
+
+	char *const *p = envp;
+	int envc = 0;
+	if (envp) {
+		for (; *p; p++)
+			envc++;
+	}
+
+	PUSH(0);
+	for (int i = envc - 1; i >= 0; i--) {
+		PUSH((uintptr_t)envp[i]);
+	}
+
+	p = argv;
+	int argc = 0;
+	if (argv) {
+		for (; *p; p++)
+			argc++;
+	}
+
+	PUSH(0);
+	for (int i = argc - 1; i >= 0; i--) {
+		PUSH((uintptr_t)argv[i]);
+	}
+	PUSH(argc);
+
+	pcb[pcb_count].cp->GPRx = (uintptr_t)ustack;
 	pcb_count++;
 	return 0;
 }
@@ -50,7 +86,7 @@ void hello_fun(void *arg) {
 
 void init_proc() {
 	context_kload(hello_fun, "Welcome");
-	context_uload("/bin/hello");
+	context_uload("/bin/pal", (char *[]){"--skip"}, NULL);
 	switch_boot_pcb();
 
 	Log("Initializing processes...");
