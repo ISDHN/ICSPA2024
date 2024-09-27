@@ -34,7 +34,6 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 	}
 	pcb[pcb_count].cp = ucontext(NULL, (Area){pcb[pcb_count].stack, pcb[pcb_count].stack + STACK_SIZE}, entry);
 	char *ustack = new_page(8);
-	printf("OS: ustack = %p\n", ustack);
 	char *str_buffer = ustack;
 
 #define PUSH(x, type)       \
@@ -130,6 +129,5 @@ Context *schedule(Context *prev) {
 		}
 	}
 	current = next;
-	printf("OS: switch to pcb %d\n", current - pcb);
 	return current->cp;
 }
