@@ -30,40 +30,47 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 	}
 	pcb[pcb_count].cp = ucontext(NULL, (Area){pcb[pcb_count].stack, pcb[pcb_count].stack + STACK_SIZE}, entry);
 	char *ustack = heap.end;
-
+	char *str_buffer = ustack;
 #define PUSH(x, type)       \
 	ustack -= sizeof(type); \
 	*(type *)ustack = x;
 
-#define PUSH_STR(s)          \
-	int len = strlen(s) + 1; \
-	ustack -= len;           \
-	strcpy(ustack, s);       \
-	*p = ustack;
+	int string_buffer_size = 0; // get the size of all str including \0
 
 	char *const *p = envp;
 	int envc = 0;
 	if (envp) {
-		for (; *p; p++)
+		for (; *p; p++) {
 			envc++;
+			string_buffer_size += strlen(*p) + 1;
+		}
 	}
-
-	PUSH(0, int);
-	for (int i = envc - 1; i >= 0; i--) {
-		PUSH(envp[i], char *);
-		printf("envp[%d]: %s\n", i, envp[i]);
-	}
-
 	p = argv;
 	int argc = 0;
 	if (argv) {
-		for (; *p; p++)
+		for (; *p; p++) {
 			argc++;
+			string_buffer_size += strlen(*p) + 1;
+		}
 	}
-
+	ustack -= string_buffer_size;
 	PUSH(0, int);
+
+#define PUSH_STR(s)          \
+	int len = strlen(s) + 1; \
+	str_buffer -= len;       \
+	strcpy(str_buffer, s);
+
+	for (int i = envc - 1; i >= 0; i--) {
+		PUSH_STR(envp[i]);
+		PUSH(str_buffer, char *);
+		printf("envp[%d]: %s\n", i, envp[i]);
+	}
+	PUSH(0, int);
+
 	for (int i = argc - 1; i >= 0; i--) {
-		PUSH(argv[i], char *);
+		PUSH_STR(argv[i]);
+		PUSH(str_buffer, char *);
 		printf("argv[%d]: %s\n", i, argv[i]);
 	}
 	PUSH(argc, int);
