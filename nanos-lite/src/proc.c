@@ -66,12 +66,9 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 		PUSH(argv[i], char *);
 		printf("argv[%d]: %s\n", i, argv[i]);
 	}
-	printf("ustack: %p\n", ustack);
 	PUSH(argc, int);
 
-	printf("argc: %d\n", argc);
 	pcb[pcb_count].cp->GPRx = (uintptr_t)ustack;
-	printf("ustack: %p data: %d\n", ustack, *(int *)ustack);
 	pcb_count++;
 	return 0;
 }
