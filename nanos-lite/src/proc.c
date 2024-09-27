@@ -35,11 +35,20 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 	pcb[pcb_count].cp = ucontext(NULL, (Area){pcb[pcb_count].stack, pcb[pcb_count].stack + STACK_SIZE}, entry);
 	char *ustack = new_page(8);
 	char *str_buffer = ustack;
+
 #define PUSH(x, type)       \
 	ustack -= sizeof(type); \
 	*(type *)ustack = x;
 
 	int string_buffer_size = 0; // get the size of all str including \0
+
+#define PUSH_STR(s)          \
+	int len = strlen(s) + 1; \
+	str_buffer -= len;       \
+	strcpy(str_buffer, s);
+
+	PUSH_STR(filename);
+	char *filename_ptr = str_buffer; // save the program name
 
 	char *const *p = envp;
 	int envc = 0;
@@ -57,14 +66,9 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 			string_buffer_size += strlen(*p) + 1;
 		}
 	}
-	ustack -= string_buffer_size;
+	ustack = str_buffer - string_buffer_size;
 	PUSH(0, int);
 	printf("string_buffer_size: %d\n", string_buffer_size);
-
-#define PUSH_STR(s)          \
-	int len = strlen(s) + 1; \
-	str_buffer -= len;       \
-	strcpy(str_buffer, s);
 
 	for (int i = envc - 1; i >= 0; i--) {
 		PUSH_STR(envp[i]);
@@ -78,7 +82,8 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 		PUSH(str_buffer, char *);
 		printf("argv[%d]: %s\n", i, str_buffer);
 	}
-	PUSH(argc, int);
+	PUSH(filename_ptr, char *);
+	PUSH(argc + 1, int); // and the program name
 
 	pcb[pcb_count].cp->GPRx = (uintptr_t)ustack;
 	pcb_count++;
@@ -96,7 +101,7 @@ void hello_fun(void *arg) {
 }
 
 void init_proc() {
-	context_uload("/bin/exec-test", (char *[]){"/bin/exec-test", NULL}, NULL);
+	context_uload("/bin/exec-test", (char *[]){NULL}, NULL);
 	switch_boot_pcb();
 
 	Log("Initializing processes...");
