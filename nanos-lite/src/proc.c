@@ -130,5 +130,6 @@ Context *schedule(Context *prev) {
 		}
 	}
 	current = next;
+	printf("OS: switch to pcb %d\n", current - pcb);
 	return current->cp;
 }
