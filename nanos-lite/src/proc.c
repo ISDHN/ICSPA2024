@@ -8,13 +8,30 @@ static PCB pcb_boot = {};
 static int pcb_count = 0;
 PCB *current = NULL;
 
-void context_kload(thread_entry func, void *arg) {
+int context_kload(thread_entry func, void *arg) {
 	if (pcb_count >= MAX_NR_PROC) {
 		Log("No more PCB space");
-		return;
+		return 1;
 	}
 	pcb[pcb_count].cp = kcontext((Area){pcb[pcb_count].stack, pcb[pcb_count].stack + STACK_SIZE}, func, arg);
 	pcb_count++;
+	return 0;
+}
+
+int context_uload(const char *filename) {
+	if (pcb_count >= MAX_NR_PROC) {
+		Log("No more PCB space");
+		return 2;
+	}
+	void *entry = (void *)loader(pcb + pcb_count, filename);
+	if (!entry) {
+		Log("Failed to load program from %s", filename);
+		return 1;
+	}
+	pcb[pcb_count].cp = ucontext(NULL, (Area){pcb[pcb_count].stack, pcb[pcb_count].stack + STACK_SIZE}, entry);
+	pcb[pcb_count].cp->GPRx = (uintptr_t)heap.end;
+	pcb_count++;
+	return 0;
 }
 
 void switch_boot_pcb() {
@@ -31,8 +48,8 @@ void hello_fun(void *arg) {
 }
 
 void init_proc() {
-	context_kload(hello_fun, "Fuck");
-	context_kload(hello_fun, "you");
+	context_kload(hello_fun, "Welcome");
+	context_uload("/bin/pal");
 	switch_boot_pcb();
 
 	Log("Initializing processes...");
