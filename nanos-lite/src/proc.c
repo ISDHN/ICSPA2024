@@ -84,6 +84,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 	// PUSH(filename_ptr, char *);
 	PUSH(argc, int); // and the program name
 
+	printf("OS: argc = %d\n", argc);
 	pcb[pcb_count].cp->GPRx = (uintptr_t)ustack;
 	pcb_count++;
 	switch_boot_pcb();
