@@ -91,7 +91,7 @@ void hello_fun(void *arg) {
 
 void init_proc() {
 	context_kload(hello_fun, "Welcome");
-	context_uload("/bin/pal", (char *[]){"--skip", NULL}, NULL);
+	// context_uload("/bin/pal", (char *[]){"--skip", NULL}, NULL);
 	switch_boot_pcb();
 
 	Log("Initializing processes...");
