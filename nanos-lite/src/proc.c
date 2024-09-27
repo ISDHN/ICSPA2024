@@ -30,7 +30,6 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 	}
 	pcb[pcb_count].cp = ucontext(NULL, (Area){pcb[pcb_count].stack, pcb[pcb_count].stack + STACK_SIZE}, entry);
 	char *ustack = heap.end;
-	printf("ustack: %p\n", ustack);
 
 #define PUSH(x)          \
 	ustack -= sizeof(x); \
@@ -68,12 +67,9 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 		printf("argv[%d]: %s\n", i, argv[i]);
 	}
 	PUSH(argc);
-	printf("%d %d\n", envc, argc);
 
 	pcb[pcb_count].cp->GPRx = (uintptr_t)ustack;
-	printf("ustack: %p\n", ustack);
 	pcb_count++;
-
 	return 0;
 }
 

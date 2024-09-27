@@ -15,9 +15,8 @@ extern void __libc_init_array(void);
 
 void call_main(uintptr_t args) {
 	int argc = *(int *)args;
-	printf("argc in call main: %d", argc);
-	//  char **argv = (char **)(args + 1);
-	//  environ = argv + argc + 1;
+	char **argv = (char **)(args + 1);
+	// environ = argv + argc + 1;
 	__libc_init_array();
 #ifdef AM
 	exit(main(am_arg));
