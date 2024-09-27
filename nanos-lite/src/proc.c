@@ -120,9 +120,11 @@ Context *schedule(Context *prev) {
 	current->cp = prev;
 	PCB *next = get_next_proc();
 	if (next != NULL) {
+		printf("next pcb:%d\n", next - pcb);
 		current = next;
 	} else {
 		if (pcb[pcb_count].cp != NULL) {
+			printf("next pcb:%d\n", pcb_count);
 			current = pcb;
 		}
 	}
