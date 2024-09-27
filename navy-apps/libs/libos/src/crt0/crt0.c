@@ -21,7 +21,7 @@ void call_main(uintptr_t args) {
 #ifdef AM
 	exit(main(am_arg))
 #else
-	exit(main(argc, NULL, NULL));
+	exit(main(argc, argv, NULL));
 #endif
 		assert(0);
 }
