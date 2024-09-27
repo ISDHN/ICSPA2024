@@ -64,8 +64,8 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 
 	for (int i = envc - 1; i >= 0; i--) {
 		PUSH_STR(envp[i]);
-		PUSH(str_buffer, char *);
 		printf("envp[%d]: %s\n", i, str_buffer);
+		PUSH(str_buffer, char *);
 	}
 	PUSH(0, int);
 
