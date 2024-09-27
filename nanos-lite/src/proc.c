@@ -124,7 +124,7 @@ Context *schedule(Context *prev) {
 		current = next;
 	} else {
 		if (pcb[pcb_count - 1].cp != NULL) {
-			printf("next pcb:%d\n", pcb_count);
+			printf("next pcb:%d\n", pcb_count - 1);
 			current = pcb;
 		}
 	}
