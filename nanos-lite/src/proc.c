@@ -121,5 +121,6 @@ Context *schedule(Context *prev) {
 			current = pcb;
 		}
 	}
+	printf("next to: %p\n", current->cp);
 	return current->cp;
 }
