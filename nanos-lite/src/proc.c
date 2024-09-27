@@ -82,7 +82,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 		printf("argv[%d]: %s\n", i, str_buffer);
 	}
 	// PUSH(filename_ptr, char *);
-	// PUSH(argc + 1, int); // and the program name
+	PUSH(argc, int); // and the program name
 
 	pcb[pcb_count].cp->GPRx = (uintptr_t)ustack;
 	pcb_count++;
@@ -124,11 +124,9 @@ Context *schedule(Context *prev) {
 	current->cp = prev;
 	PCB *next = get_next_proc();
 	if (next != NULL) {
-		printf("next pcb:%d\n", next - pcb);
 		current = next;
 	} else {
 		if (pcb[pcb_count - 1].cp != NULL) {
-			printf("next pcb:%d\n", pcb_count - 1);
 			current = pcb;
 		}
 	}
