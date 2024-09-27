@@ -13,9 +13,9 @@ int main(int argc, char *argv[], char *envp[]);
 extern char **environ;
 extern void __libc_init_array(void);
 
-void call_main(uintptr_t *args) {
+void call_main(uintptr_t args) {
 	printf("\a\a\a\a\a\aargc in call main: ");
-	// int argc = *(int *)args;
+	int argc = *(int *)args;
 	//  char **argv = (char **)(args + 1);
 	//  environ = argv + argc + 1;
 	__libc_init_array();
