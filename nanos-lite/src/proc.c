@@ -46,7 +46,6 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 	// to protect the args in .data seg
 	// *** Remember to assign the cp->epc ***
 	dst_pcb->cp = ucontext(NULL, (Area){dst_pcb->stack, dst_pcb->stack + STACK_SIZE}, NULL);
-	printf("dst_pcb: %p, dst_pcb->cp %p\n", dst_pcb, dst_pcb->cp);
 	char *ustack = new_page(8);
 	char *str_buffer = ustack;
 
@@ -82,23 +81,20 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 
 	for (int i = envc - 1; i >= 0; i--) {
 		PUSH_STR(envp[i]);
-		printf("envp[%d]: %s\n", i, str_buffer);
+		Log("envp[%d]: %s\n", i, str_buffer);
 		PUSH(str_buffer, char *);
 	}
 	PUSH(0, int);
 
 	for (int i = argc - 1; i >= 0; i--) {
 		PUSH_STR(argv[i]);
-		printf("argv[%d]: %s\n", i, str_buffer);
+		Log("argv[%d]: %s\n", i, str_buffer);
 		PUSH(str_buffer, char *);
 	}
 
 	PUSH(argc, int);
-	printf("dst_pcb: %p, dst_pcb->cp %p\n", dst_pcb, dst_pcb->cp);
 
 	void *entry = (void *)loader(pcb + pcb_count, filename);
-	printf("%p\n", entry);
-	printf("dst_pcb: %p, dst_pcb->cp %p\n", dst_pcb, dst_pcb->cp);
 
 	dst_pcb->cp->mepc = (uintptr_t)entry - 4;
 	dst_pcb->cp->GPRx = (uintptr_t)ustack;
@@ -116,7 +112,7 @@ void hello_fun(void *arg) {
 }
 
 void init_proc() {
-	char *init_program = "/bin/menu";
+	char *init_program = "/bin/exec-test";
 	context_uload(init_program, (char *[]){init_program, NULL}, NULL, true);
 	switch_boot_pcb();
 
@@ -140,15 +136,8 @@ PCB *get_next_proc() {
 Context *schedule(Context *prev) {
 	current->cp = prev;
 	PCB *next = get_next_proc();
-	printf("pcb count:%d\n", pcb_count);
 	if (next != NULL) {
 		current = next;
 	}
-	for (int i = 0; i < 4; i++) {
-		printf("pcb[%d]: %p\n", i, pcb + i);
-	}
-	printf("boot: %p\n", &pcb_boot);
-	printf("current: %p, current->cp %p\n", current, current->cp);
-	printf("%p\n", current->cp);
 	return current->cp;
 }
