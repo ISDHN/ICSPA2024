@@ -3,6 +3,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <SDL.h>
+#include <vector>
+#include <string>
 
 char handle_key(SDL_Event *ev);
 static void builtin_echo(char *args);
@@ -43,19 +45,30 @@ static void builtin_exit(char *args) {
 }
 
 static void sh_handle_cmd(const char *cmd) {
-	int cmd_len = strlen(cmd);
-	char *program = strtok((char *)cmd, " ");
-	program[cmd_len - 1] = '\0';
+	char *cmd_copy = strdup(cmd);
+	int cmd_len = strlen(cmd_copy);
+	cmd_copy[cmd_len - 1] = '\0';
+
+	char *program = strtok(cmd_copy, " ");
+
 	for (int i = 0; i < sizeof(builtin_cmds) / sizeof(builtin_cmds[0]); i++) {
 		if (strcmp(program, builtin_cmds[i].name) == 0) {
-			int pos_arg = strlen(program) + 1;
-			builtin_cmds[i].func(pos_arg >= cmd_len ? NULL : program + pos_arg);
+			int pos_arg = strlen(cmd_copy) + 1;
+			builtin_cmds[i].func(pos_arg > cmd_len ? NULL : cmd_copy + pos_arg);
 			return;
 		}
 	}
-	if (execvp(program, NULL)) {
+
+	std::vector<char *> argv;
+	argv.push_back(program);
+	char *arg = NULL;
+	while (arg = strtok(NULL, " ")) {
+		argv.push_back(arg);
+	}
+	if (execvp(program, argv.data())) {
 		sh_printf("'%s' is not recognized as an internal or external command,operable program or batch file.\n", program);
 	}
+	free(cmd_copy);
 }
 
 void builtin_sh_run() {
