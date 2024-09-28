@@ -32,9 +32,18 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 		Log("Failed to load program from %s", filename);
 		return 1;
 	}
+
+	for (char *const *p = argv; p && *p; p++) {
+		printf("argv: %s", *p);
+	}
+
 	pcb[pcb_count].cp = ucontext(NULL, (Area){pcb[pcb_count].stack, pcb[pcb_count].stack + STACK_SIZE}, entry);
 	char *ustack = new_page(8);
 	char *str_buffer = ustack;
+
+	for (char *const *p = argv; p && *p; p++) {
+		printf("argv: %s", *p);
+	}
 
 #define PUSH(x, type)       \
 	ustack -= sizeof(type); \
@@ -45,8 +54,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 #define PUSH_STR(s)          \
 	int len = strlen(s) + 1; \
 	str_buffer -= len;       \
-	strcpy(str_buffer, s);   \
-	printf("origin: %s, str_buffer: %s\n", s, str_buffer);
+	strcpy(str_buffer, s);
 
 	// PUSH_STR(filename);
 	// char *filename_ptr = str_buffer; // save the program name
