@@ -140,5 +140,6 @@ Context *schedule(Context *prev) {
 	if (next != NULL) {
 		current = next;
 	}
+	printf("%p", current->cp);
 	return current->cp;
 }
