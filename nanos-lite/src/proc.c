@@ -100,7 +100,7 @@ void hello_fun(void *arg) {
 }
 
 void init_proc() {
-	context_uload("/bin/menu", (char *[]){"/bin/menu", NULL}, NULL);
+	context_uload("/bin/nterm", (char *[]){"/bin/nterm", NULL}, NULL);
 	switch_boot_pcb();
 
 	Log("Initializing processes...");
