@@ -1,4 +1,5 @@
 #include <proc.h>
+#include <fs.h>
 #include <debug.h>
 
 #define MAX_NR_PROC 4
@@ -22,13 +23,28 @@ int context_kload(thread_entry func, void *arg) {
 	return 0;
 }
 
-int context_uload(const char *filename, char *const argv[], char *const envp[]) {
-	if (pcb_count >= MAX_NR_PROC) {
-		Log("No more PCB space");
-		return 2;
+int context_uload(const char *filename, char *const argv[], char *const envp[], bool new_one) {
+	int existence_test = fs_open(filename, 0, 0);
+	if (existence_test == -1) {
+		Log("Failed to load program from %s", filename);
+		return 1;
 	}
 
-	pcb[pcb_count].cp = ucontext(NULL, (Area){pcb[pcb_count].stack, pcb[pcb_count].stack + STACK_SIZE}, NULL);
+	PCB *dst_pcb = NULL;
+	if (new_one) {
+		if (pcb_count >= MAX_NR_PROC) {
+			Log("No more PCB space");
+			return 2;
+		}
+		dst_pcb = pcb + pcb_count;
+	} else {
+		dst_pcb = current;
+	}
+	// create the page and stack first,
+	// and load program at end
+	// to protect the args in .data seg
+	// *** Remember to assign the cp->epc ***
+	dst_pcb->cp = ucontext(NULL, (Area){dst_pcb->stack, dst_pcb->stack + STACK_SIZE}, NULL);
 	char *ustack = new_page(8);
 	char *str_buffer = ustack;
 
@@ -79,12 +95,9 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 
 	void *entry = (void *)loader(pcb + pcb_count, filename);
 	printf("%p", entry);
-	if (!entry) {
-		Log("Failed to load program from %s", filename);
-		return 1;
-	}
-	pcb[pcb_count].cp->mepc = (uintptr_t)entry - 4;
-	pcb[pcb_count].cp->GPRx = (uintptr_t)ustack;
+
+	dst_pcb->cp->mepc = (uintptr_t)entry - 4;
+	dst_pcb->cp->GPRx = (uintptr_t)ustack;
 	pcb_count++;
 	switch_boot_pcb();
 	return 0;
@@ -101,7 +114,7 @@ void hello_fun(void *arg) {
 
 void init_proc() {
 	char *init_program = "/bin/menu";
-	context_uload(init_program, (char *[]){init_program, NULL}, NULL);
+	context_uload(init_program, (char *[]){init_program, NULL}, NULL, true);
 	switch_boot_pcb();
 
 	Log("Initializing processes...");

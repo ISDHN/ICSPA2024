@@ -14,6 +14,7 @@ static const char *keyname[256] __attribute__((used)) = {
 	AM_KEYS(NAME)};
 
 size_t serial_write(const void *buf, size_t offset, size_t len) {
+	yield();
 	for (size_t i = 0; i < len; i++) {
 		putch(((char *)buf)[i]);
 	}
@@ -21,6 +22,7 @@ size_t serial_write(const void *buf, size_t offset, size_t len) {
 }
 
 size_t events_read(void *buf, size_t offset, size_t len) {
+	yield();
 	AM_INPUT_KEYBRD_T ev = io_read(AM_INPUT_KEYBRD);
 	if (ev.keycode == AM_KEY_NONE) {
 		return 0;
@@ -63,6 +65,7 @@ size_t sbctrl_write(const void *buf, size_t offset, size_t len) {
 }
 
 size_t sb_write(const void *buf, size_t offset, size_t len) {
+	yield();
 	char *p = (char *)buf;
 	io_write(AM_AUDIO_PLAY, {p, p + len});
 	return len;
