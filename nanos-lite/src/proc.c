@@ -140,6 +140,7 @@ PCB *get_next_proc() {
 Context *schedule(Context *prev) {
 	current->cp = prev;
 	PCB *next = get_next_proc();
+	printf("pcb count:%d\n", pcb_count);
 	if (next != NULL) {
 		current = next;
 	}
