@@ -65,7 +65,6 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 		for (; *p; p++) {
 			envc++;
 			string_buffer_size += strlen(*p) + 1;
-			printf("argv[%d]: %s", envc - 1, *p);
 		}
 	}
 	p = argv;
@@ -74,6 +73,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 		for (; *p; p++) {
 			argc++;
 			string_buffer_size += strlen(*p) + 1;
+			printf("argv[%d]: %s", argc - 1, *p);
 		}
 	}
 	ustack = str_buffer - string_buffer_size;
