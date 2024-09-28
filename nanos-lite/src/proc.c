@@ -23,7 +23,7 @@ int context_kload(thread_entry func, void *arg) {
 }
 
 int context_uload(const char *filename, char *const argv[], char *const envp[]) {
-	printf("%s", argv[0]);
+	printf("%s", *argv);
 	if (pcb_count >= MAX_NR_PROC) {
 		Log("No more PCB space");
 		return 2;
