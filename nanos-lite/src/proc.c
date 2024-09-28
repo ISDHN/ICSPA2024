@@ -29,6 +29,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 		return 2;
 	}
 	void *entry = (void *)loader(pcb + pcb_count, filename);
+	printf("%p", entry);
 	printf("%s\n", *argv);
 	if (!entry) {
 		Log("Failed to load program from %s", filename);
