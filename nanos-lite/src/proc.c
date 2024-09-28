@@ -141,9 +141,9 @@ Context *schedule(Context *prev) {
 		current = next;
 	}
 	for (int i = 0; i < 4; i++) {
-		printf("pcb[%d]: %p\n", i, pcb[i]);
+		printf("pcb[%d]: %p\n", i, pcb + i);
 	}
-	printf("boot: %p,current:%p\n", pcb_boot, pcb, current);
+	printf("boot: %p,current:%p\n", &pcb_boot, pcb, current);
 	printf("%p\n", current->cp);
 	return current->cp;
 }
