@@ -37,6 +37,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 			return 2;
 		}
 		dst_pcb = pcb + pcb_count;
+		pcb_count++;
 	} else {
 		dst_pcb = current;
 	}
@@ -101,7 +102,6 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 
 	dst_pcb->cp->mepc = (uintptr_t)entry - 4;
 	dst_pcb->cp->GPRx = (uintptr_t)ustack;
-	pcb_count++;
 	switch_boot_pcb();
 	return 0;
 }
