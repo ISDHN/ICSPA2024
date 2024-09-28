@@ -23,28 +23,22 @@ int context_kload(thread_entry func, void *arg) {
 }
 
 int context_uload(const char *filename, char *const argv[], char *const envp[]) {
-	printf("%s", *argv);
+	printf("%s\n", *argv);
 	if (pcb_count >= MAX_NR_PROC) {
 		Log("No more PCB space");
 		return 2;
 	}
 	void *entry = (void *)loader(pcb + pcb_count, filename);
+	printf("%s\n", *argv);
 	if (!entry) {
 		Log("Failed to load program from %s", filename);
 		return 1;
 	}
 
-	for (char *const *p = argv; p && *p; p++) {
-		printf("argv: %s", *p);
-	}
-
 	pcb[pcb_count].cp = ucontext(NULL, (Area){pcb[pcb_count].stack, pcb[pcb_count].stack + STACK_SIZE}, entry);
 	char *ustack = new_page(8);
 	char *str_buffer = ustack;
-
-	for (char *const *p = argv; p && *p; p++) {
-		printf("argv: %s", *p);
-	}
+	printf("%s\n", *argv);
 
 #define PUSH(x, type)       \
 	ustack -= sizeof(type); \
