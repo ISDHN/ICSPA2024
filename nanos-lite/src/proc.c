@@ -23,7 +23,6 @@ int context_kload(thread_entry func, void *arg) {
 }
 
 int context_uload(const char *filename, char *const argv[], char *const envp[]) {
-	printf("%s\n", *argv);
 	if (pcb_count >= MAX_NR_PROC) {
 		Log("No more PCB space");
 		return 2;
@@ -32,7 +31,6 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 	pcb[pcb_count].cp = ucontext(NULL, (Area){pcb[pcb_count].stack, pcb[pcb_count].stack + STACK_SIZE}, NULL);
 	char *ustack = new_page(8);
 	char *str_buffer = ustack;
-	printf("%s\n", *argv);
 
 #define PUSH(x, type)       \
 	ustack -= sizeof(type); \
