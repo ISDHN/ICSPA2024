@@ -4,7 +4,6 @@
 #include <unistd.h>
 #include <SDL.h>
 #include <vector>
-#include <string>
 
 char handle_key(SDL_Event *ev);
 static void builtin_echo(char *args);

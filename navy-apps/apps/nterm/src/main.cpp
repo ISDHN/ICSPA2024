@@ -21,6 +21,9 @@ int main(int argc, char *argv[]) {
 	setenv("PATH", "/bin", 0);
 
 	term = new Terminal(W, H);
+	for (int i = 0; i < argc; i++) {
+		printf("%s\n", argv[i]);
+	}
 
 	if (argc < 2) {
 		builtin_sh_run();
