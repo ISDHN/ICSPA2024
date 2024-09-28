@@ -28,15 +28,8 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 		Log("No more PCB space");
 		return 2;
 	}
-	void *entry = (void *)loader(pcb + pcb_count, filename);
-	printf("%p", entry);
-	printf("%s\n", *argv);
-	if (!entry) {
-		Log("Failed to load program from %s", filename);
-		return 1;
-	}
 
-	pcb[pcb_count].cp = ucontext(NULL, (Area){pcb[pcb_count].stack, pcb[pcb_count].stack + STACK_SIZE}, entry);
+	pcb[pcb_count].cp = ucontext(NULL, (Area){pcb[pcb_count].stack, pcb[pcb_count].stack + STACK_SIZE}, NULL);
 	char *ustack = new_page(8);
 	char *str_buffer = ustack;
 	printf("%s\n", *argv);
@@ -86,6 +79,13 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 
 	PUSH(argc, int);
 
+	void *entry = (void *)loader(pcb + pcb_count, filename);
+	printf("%p", entry);
+	if (!entry) {
+		Log("Failed to load program from %s", filename);
+		return 1;
+	}
+	pcb[pcb_count].cp->mepc = (uintptr_t)entry - 4;
 	pcb[pcb_count].cp->GPRx = (uintptr_t)ustack;
 	pcb_count++;
 	switch_boot_pcb();
