@@ -45,7 +45,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 	// to protect the args in .data seg
 	// *** Remember to assign the cp->epc ***
 	dst_pcb->cp = ucontext(NULL, (Area){dst_pcb->stack, dst_pcb->stack + STACK_SIZE}, NULL);
-	printf("dst_pcb->cp %p", dst_pcb->cp);
+	printf("dst_pcb->cp %p\n", dst_pcb->cp);
 	char *ustack = new_page(8);
 	char *str_buffer = ustack;
 
