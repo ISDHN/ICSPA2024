@@ -45,7 +45,8 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 #define PUSH_STR(s)          \
 	int len = strlen(s) + 1; \
 	str_buffer -= len;       \
-	strcpy(str_buffer, s);
+	strcpy(str_buffer, s);   \
+	printf("origin: %s, str_buffer: %s\n", s, str_buffer);
 
 	// PUSH_STR(filename);
 	// char *filename_ptr = str_buffer; // save the program name
@@ -100,7 +101,8 @@ void hello_fun(void *arg) {
 }
 
 void init_proc() {
-	context_uload("/bin/nterm", (char *[]){"/bin/nterm", NULL}, NULL);
+	char *init_program = "/bin/menu";
+	context_uload(init_program, (char *[]){init_program, NULL}, NULL);
 	switch_boot_pcb();
 
 	Log("Initializing processes...");

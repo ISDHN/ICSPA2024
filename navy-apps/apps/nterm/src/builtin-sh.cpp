@@ -3,7 +3,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <SDL.h>
-#include <vector>
 
 char handle_key(SDL_Event *ev);
 static void builtin_echo(char *args);
@@ -17,8 +16,7 @@ struct {
 	{"exit", builtin_exit},
 };
 
-static void
-sh_printf(const char *format, ...) {
+static void sh_printf(const char *format, ...) {
 	static char buf[256] = {};
 	va_list ap;
 	va_start(ap, format);
@@ -50,23 +48,25 @@ static void sh_handle_cmd(const char *cmd) {
 
 	char *program = strtok(cmd_copy, " ");
 	printf("program: %s\n", program);
+	int pos_arg = strlen(cmd_copy) + 1;
+	char *args = pos_arg > cmd_len ? NULL : cmd_copy + pos_arg;
 
 	for (int i = 0; i < sizeof(builtin_cmds) / sizeof(builtin_cmds[0]); i++) {
 		if (strcmp(program, builtin_cmds[i].name) == 0) {
-			int pos_arg = strlen(cmd_copy) + 1;
-			builtin_cmds[i].func(pos_arg > cmd_len ? NULL : cmd_copy + pos_arg);
+			builtin_cmds[i].func(args);
 			return;
 		}
 	}
 
-	std::vector<char *> argv;
-	argv.push_back(program);
-	char *arg = NULL;
-	while (arg = strtok(NULL, " ")) {
-		argv.push_back(arg);
-		printf("arg: %s\n", arg);
+	int argc = 0;
+	char *argv[32] = {0};
+	argv[argc++] = program;
+	char *p = NULL;
+	while (p = strtok(NULL, " ")) {
+		argv[argc++] = p;
 	}
-	if (execvp(program, argv.data())) {
+
+	if (execvp(program, argv)) {
 		sh_printf("'%s' is not recognized as an internal or external command,operable program or batch file.\n", program);
 	}
 	free(cmd_copy);
