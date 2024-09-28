@@ -50,6 +50,7 @@ static void sh_handle_cmd(const char *cmd) {
 	cmd_copy[cmd_len - 1] = '\0';
 
 	char *program = strtok(cmd_copy, " ");
+	printf("program: %s\n", program);
 
 	for (int i = 0; i < sizeof(builtin_cmds) / sizeof(builtin_cmds[0]); i++) {
 		if (strcmp(program, builtin_cmds[i].name) == 0) {
@@ -64,6 +65,7 @@ static void sh_handle_cmd(const char *cmd) {
 	char *arg = NULL;
 	while (arg = strtok(NULL, " ")) {
 		argv.push_back(arg);
+		printf("arg: %s\n", arg);
 	}
 	if (execvp(program, argv.data())) {
 		sh_printf("'%s' is not recognized as an internal or external command,operable program or batch file.\n", program);
