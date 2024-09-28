@@ -93,9 +93,11 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 	}
 
 	PUSH(argc, int);
+	printf("dst_pcb: %p, dst_pcb->cp %p\n", dst_pcb, dst_pcb->cp);
 
 	void *entry = (void *)loader(pcb + pcb_count, filename);
 	printf("%p\n", entry);
+	printf("dst_pcb: %p, dst_pcb->cp %p\n", dst_pcb, dst_pcb->cp);
 
 	dst_pcb->cp->mepc = (uintptr_t)entry - 4;
 	dst_pcb->cp->GPRx = (uintptr_t)ustack;
@@ -144,7 +146,8 @@ Context *schedule(Context *prev) {
 	for (int i = 0; i < 4; i++) {
 		printf("pcb[%d]: %p\n", i, pcb + i);
 	}
-	printf("boot: %p,current:%p\n", &pcb_boot, pcb, current);
+	printf("boot: %p\n", &pcb_boot);
+	printf("current: %p, current->cp %p\n", current, current->cp);
 	printf("%p\n", current->cp);
 	return current->cp;
 }
