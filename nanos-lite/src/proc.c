@@ -140,7 +140,10 @@ Context *schedule(Context *prev) {
 	if (next != NULL) {
 		current = next;
 	}
-	printf("boot: %p, pcbs: %p, current:%p\n", pcb_boot, pcb, current);
+	for (int i = 0; i < 4; i++) {
+		printf("pcb[%d]: %p\n", i, pcb[i]);
+	}
+	printf("boot: %p,current:%p\n", pcb_boot, pcb, current);
 	printf("%p\n", current->cp);
 	return current->cp;
 }
