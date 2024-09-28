@@ -23,6 +23,7 @@ int context_kload(thread_entry func, void *arg) {
 }
 
 int context_uload(const char *filename, char *const argv[], char *const envp[]) {
+	printf("%s", argv[0]);
 	if (pcb_count >= MAX_NR_PROC) {
 		Log("No more PCB space");
 		return 2;
@@ -56,9 +57,6 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 	str_buffer -= len;       \
 	strcpy(str_buffer, s);
 
-	// PUSH_STR(filename);
-	// char *filename_ptr = str_buffer; // save the program name
-
 	char *const *p = envp;
 	int envc = 0;
 	if (envp) {
@@ -87,11 +85,11 @@ int context_uload(const char *filename, char *const argv[], char *const envp[]) 
 
 	for (int i = argc - 1; i >= 0; i--) {
 		PUSH_STR(argv[i]);
-		PUSH(str_buffer, char *);
 		printf("argv[%d]: %s\n", i, str_buffer);
+		PUSH(str_buffer, char *);
 	}
-	// PUSH(filename_ptr, char *);
-	PUSH(argc, int); // and the program name
+
+	PUSH(argc, int);
 
 	pcb[pcb_count].cp->GPRx = (uintptr_t)ustack;
 	pcb_count++;
