@@ -131,18 +131,14 @@ PCB *get_next_proc() {
 			return pcb + (i + 1) % pcb_count;
 		}
 	}
-	return NULL; // boot pcb
+	return pcb + pcb_count - 1; // boot pcb
 }
 
 Context *schedule(Context *prev) {
 	current->cp = prev;
 	PCB *next = get_next_proc();
-	if (next == NULL) {
-		if (pcb[pcb_count - 1].cp != NULL) {
-			next = pcb + pcb_count - 1;
-			printf("next idx:%d\n", pcb_count - 1);
-		}
+	if (next != NULL) {
+		current = next;
 	}
-	current = next;
 	return current->cp;
 }
