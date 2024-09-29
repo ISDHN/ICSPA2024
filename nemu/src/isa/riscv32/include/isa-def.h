@@ -21,7 +21,8 @@
 typedef struct {
 	word_t gpr[MUXDEF(CONFIG_RVE, 16, 32)]; // general purpose registers
 	vaddr_t pc;
-	word_t mt_csr[256];
+	word_t mt_csr[256 + 1];
+	word_t spv_csr[128 + 1];
 	word_t *csr[16];
 } MUXDEF(CONFIG_RV64, riscv64_CPU_state, riscv32_CPU_state);
 
@@ -50,7 +51,12 @@ enum mt_csr_cst { // mechine trap csr
 	mtval2
 };
 
+enum spv_csr_cst {
+	satp = 0x80
+};
+
 enum csr_kind_cst {
+	srw = 1,
 	mrw = 3,
 	mro = 15
 };
