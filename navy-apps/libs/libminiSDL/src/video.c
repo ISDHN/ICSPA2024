@@ -5,6 +5,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+uint32_t *platte_pixels = NULL;
+
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
 	// audio_callback_caller();
 	assert(dst && src);
@@ -78,7 +80,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
-
+	return;
 	// audio_callback_caller();
 	assert(dst);
 
@@ -135,20 +137,15 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 	if (s->format->palette != NULL) {
 
 		// audio_callback_caller();
-		uint32_t *pixels = calloc(w * h, sizeof(uint32_t));
-
-		// audio_callback_caller();
-		for (int i = 0; i < w * h; i++) {
-
-			// audio_callback_caller();
-			SDL_Color color = s->format->palette->colors[((uint8_t *)s->pixels)[i]];
-
-			// audio_callback_caller();
-			pixels[i] = color.r << 16 | color.g << 8 | color.b;
+		for (int i = y; i < h + y; i++) {
+			for (int j = x; j < w + x; j++) {
+				SDL_Color color = s->format->palette->colors[s->pixels[i * s->w + j]];
+				platte_pixels[i * w + j] = color.r << 16 | color.g << 8 | color.b;
+			}
 		}
 
 		// audio_callback_caller();
-		NDL_DrawRect(pixels, x, y, w, h);
+		NDL_DrawRect(platte_pixels, x, y, w, h);
 	} else {
 
 		// audio_callback_caller();
@@ -191,6 +188,7 @@ SDL_Surface *SDL_CreateRGBSurface(uint32_t flags, int width, int height, int dep
 		assert(s->format->palette->colors);
 		memset(s->format->palette->colors, 0, sizeof(SDL_Color) * 256);
 		s->format->palette->ncolors = 256;
+		platte_pixels = calloc(width * height, sizeof(uint32_t));
 	} else {
 		s->format->palette = NULL;
 		s->format->Rmask = Rmask;
