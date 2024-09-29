@@ -27,14 +27,14 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 	int existence_test = fs_open(filename, 0, 0);
 	if (existence_test == -1) {
 		Log("Failed to load program from %s", filename);
-		return 1;
+		return -2;
 	}
 
 	PCB *dst_pcb = NULL;
 	if (new_one) {
 		if (pcb_count >= MAX_NR_PROC) {
 			Log("No more PCB space");
-			return 2;
+			return -12; // ENOMEM 12 Cannot allocate memory
 		}
 		dst_pcb = pcb + pcb_count;
 		pcb_count++;
