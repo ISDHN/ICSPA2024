@@ -75,7 +75,6 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 			   src->pixels + (srcy + i) * src->pitch + srcx * src->format->BytesPerPixel,
 			   srcw * src->format->BytesPerPixel);
 	}
-	SDL_UpdateRect(dst, dstx, dsty, w, h);
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
