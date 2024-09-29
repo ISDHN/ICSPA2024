@@ -37,6 +37,7 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 static int screen_w;
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
+	printf("update vga");
 	int pix_idx = offset / sizeof(uint32_t);
 	int x = pix_idx % screen_w;
 	int y = pix_idx / screen_w;
