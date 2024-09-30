@@ -24,33 +24,33 @@ void vaddr_write(vaddr_t addr, int len, word_t data);
 
 typedef union {
 	struct {
-		word_t mode : 1;
-		word_t asid : 9;
 		word_t ppn : 22;
+		word_t asid : 9;
+		word_t mode : 1;
 	};
 	word_t val;
 } satp_t;
 
 typedef union {
 	struct {
-		word_t ppn : 22;
-		word_t rsw : 2;
-		word_t dirty : 1;
-		word_t accessed : 1;
-		word_t global : 1;
-		word_t user : 1;
-		word_t ex : 1;
-		word_t w : 1;
-		word_t r : 1;
 		word_t valid : 1;
+		word_t r : 1;
+		word_t w : 1;
+		word_t ex : 1;
+		word_t user : 1;
+		word_t global : 1;
+		word_t accessed : 1;
+		word_t dirty : 1;
+		word_t rsw : 2;
+		word_t ppn : 22;
 	};
 	word_t val;
 } pte_t;
 
 typedef union {
 	struct {
-		word_t vpn : 20;
 		word_t pgoff : 12;
+		word_t vpn : 20;
 	};
 	word_t val;
 } vaddr_ena;
