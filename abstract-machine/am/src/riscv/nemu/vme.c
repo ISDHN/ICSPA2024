@@ -89,7 +89,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 		pte.ex = 1;
 		pte.val = paddr.ppn_1 << 10;
 		*(pte_t *)(root + (vaddr.vpn_1 << PTE_SHIFT)) = pte;
-		printf("Register entry:%p\n", pte);
+		printf("Register entry:%p\n", root + (vaddr.vpn_1 << PTE_SHIFT));
 	}
 }
 
