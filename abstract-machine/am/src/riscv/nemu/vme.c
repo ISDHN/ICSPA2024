@@ -83,12 +83,13 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	if (as->area.start == USER_SPACE.start && as->area.end == USER_SPACE.end) {
 
 	} else {
-		pte_t *pte = (pte_t *)(root + (vaddr.vpn_1 << PTE_SHIFT));
+		pte_t pte;
+		pte.r = 1;
+		pte.w = 1;
+		pte.ex = 1;
+		pte.val = paddr.ppn_1 << 10;
+		*(pte_t *)(root + (vaddr.vpn_1 << PTE_SHIFT)) = pte;
 		printf("Register entry:%p\n", pte);
-		pte->r = 1;
-		pte->w = 1;
-		pte->ex = 1;
-		pte->val = paddr.ppn_1 << 10;
 	}
 }
 
