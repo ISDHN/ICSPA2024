@@ -84,11 +84,10 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 
 	} else {
 		pte_t *pte = (pte_t *)(root + (vaddr.vpn_1 << PTE_SHIFT));
-		printf("Register pte: %p\n", root + (vaddr.vpn_1 << PTE_SHIFT));
 		pte->r = 1;
 		pte->w = 1;
 		pte->ex = 1;
-		pte->val = paddr.val;
+		pte->val = paddr.ppn_1 << 10;
 	}
 }
 
