@@ -77,6 +77,7 @@ void __am_switch(Context *c) {
 
 void map(AddrSpace *as, void *va, void *pa, int prot) {
 	uintptr_t root = (uintptr_t)as->ptr;
+	printf("root: %p", root);
 	vaddr_ena vaddr = {.val = (uintptr_t)va};
 	paddr_ena paddr = {.val = (uintptr_t)pa};
 	if (as->area.start == USER_SPACE.start && as->area.end == USER_SPACE.end) {
