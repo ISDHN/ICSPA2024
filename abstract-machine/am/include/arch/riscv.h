@@ -17,36 +17,36 @@ typedef struct Context {
 
 typedef union {
 	struct {
-		word_t ppn : 22;
-		word_t rsw : 2;
-		word_t dirty : 1;
-		word_t accessed : 1;
-		word_t global : 1;
-		word_t user : 1;
-		word_t ex : 1;
-		word_t w : 1;
-		word_t r : 1;
-		word_t valid : 1;
+		uint32_t ppn : 22;
+		uint32_t rsw : 2;
+		uint32_t dirty : 1;
+		uint32_t accessed : 1;
+		uint32_t global : 1;
+		uint32_t user : 1;
+		uint32_t ex : 1;
+		uint32_t w : 1;
+		uint32_t r : 1;
+		uint32_t valid : 1;
 	};
-	word_t val;
+	uint32_t val;
 } pte_t;
 
 typedef union {
 	struct {
-		word_t vpn_1 : 10;
-		word_t vpn_2 : 10;
-		word_t pgoff : 12;
+		uint32_t vpn_1 : 10;
+		uint32_t vpn_0 : 10;
+		uint32_t pgoff : 12;
 	};
-	word_t val;
+	uint32_t val;
 } vaddr_ena;
 
 typedef union {
 	struct {
-		word_t ppn_1 : 12;
-		word_t ppn_2 : 10;
-		word_t pgoff : 12;
+		uint32_t ppn_1 : 12;
+		uint32_t ppn_0 : 10;
+		uint32_t pgoff : 12;
 	};
-	word_t val;
+	uint32_t val;
 } paddr_ena;
 
 #ifdef __riscv_e

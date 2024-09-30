@@ -2,6 +2,7 @@
 #include "syscall.h"
 #include <proc.h>
 #include <fs.h>
+#include <mm.h>
 
 // #define STRACE
 #define SYS_DISPATCH(name, ...)            \

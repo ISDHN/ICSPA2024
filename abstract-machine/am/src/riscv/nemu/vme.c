@@ -79,10 +79,10 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	uintptr_t root = (uintptr_t)as->ptr;
 	vaddr_ena vaddr = {.val = (uintptr_t)va};
 	paddr_ena paddr = {.val = (uintptr_t)pa};
-	if (as->area == USER_SPACE) {
+	if (as->area.start == USER_SPACE.start && as->area.end == USER_SPACE.end) {
 
 	} else {
-		PTE *pte = (PTE *)(root + vaddr.vpn1);
+		pte_t *pte = (pte_t *)(root + vaddr.vpn_1);
 		pte->r = 1;
 		pte->w = 1;
 		pte->ex = 1;
