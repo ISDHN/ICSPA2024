@@ -40,7 +40,7 @@ int sys_lseek(int fd, int offset, int whence) {
 }
 
 int sys_brk(int new_brk) {
-	return 0;
+	return mm_brk(new_brk);
 }
 
 int sys_close(int fd) {

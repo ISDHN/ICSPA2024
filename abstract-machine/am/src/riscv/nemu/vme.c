@@ -2,6 +2,16 @@
 #include <nemu.h>
 #include <klib.h>
 
+#define PAGE_SHIFT 12
+#define LEVEL 2
+#define PAGE_SIZE (1ul << PAGE_SHIFT)
+#define PAGE_MASK (PAGE_SIZE - 1)
+
+#define PN_MASK 0x3ff
+
+#define PTE_SHIFT 2
+#define PTE_SIZE (1ul << PTE_SHIFT)
+
 static AddrSpace kas = {};
 static void *(*pgalloc_usr)(int) = NULL;
 static void (*pgfree_usr)(void *) = NULL;
@@ -66,6 +76,18 @@ void __am_switch(Context *c) {
 }
 
 void map(AddrSpace *as, void *va, void *pa, int prot) {
+	uintptr_t root = (uintptr_t)as->ptr;
+	vaddr_ena vaddr = {.val = (uintptr_t)va};
+	paddr_ena paddr = {.val = (uintptr_t)pa};
+	if (as->area == USER_SPACE) {
+
+	} else {
+		PTE *pte = (PTE *)(root + vaddr.vpn1);
+		pte->r = 1;
+		pte->w = 1;
+		pte->ex = 1;
+		pte->val = paddr.val;
+	}
 }
 
 Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
