@@ -80,7 +80,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	uintptr_t root = (uintptr_t)as->ptr;
 	vaddr_ena vaddr = {.val = (uintptr_t)va};
 	paddr_ena paddr = {.val = (uintptr_t)pa};
-	printf("addr: %p\n", va);
+	printf("ppn: %x\n", paddr.ppn_1);
 	if (as->area.start == USER_SPACE.start && as->area.end == USER_SPACE.end) {
 
 	} else {
@@ -89,7 +89,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 		pte->r = 1;
 		pte->w = 1;
 		pte->ex = 1;
-		// printf("Register entry:%p with %d \n", pte, pte->val);
+		// printf("Register entry:%p with %x \n", pte, pte->val);
 	}
 }
 
