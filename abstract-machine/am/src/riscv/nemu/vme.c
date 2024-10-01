@@ -80,12 +80,12 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	uintptr_t root = (uintptr_t)as->ptr;
 	vaddr_ena vaddr = {.val = (uintptr_t)va};
 	paddr_ena paddr = {.val = (uintptr_t)pa};
-	printf("val: %x ppn_1: %x ppn_0: %x pgoff: %x\n", paddr.val, paddr.ppn_1, paddr.ppn_0, paddr.pgoff);
+	printf("val: %x ppn: %x pgoff: %x\n", paddr.val, paddr.ppn, paddr.pgoff);
 	if (as->area.start == USER_SPACE.start && as->area.end == USER_SPACE.end) {
 
 	} else {
 		pte_t *pte = (pte_t *)(root + (vaddr.vpn_1 << PTE_SHIFT));
-		pte->val = paddr.ppn_1 << (20);
+		pte->val = paddr.ppn & (~PN_MASK);
 		pte->r = 1;
 		pte->w = 1;
 		pte->ex = 1;

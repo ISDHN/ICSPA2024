@@ -43,8 +43,7 @@ typedef union {
 typedef union {
 	struct {
 		uint32_t pgoff : 12;
-		uint32_t ppn_0 : 10;
-		uint32_t ppn_1 : 12;
+		uint32_t ppn : 22;
 	};
 	uint64_t val;
 } paddr_ena;
