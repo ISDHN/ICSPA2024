@@ -45,7 +45,7 @@ typedef union {
 		uint32_t pgoff : 12;
 		uint32_t ppn : 22;
 	};
-	uint64_t val;
+	uint64_t val : 34;
 } paddr_ena;
 
 #ifdef __riscv_e
