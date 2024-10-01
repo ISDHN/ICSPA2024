@@ -34,7 +34,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 	}
 	paddr_t res;
 	if (i == 1) {
-		res = ((pte.ppn & ~(PN_MASK)) << PAGE_SHIFT) | (va.vpn & PN_MASK) | va.pgoff;
+		res = ((pte.ppn & ~(PN_MASK)) << PAGE_SHIFT) | (va.vpn & PN_MASK) << PAGE_SHIFT | va.pgoff;
 	} else {
 		res = pte.ppn << PAGE_SHIFT | va.pgoff;
 	}
