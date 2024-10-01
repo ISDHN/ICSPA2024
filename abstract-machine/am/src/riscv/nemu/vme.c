@@ -80,7 +80,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	uintptr_t root = (uintptr_t)as->ptr;
 	vaddr_ena vaddr = {.val = (uintptr_t)va};
 	paddr_ena paddr = {.val = (uintptr_t)pa};
-	printf("addr: %p", va);
+	printf("addr: %p\n", va);
 	if (as->area.start == USER_SPACE.start && as->area.end == USER_SPACE.end) {
 
 	} else {
