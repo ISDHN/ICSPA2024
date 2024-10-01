@@ -41,7 +41,7 @@ typedef union {
 } vaddr_ena;
 
 typedef union {
-	uint64_t val : 34;
+	uint32_t val;
 	struct {
 		uint32_t pgoff : 12;
 		uint32_t ppn_0 : 10;
