@@ -45,7 +45,6 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 	// and load program at end
 	// to protect the args in .data seg
 	// *** Remember to assign the cp->epc ***
-	dst_pcb->cp = ucontext(NULL, (Area){dst_pcb->stack, dst_pcb->stack + STACK_SIZE}, NULL);
 	char *ustack = new_page(8);
 	char *str_buffer = ustack;
 
@@ -95,8 +94,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 	PUSH(argc, int);
 
 	void *entry = (void *)loader(pcb + pcb_count, filename);
-
-	dst_pcb->cp->mepc = (uintptr_t)entry - 4;
+	dst_pcb->cp = ucontext(NULL, (Area){dst_pcb->stack, dst_pcb->stack + STACK_SIZE}, entry);
 	dst_pcb->cp->GPRx = (uintptr_t)ustack;
 	switch_boot_pcb();
 	return 0;
