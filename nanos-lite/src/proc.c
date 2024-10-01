@@ -46,6 +46,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 	// to protect the args in .data seg
 	// *** Remember to assign the cp->epc ***
 	char *ustack = new_page(8);
+	printf("New proc's ustack: %p\n", ustack);
 	char *str_buffer = ustack;
 
 #define PUSH(x, type)       \
