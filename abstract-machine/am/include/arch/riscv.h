@@ -41,12 +41,12 @@ typedef union {
 } vaddr_ena;
 
 typedef union {
+	uint64_t val : 34;
 	struct {
 		uint32_t pgoff : 12;
 		uint32_t ppn_0 : 10;
 		uint32_t ppn_1 : 12;
 	};
-	uint64_t val : 34;
 } paddr_ena;
 
 #ifdef __riscv_e
