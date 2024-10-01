@@ -83,7 +83,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 
 	} else {
 		pte_t *pte = (pte_t *)(root + (vaddr.vpn_1 << PTE_SHIFT));
-		pte->val = ((uintptr_t)pa >> PAGE_SHIFT) & (~PN_MASK);
+		pte->ppn = ((uintptr_t)pa >> PAGE_SHIFT) & (~PN_MASK);
 		pte->r = 1;
 		pte->w = 1;
 		pte->ex = 1;
