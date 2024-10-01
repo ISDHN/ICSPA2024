@@ -44,8 +44,9 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 	// create the page and stack first,
 	// and load program at end
 	// to protect the args in .data seg
-	// *** Remember to assign the cp->epc ***
-	char *ustack = new_page(8);
+
+	// stack grow downsides, so the initial stack pointer should be the end of the page
+	char *ustack = new_page(8) + 8 * PGSIZE;
 	Log("New proc's ustack: %p\n", ustack);
 	char *str_buffer = ustack;
 
