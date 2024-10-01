@@ -88,7 +88,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 		pte->w = 1;
 		pte->ex = 1;
 		pte->valid = 1;
-		printf("Register entry:%p with %x \n", pte, pte->val);
+		// printf("Register entry:%p with %x \n", pte, pte->val);
 	}
 }
 
