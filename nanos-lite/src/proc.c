@@ -105,6 +105,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 	void *entry = (void *)loader(dst_pcb, filename);
 	dst_pcb->cp = ucontext(&dst_pcb->as, (Area){dst_pcb->stack, dst_pcb->stack + STACK_SIZE}, entry);
 	dst_pcb->cp->GPRx = (uintptr_t)ustack;
+	dst_pcb->max_brk = 0;
 	switch_boot_pcb();
 	return 0;
 }
