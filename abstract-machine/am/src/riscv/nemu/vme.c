@@ -81,6 +81,9 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	uintptr_t root = (uintptr_t)as->ptr;
 	vaddr_ena vaddr = {.val = (uintptr_t)va};
 	pte_t *pte = (pte_t *)(root + (vaddr.vpn_1 << PTE_SHIFT));
+	if (pte->val == 0) {
+		printf("Register first pte: %p\n", pte);
+	}
 	if (as->area.start == USER_SPACE.start && as->area.end == USER_SPACE.end) {
 		if (pte->val == 0) {
 			pte->valid = 1;
@@ -88,6 +91,9 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 			pte->ppn = dst_pg >> PAGE_SHIFT;
 		}
 		pte_t *next_lvl = (pte_t *)((pte->ppn << PAGE_SHIFT) | (vaddr.vpn_0 << PTE_SHIFT));
+		if (next_lvl->val == 0) {
+			printf("Register second pte: %p\n", next_lvl);
+		}
 		next_lvl->ppn = (uintptr_t)pa >> PAGE_SHIFT;
 		next_lvl->r = 1;
 		next_lvl->w = 1;
