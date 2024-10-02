@@ -24,12 +24,15 @@ void free_page(void *p) {
 
 /* The brk() system call handler. */
 int mm_brk(uintptr_t brk) {
-	uint32_t old_vpage = current->max_brk >> PAGE_SHIFT;
-	uint32_t new_vpage = brk >> PAGE_SHIFT;
+	uintptr_t old_vpage = current->max_brk & PAGE_MASK;
+	uintptr_t new_vpage = brk & PAGE_MASK;
 	if (old_vpage != new_vpage && current->max_brk != 0) {
-		void *new_ppage = new_page(1);
+		int increment = (new_vpage - old_vpage) >> PAGE_SHIFT;
+		void *new_ppage = new_page(increment);
 		Log("brk: %p -> %p", old_vpage, new_vpage);
-		map(&current->as, (void *)(new_vpage), new_ppage, 0);
+		for (int i = 0; i < increment; i++) {
+			map(&current->as, (void *)old_vpage + (i + 1) * PGSIZE, new_ppage + i * PGSIZE, 0);
+		}
 	}
 	current->max_brk = brk;
 	return 0;

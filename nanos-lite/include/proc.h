@@ -6,7 +6,7 @@
 
 #define STACK_SIZE (8 * PGSIZE)
 #define PAGE_SHIFT 12
-#define PAGE_MASK ~(1ul << PAGE_SHIFT)
+#define PAGE_MASK (-1ul << PAGE_SHIFT)
 
 typedef union {
 	uint8_t stack[STACK_SIZE] PG_ALIGN;
