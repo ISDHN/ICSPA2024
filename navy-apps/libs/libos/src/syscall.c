@@ -45,12 +45,12 @@
 #error _syscall_ is not implemented
 #endif
 
-intptr_t _syscall_(intptr_t type, intptr_t a0, intptr_t a1, intptr_t a2) {
-	register intptr_t _gpr1 asm(GPR1) = type;
-	register intptr_t _gpr2 asm(GPR2) = a0;
-	register intptr_t _gpr3 asm(GPR3) = a1;
-	register intptr_t _gpr4 asm(GPR4) = a2;
-	register intptr_t ret asm(GPRx);
+uintptr_t _syscall_(uintptr_t type, uintptr_t a0, uintptr_t a1, uintptr_t a2) {
+	register uintptr_t _gpr1 asm(GPR1) = type;
+	register uintptr_t _gpr2 asm(GPR2) = a0;
+	register uintptr_t _gpr3 asm(GPR3) = a1;
+	register uintptr_t _gpr4 asm(GPR4) = a2;
+	register uintptr_t ret asm(GPRx);
 	asm volatile(SYSCALL : "=r"(ret) : "r"(_gpr1), "r"(_gpr2), "r"(_gpr3), "r"(_gpr4));
 	return ret;
 }
@@ -62,16 +62,16 @@ void _exit(int status) {
 }
 
 int _open(const char *path, int flags, mode_t mode) {
-	return _syscall_(SYS_open, (intptr_t)path, flags, mode);
+	return _syscall_(SYS_open, (uintptr_t)path, flags, mode);
 }
 
 int _write(int fd, void *buf, size_t count) {
-	return _syscall_(SYS_write, fd, (intptr_t)buf, count);
+	return _syscall_(SYS_write, fd, (uintptr_t)buf, count);
 }
 
 extern char _end;
-void *_sbrk(intptr_t increment) {
-	static intptr_t program_break = (intptr_t)&_end;
+void *_sbrk(uintptr_t increment) {
+	static uintptr_t program_break = (uintptr_t)&_end;
 	int ret = _syscall_(SYS_brk, program_break + increment, 0, 0);
 	if (ret) {
 		return (void *)-1;
@@ -81,7 +81,7 @@ void *_sbrk(intptr_t increment) {
 }
 
 int _read(int fd, void *buf, size_t count) {
-	return _syscall_(SYS_read, fd, (intptr_t)buf, count);
+	return _syscall_(SYS_read, fd, (uintptr_t)buf, count);
 }
 
 int _close(int fd) {
@@ -94,11 +94,11 @@ off_t _lseek(int fd, off_t offset, int whence) {
 }
 
 int _gettimeofday(struct timeval *tv, struct timezone *tz) {
-	return _syscall_(SYS_gettimeofday, (intptr_t)tv, (intptr_t)tz, 0);
+	return _syscall_(SYS_gettimeofday, (uintptr_t)tv, (uintptr_t)tz, 0);
 }
 
 int _execve(const char *fname, char *const argv[], char *const envp[]) {
-	return _syscall_(SYS_execve, (intptr_t)fname, (intptr_t)argv, (intptr_t)envp);
+	return _syscall_(SYS_execve, (uintptr_t)fname, (uintptr_t)argv, (uintptr_t)envp);
 }
 
 // Syscalls below are not used in Nanos-lite.
