@@ -45,10 +45,15 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 	// and load program at end
 	// to protect the args in .data seg
 
-	// stack grow downsides, so the initial stack pointer should be the end of the page
 	protect(&dst_pcb->as);
-	char *ustack = new_page(8) + 8 * PGSIZE;
+	// stack grow downsides, so the initial stack pointer should be the end of the page
+	int pg_nr_stk = 8;
+	char *ustack = new_page(pg_nr_stk) + pg_nr_stk * PGSIZE;
 	Log("New proc's ustack: %p\n", ustack);
+	for (int i = 0; i < pg_nr_stk; i++) {
+		map(&pcb->as, pcb->as.area.end + PGSIZE * (i - gp_nr_stk), ustack + i * PGSIZE, 0);
+	}
+
 	char *str_buffer = ustack;
 
 #define PUSH(x, type)       \
@@ -97,7 +102,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 	PUSH(argc, int);
 
 	void *entry = (void *)loader(pcb + pcb_count, filename);
-	dst_pcb->cp = ucontext(NULL, (Area){dst_pcb->stack, dst_pcb->stack + STACK_SIZE}, entry);
+	dst_pcb->cp = ucontext(&dst_pcb->as, (Area){dst_pcb->stack, dst_pcb->stack + STACK_SIZE}, entry);
 	dst_pcb->cp->GPRx = (uintptr_t)ustack;
 	switch_boot_pcb();
 	return 0;
