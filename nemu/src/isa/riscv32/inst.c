@@ -86,7 +86,7 @@ void log_jal_r(bool is_call, bool is_ret, word_t dst) {
 		char *func_name = find_func_name(dst);
 		if (strcmp(func_name, "putch") == 0)
 			return;
-		Log("%#x:%*scall %#x@%s $sp:%#x", cpu.pc, cnt * CONFIG_FTRANCE_PAD, "", dst, find_func_name(dst), R(2));
+		Log("%#x:%*scall %#x@%s", cpu.pc, cnt * CONFIG_FTRANCE_PAD, "", dst, find_func_name(dst));
 		push_int(call_stack, &cnt, dst);
 	} else if (is_ret) {
 		char *func_name = find_func_name(cpu.pc);
