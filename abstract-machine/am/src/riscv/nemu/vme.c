@@ -106,7 +106,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 		pte->ex = 1;
 		pte->valid = 1;
 	}
-	// printf("Map %p to %p\n", va, pa);
+	printf("Map %p to %p\n", va, pa);
 }
 
 Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
