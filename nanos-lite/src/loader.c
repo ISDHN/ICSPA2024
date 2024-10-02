@@ -71,8 +71,9 @@ uintptr_t loader(PCB *pcb, const char *filename) {
 		if (phdr.p_type != PT_LOAD) {
 			continue;
 		}
-		readbytes(fd, (void *)phdr.p_vaddr, phdr.p_offset, phdr.p_filesz);
-		memset((void *)(phdr.p_vaddr + phdr.p_filesz), 0, phdr.p_memsz - phdr.p_filesz);
+		void *dst = ph_pg + (phdr.p_vaddr - start);
+		readbytes(fd, dst, phdr.p_offset, phdr.p_filesz);
+		memset(dst + phdr.p_filesz, 0, phdr.p_memsz - phdr.p_filesz);
 	}
 	Log("%s entry point: %p", filename, ehdr.e_entry);
 	return ehdr.e_entry;
