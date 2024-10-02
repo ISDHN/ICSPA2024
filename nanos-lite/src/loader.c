@@ -61,7 +61,7 @@ uintptr_t loader(PCB *pcb, const char *filename) {
 
 	uint32_t pg_nr = (end - start) >> PAGE_SHIFT;
 	void *ph_pg = new_page(pg_nr);
-	for (int i = 0; i <= pg_nr; i++) {
+	for (int i = 0; i < pg_nr; i++) {
 		map(&pcb->as, (void *)(start + PGSIZE * i), ph_pg + PGSIZE * i, 0);
 	}
 	Log("%s virtual page: %p~%p", filename, start, end);
