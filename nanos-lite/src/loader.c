@@ -63,7 +63,7 @@ uintptr_t loader(PCB *pcb, const char *filename) {
 	for (int i = 0; i < pg_nr; i++) {
 		map(&pcb->as, (void *)(start + PGSIZE * i), ph_pg + PGSIZE * i, 0);
 	}
-	Log("%s virtual page: %d~%d", filename, start, end);
+	Log("%s virtual page: %p~%p", filename, start, end);
 
 	for (int i = 0; i < ehdr.e_phnum; i++) {
 		Elf_Phdr phdr;
