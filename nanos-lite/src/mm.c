@@ -26,7 +26,10 @@ void free_page(void *p) {
 int mm_brk(uintptr_t brk) {
 	uintptr_t old_vpage = current->max_brk & PAGE_MASK;
 	uintptr_t new_vpage = brk & PAGE_MASK;
-	if (old_vpage != new_vpage && current->max_brk != 0) {
+	if (current->max_brk == 0) {
+		void *new_ppage = new_page(1);
+		map(&current->as, (void *)new_vpage, new_ppage, 0);
+	} else if (old_vpage != new_vpage) {
 		int increment = (new_vpage - old_vpage) >> PAGE_SHIFT;
 		void *new_ppage = new_page(increment);
 		Log("brk: %p -> %p", old_vpage, new_vpage);
