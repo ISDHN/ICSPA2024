@@ -95,7 +95,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 
 	for (int i = argc - 1; i >= 0; i--) {
 		PUSH_STR(argv[i]);
-		Log("argv[%d]: %s\n", i, str_buffer);
+		Log("argv[%d]: %s", i, str_buffer);
 		PUSH(str_buffer, char *);
 	}
 
