@@ -28,6 +28,7 @@ int mm_brk(uintptr_t brk) {
 	uint32_t new_vpage = brk >> PAGE_SHIFT;
 	if (old_vpage != new_vpage) {
 		void *new_ppage = new_page(1);
+		Log("brk: %p -> %p", old_vpage, new_vpage);
 		map(&current->as, (void *)(new_vpage), new_ppage, 0);
 	}
 	current->max_brk = brk;
