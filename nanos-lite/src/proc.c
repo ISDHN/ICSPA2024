@@ -118,7 +118,7 @@ void hello_fun(void *arg) {
 }
 
 void init_proc() {
-	char *init_program = "/bin/dummy";
+	char *init_program = "/bin/nterm";
 	context_uload(init_program, (char *[]){init_program, NULL}, NULL, true);
 	switch_boot_pcb();
 
