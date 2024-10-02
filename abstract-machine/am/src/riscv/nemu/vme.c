@@ -99,6 +99,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 		next_lvl->w = 1;
 		next_lvl->ex = 1;
 		next_lvl->valid = 1;
+		printf("Map %p to %p\n", va, pa);
 	} else {
 		pte->ppn = ((uintptr_t)pa >> PAGE_SHIFT) & (~PN_MASK);
 		pte->r = 1;
@@ -106,7 +107,6 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 		pte->ex = 1;
 		pte->valid = 1;
 	}
-	printf("Map %p to %p\n", va, pa);
 }
 
 Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
