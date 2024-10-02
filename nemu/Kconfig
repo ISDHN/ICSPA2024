@@ -193,6 +193,11 @@ config FTRANCE_PAD
     int "The length of the padding"
     default 1
 
+config FTRANCE_ONLY_ERRORTRACE
+    depends on FTRACE
+    bool "only print the error traceback"
+    default y
+
 config ETRACE
     depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
     bool "Enable exception tracer"
