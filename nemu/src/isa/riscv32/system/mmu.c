@@ -31,7 +31,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 		word_t vpn = (va.vpn >> (i * 10)) & PN_MASK;
 		pte = (pte_t)paddr_read((a << PAGE_SHIFT) | vpn << PTE_SHIFT, PTE_SIZE);
 		if (!pte.valid) {
-			panic("Invalid pte %#x when accecc %#x", (a << PAGE_SHIFT) | vpn << PTE_SHIFT, vaddr);
+			panic("Invalid pte %#x when access %#x", (a << PAGE_SHIFT) | vpn << PTE_SHIFT, vaddr);
 		}
 		if (pte.r | pte.ex) {
 			break;
