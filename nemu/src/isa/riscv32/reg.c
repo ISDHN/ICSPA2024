@@ -23,9 +23,9 @@ const char *regs[] = {
 	"s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"};
 
 void isa_reg_display() {
+	printf("%-3s: %#08x\n", "pc", cpu.pc);
 	for (int i = 0; i < ARRLEN(regs); i++) {
 		bool success = false;
-		printf("%-3s: %#08x\n", "pc", cpu.pc);
 		printf("%-3s: %#08x\n", regs[i], isa_reg_str2val(regs[i], &success));
 	}
 }
