@@ -17,6 +17,7 @@ void call_main(uintptr_t args) {
 	int argc = *(int *)args;
 	char **argv = (char **)(args + sizeof(int));
 	environ = argv + argc + 1;
+	printf("argc : %d\n", argc);
 	__libc_init_array();
 	sbrk(0); // tell the system where the _end is
 #ifdef AM
