@@ -77,6 +77,7 @@ AS        = $(CROSS_COMPILE)gcc
 CC        = $(CROSS_COMPILE)gcc
 CXX       = $(CROSS_COMPILE)g++
 LD        = $(CROSS_COMPILE)ld
+OBJDUMP   = $(CROSS_COMPILE)objdump
 AR        = $(CROSS_COMPILE)ar
 
 ### Compilation flags
@@ -124,6 +125,7 @@ $(LIBS):
 $(APP): $(LINKAGE)
 	@echo + LD "->" $(shell realpath $@ --relative-to .)
 	@$(LD) $(LDFLAGS) -o $@ $(WL)--start-group $^ $(WL)--end-group
+	@$(OBJDUMP) -d $@ > $@.txt
 
 ### Rule (archive): objects (`*.o`) -> `ARCHIVE.a` (ar)
 $(ARCHIVE): $(LINKAGE)
