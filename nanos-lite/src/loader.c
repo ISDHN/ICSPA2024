@@ -54,7 +54,7 @@ uintptr_t loader(PCB *pcb, const char *filename) {
 	start &= PAGE_MASK; // get the start and end of the page that the beginning of the program is in
 	end &= PAGE_MASK;
 
-	uint32_t pg_nr = (end - start) >> PAGE_SHIFT + 1;
+	uint32_t pg_nr = ((end - start) >> PAGE_SHIFT) + 1;
 	void *ph_pg = new_page(pg_nr);
 	for (int i = 0; i < pg_nr; i++) {
 		map(&pcb->as, (void *)(start + PGSIZE * i), ph_pg + PGSIZE * i, 0);
