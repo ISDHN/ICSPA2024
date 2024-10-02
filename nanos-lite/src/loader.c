@@ -65,6 +65,7 @@ uintptr_t loader(PCB *pcb, const char *filename) {
 		map(&pcb->as, (void *)(start + PGSIZE * i), ph_pg + PGSIZE * i, 0);
 	}
 	Log("%s virtual page: %p~%p", filename, start, end);
+	Log("%s physical page: %p~%p", filename, ph_pg, ph_pg + pg_nr * PGSIZE);
 
 	for (int i = 0; i < ehdr.e_phnum; i++) {
 		Elf_Phdr phdr;
