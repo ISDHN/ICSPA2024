@@ -41,7 +41,6 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 	} else {
 		res = pte.ppn << PAGE_SHIFT | va.pgoff;
 	}
-	assert(res == vaddr);
 	return res;
 }
 #pragma GCC pop_options
