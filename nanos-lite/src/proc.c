@@ -119,7 +119,7 @@ void hello_fun(void *arg) {
 }
 
 void init_proc() {
-	char *init_program = "/bin/nterm";
+	char *init_program = "/bin/menu";
 	context_uload(init_program, (char *[]){init_program, NULL}, NULL, true);
 	switch_boot_pcb();
 
@@ -137,7 +137,7 @@ PCB *get_next_proc() {
 			return pcb + (i + 1) % pcb_count;
 		}
 	}
-	return pcb + pcb_count - 1; // boot pcb
+	return pcb + pcb_count - 1; // if boot pcb: return the first
 }
 
 Context *schedule(Context *prev) {
