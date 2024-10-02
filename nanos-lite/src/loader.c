@@ -37,6 +37,7 @@ uintptr_t loader(PCB *pcb, const char *filename) {
 
 	Elf_Ehdr ehdr;
 	readbytes(fd, &ehdr, 0, sizeof(Elf_Ehdr));
+
 	uintptr_t start = 0xffffffff;
 	uintptr_t end = 0;
 	for (int i = 0; i < ehdr.e_phnum; i++) {
