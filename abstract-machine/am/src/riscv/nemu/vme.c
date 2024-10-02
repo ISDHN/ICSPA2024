@@ -79,10 +79,20 @@ void __am_switch(Context *c) {
 void map(AddrSpace *as, void *va, void *pa, int prot) {
 	uintptr_t root = (uintptr_t)as->ptr;
 	vaddr_ena vaddr = {.val = (uintptr_t)va};
+	pte_t *pte = (pte_t *)(root + (vaddr.vpn_1 << PTE_SHIFT));
 	if (as->area.start == USER_SPACE.start && as->area.end == USER_SPACE.end) {
-
+		if (pte->val == 0) {
+			pte->valid = 1;
+			uintptr_t dst_pg = (uintptr_t)pgalloc_usr(PAGE_SIZE);
+			pte->ppn = dst_pg >> PAGE_SHIFT;
+		}
+		pte_t *next_lvl = (pte_t *)((pte->ppn << PAGE_SHIFT) | (vaddr.vpn_0 << PTE_SHIFT));
+		next_lvl->ppn = (uintptr_t)pa >> PAGE_SHIFT;
+		next_lvl->r = 1;
+		next_lvl->w = 1;
+		next_lvl->ex = 1;
+		next_lvl->valid = 1;
 	} else {
-		pte_t *pte = (pte_t *)(root + (vaddr.vpn_1 << PTE_SHIFT));
 		pte->ppn = ((uintptr_t)pa >> PAGE_SHIFT) & (~PN_MASK);
 		pte->r = 1;
 		pte->w = 1;
@@ -94,6 +104,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 
 Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
 	Context *c = (Context *)kstack.end - 1;
+	c->pdir = as->ptr;
 	if (entry) {
 		c->mepc = (uintptr_t)entry - 4;
 	}

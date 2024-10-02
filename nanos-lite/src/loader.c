@@ -37,6 +37,33 @@ uintptr_t loader(PCB *pcb, const char *filename) {
 
 	Elf_Ehdr ehdr;
 	readbytes(fd, &ehdr, 0, sizeof(Elf_Ehdr));
+	uintptr_t start = 0xffffffff;
+	uintptr_t end = 0;
+	for (int i = 0; i < ehdr.e_phnum; i++) {
+		Elf_Phdr phdr;
+		readbytes(fd, &phdr, ehdr.e_phoff + i * ehdr.e_phentsize, ehdr.e_phentsize);
+		if (phdr.p_type != PT_LOAD) {
+			continue;
+		}
+		uint32_t offset = phdr.p_vaddr;
+		start = offset < start ? offset : start;
+		end = offset + phdr.p_memsz > end ? offset + phdr.p_memsz : end;
+	}
+
+	start >>= PAGE_SHIFT;
+	start <<= PAGE_SHIFT; // get the start of the page that the beginning of the program is in
+
+	uint32_t pgoff = end & PAGE_MASK;
+	end >>= PAGE_SHIFT;
+	end += !!(pgoff); // if the end of the program isn't at the end of a page, we need alloc a new page
+	end <<= PAGE_SHIFT;
+
+	uint32_t pg_nr = (end - start) >> PAGE_SHIFT;
+	void *ph_pg = new_page(pg_nr);
+	for (int i = 0; i < pg_nr; i++) {
+		map(&pcb->as, (void *)(start + PGSIZE * i), ph_pg + PGSIZE * i, 0);
+	}
+
 	for (int i = 0; i < ehdr.e_phnum; i++) {
 		Elf_Phdr phdr;
 		readbytes(fd, &phdr, ehdr.e_phoff + i * ehdr.e_phentsize, ehdr.e_phentsize);

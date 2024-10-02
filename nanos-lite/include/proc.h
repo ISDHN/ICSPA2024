@@ -5,6 +5,8 @@
 #include <memory.h>
 
 #define STACK_SIZE (8 * PGSIZE)
+#define PAGE_SHIFT 12
+#define PAGE_MASK ~(1ul << PAGE_SHIFT)
 
 typedef union {
 	uint8_t stack[STACK_SIZE] PG_ALIGN;
@@ -23,6 +25,6 @@ extern PCB *current;
 #endif
 
 Context *schedule(Context *prev);
-uintptr_t loader(PCB *pcb, const char *filename);
+uintptr_t loader(PCB *pcb, const char *filename) __attribute__((optimize(0)));
 int naive_uload(PCB *pcb, const char *filename);
 int context_uload(const char *filename, char *const argv[], char *const envp[], bool new_one);
