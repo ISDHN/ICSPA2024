@@ -188,8 +188,6 @@ SDL_Surface *SDL_CreateRGBSurface(uint32_t flags, int width, int height, int dep
 		assert(s->format->palette->colors);
 		memset(s->format->palette->colors, 0, sizeof(SDL_Color) * 256);
 		s->format->palette->ncolors = 256;
-		platte_pixels = calloc(width * height, sizeof(uint32_t));
-		printf("platte_pixels: %p\n", platte_pixels);
 	} else {
 		s->format->palette = NULL;
 		s->format->Rmask = Rmask;
@@ -248,8 +246,11 @@ void SDL_FreeSurface(SDL_Surface *s) {
 }
 
 SDL_Surface *SDL_SetVideoMode(int width, int height, int bpp, uint32_t flags) {
-	if (flags & SDL_HWSURFACE)
+	if (flags & SDL_HWSURFACE) {
 		NDL_OpenCanvas(&width, &height);
+		platte_pixels = calloc(width * height, sizeof(uint32_t));
+		printf("platte_pixels: %p\n", platte_pixels);
+	}
 	return SDL_CreateRGBSurface(flags, width, height, bpp,
 								DEFAULT_RMASK, DEFAULT_GMASK, DEFAULT_BMASK, DEFAULT_AMASK);
 }
