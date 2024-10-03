@@ -79,7 +79,6 @@ void __am_switch(Context *c) {
 
 void map(AddrSpace *as, void *va, void *pa, int prot) {
 	uintptr_t root = (uintptr_t)as->ptr;
-	printf("pdir: %p\n", root);
 	vaddr_ena vaddr = {.val = (uintptr_t)va};
 	pte_t *pte = (pte_t *)(root + (vaddr.vpn_1 << PTE_SHIFT));
 	if (pte->val == 0) {
