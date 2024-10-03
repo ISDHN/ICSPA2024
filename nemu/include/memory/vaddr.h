@@ -24,15 +24,6 @@ void vaddr_write(vaddr_t addr, int len, word_t data);
 
 typedef union {
 	struct {
-		word_t ppn : 22;
-		word_t asid : 9;
-		word_t mode : 1;
-	};
-	word_t val;
-} satp_t;
-
-typedef union {
-	struct {
 		word_t valid : 1;
 		word_t r : 1;
 		word_t w : 1;

@@ -21,10 +21,47 @@
 typedef struct {
 	word_t gpr[MUXDEF(CONFIG_RVE, 16, 32)]; // general purpose registers
 	vaddr_t pc;
+	bool intr;
 	word_t mt_csr[256 + 1];
 	word_t spv_csr[128 + 1];
 	word_t *csr[16];
 } MUXDEF(CONFIG_RV64, riscv64_CPU_state, riscv32_CPU_state);
+
+typedef union {
+	struct {
+		word_t ppn : 22;
+		word_t asid : 9;
+		word_t mode : 1;
+	};
+	word_t val;
+} satp_t;
+
+typedef union {
+	struct {
+		word_t reserve_0 : 1;
+		word_t sie : 1;
+		word_t reserve_1 : 1;
+		word_t mie : 1;
+		word_t reserve_2 : 2;
+		word_t spie : 1;
+		word_t ube : 1;
+		word_t mpie : 1;
+		word_t spp : 1;
+		word_t vs : 2;
+		word_t mpp : 2;
+		word_t fs : 2;
+		word_t xs : 2;
+		word_t mprv : 1;
+		word_t sum : 1;
+		word_t mxr : 1;
+		word_t tvm : 1;
+		word_t tw : 1;
+		word_t tsr : 1;
+		word_t reserve_3 : 8;
+		word_t sd : 1;
+	};
+	word_t val;
+} mstatus_t;
 
 // decode
 typedef struct {

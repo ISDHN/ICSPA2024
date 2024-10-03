@@ -46,6 +46,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 	// to protect the args in .data seg
 
 	protect(&dst_pcb->as);
+	Log("%s's pdir: %p", filename, dst_pcb->as.ptr);
 	// stack grow downsides, so the initial stack pointer should be the end of the page
 	int pg_nr_stk = 8;
 	void *ustack = new_page(pg_nr_stk) + pg_nr_stk * PGSIZE;
