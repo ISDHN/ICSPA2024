@@ -121,7 +121,7 @@ void hello_fun(void *arg) {
 
 void init_proc() {
 	char *init_program = "/bin/pal";
-	context_kload(hello_fun, "init_program");
+	context_uload("bin/hello", (char *[]){"bin/hello", NULL}, NULL, true);
 	context_uload(init_program, (char *[]){init_program, "--skip", NULL}, NULL, true);
 	switch_boot_pcb();
 
