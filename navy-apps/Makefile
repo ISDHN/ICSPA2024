@@ -176,7 +176,7 @@ $(CLEAN_ALL):
 
 ### Build fsimg and ramdisk for Nanos-lite
 APPS =   menu nterm nplayer pal bird
-TESTS =  dummy
+TESTS =  hello
 VME = 1
 
 fsimg: $(addprefix apps/, $(APPS)) $(addprefix tests/, $(TESTS))
