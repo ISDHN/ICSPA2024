@@ -72,6 +72,9 @@ int _write(int fd, void *buf, size_t count) {
 extern char _end;
 void *_sbrk(uintptr_t increment) {
 	static uintptr_t program_break = (uintptr_t)&_end;
+	if (increment < 0) {
+		printf("sbrk: negative increment\n");
+	}
 	int ret = _syscall_(SYS_brk, program_break + increment, 0, 0);
 	if (ret) {
 		return (void *)-1;
