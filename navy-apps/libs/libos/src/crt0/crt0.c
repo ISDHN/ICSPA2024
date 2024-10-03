@@ -14,12 +14,12 @@ extern char **environ;
 extern void __libc_init_array(void);
 
 void call_main(uintptr_t args) {
+	sbrk(0); // tell the system where the _end is
 	int argc = *(int *)args;
 	char **argv = (char **)(args + sizeof(int));
 	environ = argv + argc + 1;
-	printf("argc : %d\n", argc);
 	__libc_init_array();
-	sbrk(0); // tell the system where the _end is
+	printf("argc: %d\n", argc);
 #ifdef AM
 	exit(main(am_arg))
 #else

@@ -48,8 +48,8 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 	protect(&dst_pcb->as);
 	// stack grow downsides, so the initial stack pointer should be the end of the page
 	int pg_nr_stk = 8;
-	char *ustack = new_page(pg_nr_stk) + pg_nr_stk * PGSIZE;
-	Log("New proc's ustack: %p", ustack);
+	void *ustack = new_page(pg_nr_stk) + pg_nr_stk * PGSIZE;
+	Log("New proc's ustack: %p -> %p", ustack, pcb->as.area.end - pg_nr_stk * PGSIZE);
 	for (int i = 0; i < pg_nr_stk; i++) {
 		map(&pcb->as, pcb->as.area.end + PGSIZE * (i - pg_nr_stk), ustack + i * PGSIZE, 0);
 	}
@@ -121,7 +121,7 @@ void hello_fun(void *arg) {
 }
 
 void init_proc() {
-	char *init_program = "/bin/nterm";
+	char *init_program = "/bin/menu";
 	context_uload(init_program, (char *[]){init_program, NULL}, NULL, true);
 	switch_boot_pcb();
 
