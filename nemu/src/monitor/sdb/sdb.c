@@ -194,6 +194,11 @@ static int cmd_info(char *args) {
 	return 0;
 }
 
+static int cmd_tb(char *args) {
+	traceback_display();
+	return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -213,6 +218,9 @@ static struct {
 #ifdef CONFIG_DIFFTEST
 	{"attatch", "Attatch to difftest", cmd_attatch},
 	{"detach", "Detach from difftest", cmd_detach},
+#endif
+#ifdef CONFIG_FTRACE
+	{"tb", "TraceBack", cmd_tb},
 #endif
 	{"info", "Print program state", cmd_info},
 	{"save", "Save the current state to a file", cmd_save},
