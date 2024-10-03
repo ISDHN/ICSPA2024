@@ -26,6 +26,9 @@ void free_page(void *p) {
 int mm_brk(uintptr_t brk) {
 	uintptr_t old_vpage = current->max_brk & PAGE_MASK;
 	uintptr_t new_vpage = brk & PAGE_MASK;
+	if (brk < current->max_brk) {
+		panic("What are you fucking doing? Narrowing the brk??");
+	}
 	if (current->max_brk == 0) {
 		Log("init brk: %p", (void *)new_vpage);
 	} else if (old_vpage != new_vpage) {
