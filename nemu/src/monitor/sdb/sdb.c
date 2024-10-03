@@ -193,12 +193,12 @@ static int cmd_info(char *args) {
 	}
 	return 0;
 }
-
+#ifdef CONFIG_FTRACE
 static int cmd_tb(char *args) {
 	traceback_display();
 	return 0;
 }
-
+#endif
 static int cmd_help(char *args);
 
 static struct {

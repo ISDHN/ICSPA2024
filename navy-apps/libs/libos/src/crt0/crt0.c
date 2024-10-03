@@ -19,7 +19,6 @@ void call_main(uintptr_t args) {
 	char **argv = (char **)(args + sizeof(int));
 	environ = argv + argc + 1;
 	__libc_init_array();
-	printf("args: %x\n", args);
 #ifdef AM
 	exit(main(am_arg))
 #else
