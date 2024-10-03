@@ -120,8 +120,8 @@ void hello_fun(void *arg) {
 }
 
 void init_proc() {
-	char *init_program = "/bin/menu";
-	context_uload(init_program, (char *[]){init_program, NULL}, NULL, true);
+	char *init_program = "/bin/pal";
+	context_uload(init_program, (char *[]){init_program, "--skip", NULL}, NULL, true);
 	switch_boot_pcb();
 
 	Log("Initializing processes...");
