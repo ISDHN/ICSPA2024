@@ -31,8 +31,7 @@ uintptr_t loader(PCB *pcb, const char *filename) {
 		return 0;
 	}
 	if (ident[EI_CLASS] != Elf_Class) {
-		Log("Unsupported ELF file class");
-		return 0;
+		panic("Unsupported ELF file class");
 	}
 
 	Elf_Ehdr ehdr;
