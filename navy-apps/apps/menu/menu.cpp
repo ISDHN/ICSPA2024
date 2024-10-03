@@ -17,7 +17,7 @@
 
 #define W 400
 #define H 300
-#define BG 0x00ffffff
+#define BG 0x0000FF00
 
 const char *font_fname = "/share/fonts/Courier-7.bdf";
 static BDF_Font *font;
