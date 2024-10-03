@@ -49,9 +49,9 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 	// stack grow downsides, so the initial stack pointer should be the end of the page
 	int pg_nr_stk = 8;
 	void *ustack = new_page(pg_nr_stk) + pg_nr_stk * PGSIZE;
-	Log("New proc's ustack: %p -> %p", ustack, pcb->as.area.end - pg_nr_stk * PGSIZE);
+	Log("New proc's ustack: %p -> %p", ustack, dst_pcb->as.area.end - pg_nr_stk * PGSIZE);
 	for (int i = 0; i < pg_nr_stk; i++) {
-		map(&pcb->as, pcb->as.area.end + PGSIZE * (i - pg_nr_stk), ustack + i * PGSIZE, 0);
+		map(&dst_pcb->as, dst_pcb->as.area.end + PGSIZE * (i - pg_nr_stk), ustack + i * PGSIZE, 0);
 	}
 
 	char *str_buffer = ustack;
