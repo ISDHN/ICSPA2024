@@ -189,6 +189,7 @@ SDL_Surface *SDL_CreateRGBSurface(uint32_t flags, int width, int height, int dep
 		memset(s->format->palette->colors, 0, sizeof(SDL_Color) * 256);
 		s->format->palette->ncolors = 256;
 		platte_pixels = calloc(width * height, sizeof(uint32_t));
+		printf("platte_pixels: %p\n", platte_pixels);
 	} else {
 		s->format->palette = NULL;
 		s->format->Rmask = Rmask;
