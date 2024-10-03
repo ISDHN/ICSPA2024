@@ -24,7 +24,6 @@ void free_page(void *p) {
 
 /* The brk() system call handler. */
 int mm_brk(uintptr_t brk) {
-	Log("new brk: %p", (void *)brk);
 	uintptr_t old_vpage = current->max_brk & PAGE_MASK;
 	uintptr_t new_vpage = brk & PAGE_MASK;
 	if (brk < current->max_brk) {
