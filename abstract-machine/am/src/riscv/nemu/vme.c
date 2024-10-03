@@ -74,9 +74,9 @@ void __am_switch(Context *c) {
 	if (vme_enable && c->pdir != NULL) {
 		uintptr_t prev = get_satp();
 		set_satp(c->pdir);
-		if ((void *)prev != c->pdir) {
-			printf("set satp to %p\n", c->pdir);
-		}
+		// if ((void *)prev != c->pdir) {
+		// 	printf("set satp to %p\n", c->pdir);
+		// }
 	}
 }
 
