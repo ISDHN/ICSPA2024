@@ -146,6 +146,7 @@ PCB *get_next_proc() {
 
 Context *schedule(Context *prev) {
 	current->cp = prev;
+	Log("update current context to %p", current->cp);
 	PCB *next = get_next_proc();
 	if (next != NULL) {
 		current = next;
