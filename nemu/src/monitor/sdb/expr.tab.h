@@ -69,8 +69,9 @@ extern int yydebug;
     T_LAND = 260,                  /* T_LAND  */
     T_EQ = 261,                    /* T_EQ  */
     T_NE = 262,                    /* T_NE  */
-    NEGM = 263,                    /* NEGM  */
-    DREF = 264                     /* DREF  */
+    T_LT = 263,                    /* T_LT  */
+    NEGM = 264,                    /* NEGM  */
+    DREF = 265                     /* DREF  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -84,7 +85,7 @@ union YYSTYPE
     word_t num;
     char* reg;
 
-#line 88 "src/monitor/sdb/expr.tab.h"
+#line 89 "src/monitor/sdb/expr.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

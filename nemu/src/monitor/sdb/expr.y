@@ -20,7 +20,7 @@
 %type <num> number
 
 %left T_LAND
-%left T_EQ T_NE
+%left T_EQ T_NE T_LT
 %left '+' '-'
 %left '*' '/'
 %right NEGM  DREF
@@ -67,6 +67,7 @@ expr : number { $$ = $1; }
     | expr T_EQ expr { $$ = $1 == $3; }
     | expr T_NE expr { $$ = $1 != $3; }
     | expr T_LAND expr { $$ = $1 && $3; }
+    | expr T_LT expr { $$ = $1 < $3; }
      ;
 
 %%

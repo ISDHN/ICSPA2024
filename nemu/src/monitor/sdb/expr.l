@@ -20,6 +20,7 @@ w [a-zA-Z0-9]
 &&              { return T_LAND; }
 ==              { return T_EQ; }
 !=              { return T_NE; }
+"<"               { return T_LT; }
 .               { return yytext[0]; }       
 
 

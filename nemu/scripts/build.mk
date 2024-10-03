@@ -63,7 +63,7 @@ $(OBJ_DIR)/%.o: %.cpp
 
 .PHONY: app clean
 
-flexbison: $(LEX_C) $(PARSER_C)
+flexbison: $(PARSER_C) $(LEX_C) 
 
 app:  $(BINARY) 
 
