@@ -34,7 +34,7 @@ int mm_brk(uintptr_t brk) {
 	} else if (old_vpage != new_vpage) {
 		int increment = (new_vpage - old_vpage) >> PAGE_SHIFT;
 		void *new_ppage = new_page(increment);
-		Log("brk: %p -> %p", brk, new_vpage);
+		Log("brk: %p -> %p", current->max_brk, new_vpage);
 		for (int i = 0; i < increment; i++) {
 			map(&current->as, (void *)old_vpage + (i + 1) * PGSIZE, new_ppage + i * PGSIZE, 0);
 		}
