@@ -106,7 +106,6 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 	dst_pcb->cp = ucontext(&dst_pcb->as, (Area){dst_pcb->stack, dst_pcb->stack + STACK_SIZE}, entry);
 	dst_pcb->cp->GPRx = (uintptr_t)ustack;
 	dst_pcb->max_brk = 0;
-	// dst_pcb->max_brk = 0;
 	switch_boot_pcb();
 	return 0;
 }
@@ -114,7 +113,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 void hello_fun(void *arg) {
 	int j = 1;
 	while (1) {
-		// Log("Hello World from Nanos-lite with arg '%s' for the %dth time!", (char *)arg, j);
+		Log("Hello World from Nanos-lite with arg '%s' for the %dth time!", (char *)arg, j);
 		j++;
 		yield();
 	}
