@@ -26,7 +26,7 @@ void isa_reg_display() {
 	printf("%-3s: %#08x\n", "pc", cpu.pc);
 	for (int i = 0; i < ARRLEN(regs); i++) {
 		bool success = false;
-		printf("%-3s: %#08x\n", regs[i], isa_reg_str2val(regs[i], &success));
+		printf("%-3s: %#010x\n", regs[i], isa_reg_str2val(regs[i], &success));
 	}
 }
 
