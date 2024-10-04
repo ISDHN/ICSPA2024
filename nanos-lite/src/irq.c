@@ -6,7 +6,6 @@ void do_syscall(Context *c);
 static Context *do_event(Event e, Context *c) {
 	switch (e.event) {
 		case EVENT_IRQ_TIMER:
-			Log("Tik tak...");
 		case EVENT_YIELD:
 			c = schedule(c);
 			break;
