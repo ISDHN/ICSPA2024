@@ -118,6 +118,7 @@ static inline void Mret() {
 	status->mie = status->mpie;
 	status->mpie = 1;
 	if (cpu.mt_csr[mcause] == 0x80000007) {
+		printf("epc: %#x\n", MRW(mepc) + 4);
 		isa_reg_display();
 		Log("end timer intr");
 	}
