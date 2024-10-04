@@ -36,7 +36,6 @@ extern void __am_asm_trap(void);
 bool cte_init(Context *(*handler)(Event, Context *)) {
 	// initialize exception entry
 	asm volatile("csrw mtvec, %0" : : "r"(__am_asm_trap));
-
 	// register event handler
 	user_handler = handler;
 
@@ -46,6 +45,7 @@ bool cte_init(Context *(*handler)(Event, Context *)) {
 Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
 	Context *c = (Context *)kstack.end - 1;
 	c->mepc = (uintptr_t)entry - 4;
+	c->mstatus = 0x1800;
 	c->pdir = NULL;
 	*((Context **)kstack.start) = c;
 	c->GPRx = (uintptr_t)arg;
@@ -61,8 +61,11 @@ void yield() {
 }
 
 bool ienabled() {
-	return false;
+	uint32_t mstatus;
+	asm volatile("csrr %0,mstatus" : "=r"(mstatus) :);
+	return mstatus & 8; // mie
 }
 
 void iset(bool enable) {
+	asm volatile("csrs mstatus, %0" ::"r"((uint32_t)enable << 3)); // enable interrupt
 }
