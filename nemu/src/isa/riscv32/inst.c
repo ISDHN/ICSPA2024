@@ -113,12 +113,14 @@ void traceback_display() {
 #endif
 }
 
-static inline void Mret() {
+static inline void Mret(Decode *s) {
+	s->dnpc = MRW(mepc) + 4;
 	mstatus_t *status = (mstatus_t *)(&cpu.mt_csr[mstatus]);
 	status->mie = status->mpie;
 	status->mpie = 1;
 	if (cpu.mt_csr[mcause] == 0x80000007) {
-		printf("epc: %#x\n", MRW(mepc) + 4);
+		s->dnpc -= 4;
+		printf("epc: %#x\n", MRW(mepc));
 		isa_reg_display();
 		Log("end timer intr");
 	}
@@ -231,7 +233,7 @@ static int decode_exec(Decode *s) {
 	INSTPAT("??????? ????? ????? 001 ????? 111 0011", csrrw, I, if (rd != 0) R(rd) = CSR(imm); CSR(imm) = src1);
 	INSTPAT("??????? ????? ????? 010 ????? 111 0011", csrrs, I, R(rd) = CSR(imm); if (src1 != 0) CSR(imm) |= src1);
 	INSTPAT("??????? ????? ????? 011 ????? 111 0011", csrrc, I, R(rd) = CSR(imm); if (src1 != 0) CSR(imm) &= ~src1);
-	INSTPAT("0011000 00010 00000 000 00000 111 0011", mret, N, { s->dnpc = MRW(mepc) + 4; Mret(); });
+	INSTPAT("0011000 00010 00000 000 00000 111 0011", mret, N, Mret(s););
 	// Misc
 	INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv, N, INV(s->pc));
 	INSTPAT_END();
