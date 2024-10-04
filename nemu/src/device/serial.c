@@ -33,7 +33,9 @@ static void serial_putc(char ch) {
 
 void flush_log_buffer() {
 	extern int log_fp_fd;
-	fsync(log_fp_fd);
+	if (log_fp_fd != -1) {
+		fsync(log_fp_fd);
+	}
 }
 
 static void serial_io_handler(uint32_t offset, int len, bool is_write) {
