@@ -120,9 +120,9 @@ static inline void Mret(Decode *s) {
 	status->mpie = 1;
 	if (cpu.mt_csr[mcause] == 0x80000007) {
 		s->dnpc -= 4;
-		printf("epc: %#x\n", MRW(mepc));
-		isa_reg_display();
-		Log("end timer intr");
+		// printf("epc: %#x\n", MRW(mepc));
+		// isa_reg_display();
+		// Log("end timer intr");
 	}
 }
 
