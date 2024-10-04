@@ -128,7 +128,7 @@ void init_proc() {
 	char *init_program = "/bin/nterm";
 	// context_uload("/bin/hello", (char *[]){"/bin/hello", NULL}, NULL, true);
 	context_kload(hello_fun, "arg1", 1);
-	context_uload(init_program, (char *[]){init_program, NULL}, NULL, 100, true);
+	context_uload(init_program, (char *[]){init_program, NULL}, NULL, 1, true);
 	switch_boot_pcb();
 
 	Log("Initializing processes...");
