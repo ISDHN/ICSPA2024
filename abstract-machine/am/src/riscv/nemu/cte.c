@@ -70,6 +70,6 @@ void iset(bool enable) {
 	if (enable) {
 		asm volatile("csrs mstatus, %0" ::"r"(1 << 3)); // enable interrupt
 	} else {
-		asm volatile("csrc mstatus, %0" ::"r"(1 << 3)); // enable interrupt
+		asm volatile("csrc mstatus, %0" ::"r"(1 << 3)); // disable interrupt
 	}
 }
