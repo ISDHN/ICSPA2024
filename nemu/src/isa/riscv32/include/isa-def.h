@@ -43,7 +43,7 @@ typedef union {
 		word_t sie : 1;
 		word_t reserve_1 : 1;
 		word_t mie : 1;
-		word_t reserve_2 : 2;
+		word_t reserve_2 : 1;
 		word_t spie : 1;
 		word_t ube : 1;
 		word_t mpie : 1;
