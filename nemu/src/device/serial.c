@@ -16,6 +16,7 @@
 #include <utils.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <device/alarm.h>
 #include <device/map.h>
 
 /* http://en.wikibooks.org/wiki/Serial_Programming/8250_UART_Programming */
@@ -28,6 +29,11 @@ static uint8_t *serial_base = NULL;
 static void serial_putc(char ch) {
 	MUXDEF(CONFIG_TARGET_AM, putch(ch), putc(ch, stderr));
 	log_write("%c", ch);
+}
+
+static void flush_log_buffer() {
+	extern int log_fp_fd;
+	fsync(log_fp_fd);
 }
 
 static void serial_io_handler(uint32_t offset, int len, bool is_write) {
@@ -52,4 +58,5 @@ void init_serial() {
 #else
 	add_mmio_map("serial", CONFIG_SERIAL_MMIO, serial_base, 8, serial_io_handler);
 #endif
+	add_alarm_handle(flush_log_buffer);
 }
