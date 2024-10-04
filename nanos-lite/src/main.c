@@ -26,11 +26,11 @@ int main() {
 	init_fs();
 
 	init_proc();
-	iset(true);
 
 	Log("Finish initialization");
 
 #ifdef HAS_CTE
+	iset(true);
 	// yield();
 #endif
 
