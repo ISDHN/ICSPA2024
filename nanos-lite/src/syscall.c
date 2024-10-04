@@ -59,7 +59,7 @@ int sys_gettimeofday(struct timeval *tv, void *tz) {
 
 int sys_execve(const char *pathname, char *const argv[], char *const envp[]) {
 	printf("execve: %s \n", pathname);
-	int res = context_uload(pathname, argv, envp, false);
+	int res = context_uload(pathname, argv, envp, 5, false);
 	if (!res) {
 		yield();
 	}

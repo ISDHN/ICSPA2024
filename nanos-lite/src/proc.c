@@ -13,17 +13,18 @@ void switch_boot_pcb() {
 	current = &pcb_boot;
 }
 
-int context_kload(thread_entry func, void *arg) {
+int context_kload(thread_entry func, void *arg, uint32_t priority) {
 	if (pcb_count >= MAX_NR_PROC) {
 		Log("No more PCB space");
 		return 1;
 	}
 	pcb[pcb_count].cp = kcontext((Area){pcb[pcb_count].stack, pcb[pcb_count].stack + STACK_SIZE}, func, arg);
+	pcb[pcb_count].priority = priority;
 	pcb_count++;
 	return 0;
 }
 
-int context_uload(const char *filename, char *const argv[], char *const envp[], bool new_one) {
+int context_uload(const char *filename, char *const argv[], char *const envp[], uint32_t priority, bool new_one) {
 	int existence_test = fs_open(filename, 0, 0);
 	if (existence_test == -1) {
 		Log("Failed to load program from %s", filename);
@@ -107,6 +108,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 	dst_pcb->cp = ucontext(&dst_pcb->as, (Area){dst_pcb->stack, dst_pcb->stack + STACK_SIZE}, entry);
 	dst_pcb->cp->GPRx = (uintptr_t)ustack;
 	dst_pcb->max_brk = 0;
+	dst_pcb->priority = priority;
 	switch_boot_pcb();
 	return 0;
 }
@@ -123,8 +125,8 @@ void hello_fun(void *arg) {
 void init_proc() {
 	char *init_program = "/bin/nterm";
 	// context_uload("/bin/hello", (char *[]){"/bin/hello", NULL}, NULL, true);
-	context_uload(init_program, (char *[]){init_program, NULL}, NULL, true);
-	context_kload(hello_fun, "arg1");
+	context_uload(init_program, (char *[]){init_program, NULL}, NULL, 5, true);
+	context_kload(hello_fun, "arg1", 1);
 	switch_boot_pcb();
 
 	Log("Initializing processes...");
@@ -145,11 +147,14 @@ PCB *get_next_proc() {
 }
 
 Context *schedule(Context *prev) {
+	static int count = 0;
+	count++;
 	current->cp = prev;
-	// Log("update current context to %p", current->cp);
-	PCB *next = get_next_proc();
-	if (next != NULL) {
-		current = next;
+	if (count % current->priority == 0) {
+		PCB *next = get_next_proc();
+		if (next != NULL) {
+			current = next;
+		}
 	}
 	return current->cp;
 }
