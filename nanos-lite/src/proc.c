@@ -150,11 +150,11 @@ Context *schedule(Context *prev) {
 	static int count = 0;
 	count++;
 	current->cp = prev;
-	// if (current->priority != 0 && count % current->priority == 0) {
-	PCB *next = get_next_proc();
-	if (next != NULL) {
-		current = next;
+	if (current->priority != 0 && count % current->priority == 0) {
+		PCB *next = get_next_proc();
+		if (next != NULL) {
+			current = next;
+		}
 	}
-	//}
 	return current->cp;
 }
