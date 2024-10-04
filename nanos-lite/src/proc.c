@@ -108,7 +108,9 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 	dst_pcb->cp = ucontext(&dst_pcb->as, (Area){dst_pcb->stack, dst_pcb->stack + STACK_SIZE}, entry);
 	dst_pcb->cp->GPRx = (uintptr_t)ustack;
 	dst_pcb->max_brk = 0;
-	dst_pcb->priority = priority;
+	if (priority != -1) {
+		dst_pcb->priority = priority;
+	}
 	switch_boot_pcb();
 	return 0;
 }
