@@ -119,6 +119,7 @@ static inline void Mret() {
 	status->mpie = 1;
 	if (cpu.mt_csr[mcause] == 0x80000007) {
 		isa_reg_display();
+		Log("end timer intr");
 	}
 }
 
