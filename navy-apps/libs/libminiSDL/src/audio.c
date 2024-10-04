@@ -1,6 +1,5 @@
 #include <NDL.h>
 #include <SDL.h>
-#include <assert.h>
 #include <sdl-audio.h>
 #include <wav.h>
 

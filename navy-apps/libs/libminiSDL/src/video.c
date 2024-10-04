@@ -1,7 +1,6 @@
 #include <NDL.h>
 #include <SDL.h>
 #include <sdl-video.h>
-#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -62,7 +61,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 	} else {
 
 		// audio_callback_caller();
-		// assert(srcw == dstw && dsth == srch);
+		assert(srcw == dstw && dsth == srch);
 
 		// audio_callback_caller();
 		w = srcw;
