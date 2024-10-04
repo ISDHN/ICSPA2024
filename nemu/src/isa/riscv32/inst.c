@@ -113,6 +113,10 @@ void traceback_display() {
 #endif
 }
 
+static inline mstatus_t *get_mstatus() {
+	return (mstatus_t *)(&cpu.mt_csr[mstatus]);
+}
+
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type) {
 	uint32_t i = s->isa.inst.val;
 	int rs1 = BITS(i, 19, 15);
@@ -219,7 +223,7 @@ static int decode_exec(Decode *s) {
 	INSTPAT("0000000 00001 00000 000 00000 111 0011", ebreak, N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
 	INSTPAT("??????? ????? ????? 001 ????? 111 0011", csrrw, I, if (rd != 0) R(rd) = CSR(imm); CSR(imm) = src1);
 	INSTPAT("??????? ????? ????? 010 ????? 111 0011", csrrs, I, R(rd) = CSR(imm); if (src1 != 0) CSR(imm) |= src1);
-	INSTPAT("0011000 00010 00000 000 00000 111 0011", mret, N, s->dnpc = MRW(mepc) + 4);
+	INSTPAT("0011000 00010 00000 000 00000 111 0011", mret, N, { s->dnpc = MRW(mepc) + 4; mstatus_t *status = get_mstatus(); status->mie = status->mpie; status->mpie = 1; });
 	// Misc
 	INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv, N, INV(s->pc));
 	INSTPAT_END();

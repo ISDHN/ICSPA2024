@@ -15,10 +15,16 @@
 
 #include <isa.h>
 
+static inline mstatus_t *get_mstatus() {
+	return (mstatus_t *)(&cpu.mt_csr[mstatus]);
+}
+
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 	cpu.csr[mrw][mepc] = epc;
 	cpu.csr[mrw][mcause] = NO;
-
+	mstatus_t *status = get_mstatus();
+	status->mpie = status->mie;
+	status->mie = 0;
 #ifdef CONFIG_ETRACE
 	Log("Interrupt: NO = %d, epc = %#x, mcause = %#x", NO, epc, cpu.csr[mrw][mcause]);
 	Log("Go to interrupt handler: %#x", cpu.csr[mrw][mtvec]);
@@ -27,5 +33,10 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 }
 
 word_t isa_query_intr() {
+	mstatus_t *status = get_mstatus();
+	if (status->mie && cpu.intr) {
+		cpu.intr = false;
+		return IRQ_TIMER;
+	}
 	return INTR_EMPTY;
 }

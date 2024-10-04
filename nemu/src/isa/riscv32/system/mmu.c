@@ -17,8 +17,6 @@
 #include <memory/vaddr.h>
 #include <memory/paddr.h>
 
-#pragma GCC push_options
-#pragma GCC optimize(0)
 paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 	vaddr_ena va = (vaddr_ena)vaddr;
 	satp_t satp_csr = (satp_t)cpu.spv_csr[satp];
@@ -45,4 +43,3 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 	}
 	return res;
 }
-#pragma GCC pop_options
