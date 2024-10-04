@@ -32,7 +32,7 @@ void restart() {
 	cpu.csr[mrw] = cpu.mt_csr;
 	cpu.csr[srw] = cpu.spv_csr;
 	cpu.csr[mrw][mstatus] = 0x1800;
-	((mstatus_t *)(&cpu.mt_csr[mstatus]))->mie = 1; // enable interrupt
+	//((mstatus_t *)(&cpu.mt_csr[mstatus]))->mie = 1; // enable interrupt
 	/* The zero register is always 0. */
 	cpu.gpr[0] = 0;
 }
