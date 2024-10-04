@@ -72,10 +72,10 @@ void __am_get_cur_as(Context *c) {
 
 void __am_switch(Context *c) {
 	if (vme_enable && c->pdir != NULL) {
-		// uintptr_t prev = get_satp();
-		// if ((void *)prev != c->pdir) {
-		// 	printf("set satp to %p\n", c->pdir);
-		// }
+		uintptr_t prev = get_satp();
+		if ((void *)prev != c->pdir) {
+			printf("set satp to %p\n", c->pdir);
+		}
 		set_satp(c->pdir);
 	}
 }
