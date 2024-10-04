@@ -77,7 +77,7 @@ void do_syscall(Context *c) {
 #endif
 	switch (a[0]) {
 		case SYS_exit:
-			halt(0);
+			halt(a[1]);
 			// sys_execve("/bin/nterm", NULL, NULL);
 			break;
 			SYS_DISPATCH(write, a[1], (const char *)a[2], a[3]);

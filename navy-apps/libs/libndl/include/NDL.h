@@ -3,10 +3,6 @@
 
 #include <stdint.h>
 
-#define assert(x) \
-	if (!(x))     \
-	printf("Assertion \"%s\" failed at %s:%d\n", #x, __FILE__, __LINE__), exit(1)
-
 #ifdef __cplusplus
 extern "C" {
 #endif

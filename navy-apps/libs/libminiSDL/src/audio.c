@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <sdl-audio.h>
 #include <wav.h>
+#include <assert.h>
 
 SDL_AudioSpec spec;
 
