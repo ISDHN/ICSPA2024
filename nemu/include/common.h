@@ -20,6 +20,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+#include <stdio.h>
+#include <unistd.h>
 
 #include <generated/autoconf.h>
 #include <macro.h>

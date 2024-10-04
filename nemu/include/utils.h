@@ -62,10 +62,10 @@ uint64_t get_time();
 
 #define log_write(...) IFDEF(CONFIG_TARGET_NATIVE_ELF, do { \
     extern FILE* log_fp; \
-    extern bool log_enable(); \
-    if (log_enable() && log_fp != NULL) { \
+    if (log_fp != NULL) { \
       fprintf(log_fp, __VA_ARGS__); \
       fflush(log_fp); \
+	  fsync(fileno(log_fp));\
     } } while (0))
 
 #define _Log(...)               \

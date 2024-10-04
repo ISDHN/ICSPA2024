@@ -27,15 +27,7 @@ static uint8_t *serial_base = NULL;
 
 static void serial_putc(char ch) {
 	MUXDEF(CONFIG_TARGET_AM, putch(ch), putc(ch, stderr));
-	do {
-		extern FILE *log_fp;
-		extern bool log_enable();
-		if (log_fp != NULL) {
-			fprintf(log_fp, "%c", ch);
-			fflush(log_fp);
-			fsync(fileno(log_fp));
-		}
-	} while (0);
+	log_write("%c", ch);
 }
 
 static void serial_io_handler(uint32_t offset, int len, bool is_write) {
