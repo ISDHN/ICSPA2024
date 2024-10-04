@@ -31,7 +31,7 @@ static void serial_putc(char ch) {
 	log_write("%c", ch);
 }
 
-static void flush_log_buffer() {
+void flush_log_buffer() {
 	extern int log_fp_fd;
 	fsync(log_fp_fd);
 }
