@@ -30,6 +30,7 @@ int main() {
 	Log("Finish initialization");
 
 #ifdef HAS_CTE
+	asm volatile("csrs mstatus, %0" ::"r"(1 << 3)); // enable interrupt
 	yield();
 #endif
 

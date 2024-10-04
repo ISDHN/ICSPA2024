@@ -25,6 +25,6 @@ extern PCB *current;
 #endif
 
 Context *schedule(Context *prev);
-uintptr_t loader(PCB *pcb, const char *filename) __attribute__((optimize(0)));
+uintptr_t loader(PCB *pcb, const char *filename);
 int naive_uload(PCB *pcb, const char *filename);
 int context_uload(const char *filename, char *const argv[], char *const envp[], bool new_one);
