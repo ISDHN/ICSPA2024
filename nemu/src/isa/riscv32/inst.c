@@ -126,8 +126,6 @@ static inline void Mret(Decode *s) {
 	// 	  printf("epc: %#x\n", MRW(mepc));
 	// 	  isa_reg_display();
 	// 	  Log("end timer intr");
-	// } else {
-	// 	s->dnpc = MRW(mepc) + 4;
 	// }
 }
 
