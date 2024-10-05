@@ -114,7 +114,6 @@ void traceback_display() {
 }
 
 static inline void Mret(Decode *s) {
-	cpu.intr = false;
 	mstatus_t *status = (mstatus_t *)(&cpu.mt_csr[mstatus]);
 	status->mie = status->mpie;
 	status->mpie = 1;
