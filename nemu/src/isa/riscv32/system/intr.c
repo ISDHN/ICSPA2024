@@ -25,10 +25,10 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 	mstatus_t *status = get_mstatus();
 	status->mpie = status->mie;
 	status->mie = 0;
-	// if (cpu.mt_csr[mcause] == 0x80000007) {
-	// 	printf("Start timer intr\n");
-	// 	// isa_reg_display();
-	// }
+	if (cpu.mt_csr[mcause] == 0x80000007) {
+		printf("Start timer intr\n");
+		// isa_reg_display();
+	}
 #ifdef CONFIG_ETRACE
 	Log("Interrupt: NO = %#x, epc = %#x, mcause = %#x", NO, epc, cpu.csr[mrw][mcause]);
 #endif

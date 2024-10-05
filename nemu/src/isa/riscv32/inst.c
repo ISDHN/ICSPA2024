@@ -121,11 +121,11 @@ static inline void Mret(Decode *s) {
 #ifdef CONFIG_ETRACE
 	Log("Mret to %#x", s->dnpc);
 #endif
-	// if (cpu.mt_csr[mcause] == 0x80000007) {
-	// 	  printf("epc: %#x\n", MRW(mepc));
-	// 	  isa_reg_display();
-	// 	  Log("end timer intr");
-	// }
+	if (cpu.mt_csr[mcause] == 0x80000007) {
+		//   printf("epc: %#x\n", MRW(mepc));
+		//   isa_reg_display();
+		Log("end timer intr");
+	}
 }
 
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type) {
