@@ -26,7 +26,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 	status->mpie = status->mie;
 	status->mie = 0;
 	if (cpu.mt_csr[mcause] == 0x80000007) {
-		printf("Start timer intr\n");
+		// printf("Start timer intr\n");
 		// isa_reg_display();
 	}
 #ifdef CONFIG_ETRACE
