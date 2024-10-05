@@ -116,11 +116,11 @@ static void exec_once(Decode *s, vaddr_t pc) {
 
 #endif
 	isa_decode_exec_once(s);
-	word_t intr = isa_query_intr();
-	if (intr != INTR_EMPTY) {
-		s->dnpc = isa_raise_intr(intr, cpu.pc);
-	}
 	cpu.pc = s->dnpc;
+	word_t intr = isa_query_intr(); // the pc has alreaady been updated!!!
+	if (intr != INTR_EMPTY) {
+		cpu.pc = isa_raise_intr(intr, cpu.pc);
+	}
 }
 
 static void execute(uint64_t n) {

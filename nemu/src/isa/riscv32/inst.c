@@ -114,16 +114,17 @@ void traceback_display() {
 }
 
 static inline void Mret(Decode *s) {
-	s->dnpc = MRW(mepc) + 4;
+	cpu.intr = false;
 	mstatus_t *status = (mstatus_t *)(&cpu.mt_csr[mstatus]);
 	status->mie = status->mpie;
 	status->mpie = 1;
 	if (cpu.mt_csr[mcause] == 0x80000007) {
-		// s->dnpc -= 4;
-		//  printf("epc: %#x\n", MRW(mepc));
-		//  isa_reg_display();
-		//  Log("end timer intr");
+		// s->dnpc = MRW(mepc);
+		//   printf("epc: %#x\n", MRW(mepc));
+		//   isa_reg_display();
+		//   Log("end timer intr");
 	}
+	s->dnpc = MRW(mepc);
 }
 
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type) {
@@ -228,7 +229,7 @@ static int decode_exec(Decode *s) {
 	INSTPAT("??????? ????? ????? 101 ????? 000 0011", lhu, I, R(rd) = Mr(src1 + imm, 2));
 	INSTPAT("??????? ????? ????? 010 ????? 000 0011", lw, I, R(rd) = Mr(src1 + imm, 4));
 	// Trap and Exception ZSir
-	INSTPAT("0000000 00000 00000 000 00000 111 0011", ecall, N, s->dnpc = isa_raise_intr(GPR1, s->pc));
+	INSTPAT("0000000 00000 00000 000 00000 111 0011", ecall, N, s->dnpc = isa_raise_intr(GPR1, s->dnpc));
 	INSTPAT("0000000 00001 00000 000 00000 111 0011", ebreak, N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
 	INSTPAT("??????? ????? ????? 001 ????? 111 0011", csrrw, I, if (rd != 0) R(rd) = CSR(imm); CSR(imm) = src1);
 	INSTPAT("??????? ????? ????? 010 ????? 111 0011", csrrs, I, R(rd) = CSR(imm); if (src1 != 0) CSR(imm) |= src1);
