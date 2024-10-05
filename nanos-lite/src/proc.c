@@ -118,7 +118,7 @@ int context_uload(const char *filename, char *const argv[], char *const envp[], 
 void hello_fun(void *arg) {
 	int j = 1;
 	while (1) {
-		Log("Hello World from Nanos-lite with arg  for the %dth time!", j);
+		Log("Hello World from Nanos-lite with arg '%s' for the %dth time!", (char *)arg, j);
 		j++;
 		yield();
 	}
