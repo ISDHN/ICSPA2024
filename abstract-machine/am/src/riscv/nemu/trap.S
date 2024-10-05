@@ -46,11 +46,11 @@ f(30) f(31)
 .globl __am_asm_trap
 __am_asm_trap:
 
-    csrrw sp, mscratch, sp   # (1) atomically exchange sp and mscratch
-    bnez sp, save_context    # (2) take the branch if we trapped from user
-    csrr sp, mscratch        # (3) if we trapped from kernel, restore the original sp
+#     csrrw sp, mscratch, sp   # (1) atomically exchange sp and mscratch
+#     bnez sp, save_context    # (2) take the branch if we trapped from user
+#     csrr sp, mscratch        # (3) if we trapped from kernel, restore the original sp
 
-save_context:
+# save_context:
 
     addi sp, sp, -CONTEXT_SIZE
 
@@ -64,13 +64,13 @@ save_context:
     STORE t1, OFFSET_STATUS(sp)
     STORE t2, OFFSET_EPC(sp)
 
-    csrrw t0, mscratch, zero
-    STORE t0, (2 * XLEN)(sp)  # sp is x2
+    # csrrw t0, mscratch, zero
+    # STORE t0, (2 * XLEN)(sp)  # sp is x2
 
-    addi t0, t0, -CONTEXT_SIZE
-    sub t0, t0, sp
-    sltiu t0, t0, 1
-    STORE t0, OFFSET_PRV(sp)
+    # addi t0, t0, -CONTEXT_SIZE
+    # sub t0, t0, sp
+    # sltiu t0, t0, 1
+    # STORE t0, OFFSET_PRV(sp)
 
     # set mstatus.MPRV to pass difftest
     li a0, (1 << 17) 
@@ -87,18 +87,18 @@ save_context:
     csrw mstatus, t1
     csrw mepc, t2
 
-    LOAD t0, OFFSET_PRV(sp)
-    bnez t0, exit
-    addi sp, sp, CONTEXT_SIZE
-    csrw mscratch, sp
-    addi sp, sp, -CONTEXT_SIZE
+#     LOAD t0, OFFSET_PRV(sp)
+#     bnez t0, exit
+#     csrw mscratch, sp
+#     addi sp, sp, -CONTEXT_SIZE
 
-exit:
-    LOAD t6, OFFSET_SP(sp)
+# exit:
+#     LOAD t6, OFFSET_SP(sp)
 
-    csrrw t6, mscratch, t6
-    csrrw sp, mscratch, sp
-    csrrw t6, mscratch, t6
+#     csrrw t6, mscratch, t6
+#     csrrw sp, mscratch, sp
+#     csrrw t6, mscratch, t6
     
-    MAP(REGS, POP_ALT)
+    MAP(REGS, POP)
+    addi sp, sp, CONTEXT_SIZE
     mret
