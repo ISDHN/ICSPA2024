@@ -1,6 +1,6 @@
 HAS_NAVY = 1
 RAMDISK_FILE = build/ramdisk.img
-NEMUFLAGS= -b
+NEMUFLAGS= 
 
  
 NAME = nanos-lite
