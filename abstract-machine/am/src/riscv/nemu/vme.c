@@ -117,7 +117,7 @@ Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
 	c->pdir = as->ptr;
 	c->mstatus = 0x1880;
 	if (entry) {
-		c->mepc = (uintptr_t)entry - 4;
+		c->mepc = (uintptr_t)entry;
 	}
 	*((Context **)kstack.start) = c;
 	return c;
