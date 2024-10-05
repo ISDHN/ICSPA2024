@@ -122,7 +122,7 @@ static inline void Mret(Decode *s) {
 	Log("Mret to %#x", s->dnpc);
 #endif
 	if (cpu.mt_csr[mcause] == 0x80000007) {
-		//   printf("epc: %#x\n", MRW(mepc));
+		printf("epc: %#x\n", MRW(mepc));
 		//   isa_reg_display();
 		Log("end timer intr");
 	}
