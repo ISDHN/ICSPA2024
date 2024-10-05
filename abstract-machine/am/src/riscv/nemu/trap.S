@@ -87,18 +87,18 @@ save_context:
     csrw mstatus, t1
     csrw mepc, t2
 
-#     LOAD t0, OFFSET_PRV(sp)
-#     bnez t0, exit
-#     csrw mscratch, sp
-#     addi sp, sp, -CONTEXT_SIZE
-
-# exit:
-#     LOAD t6, OFFSET_SP(sp)
-
-#     csrrw t6, mscratch, t6
-#     csrrw sp, mscratch, sp
-#     csrrw t6, mscratch, t6
-    
-    MAP(REGS, POP)
+    LOAD t0, OFFSET_PRV(sp)
+    bnez t0, exit
     addi sp, sp, CONTEXT_SIZE
+    csrw mscratch, sp
+    addi sp, sp, -CONTEXT_SIZE
+
+exit:
+    LOAD t6, OFFSET_SP(sp)
+
+    csrrw t6, mscratch, t6
+    csrrw sp, mscratch, sp
+    csrrw t6, mscratch, t6
+    
+    MAP(REGS, POP_ALT)
     mret
