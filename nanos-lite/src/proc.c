@@ -129,7 +129,7 @@ void init_proc() {
 	//  context_uload("/bin/hello", (char *[]){"/bin/hello", NULL}, NULL, 2, true);
 	context_kload(hello_fun, "arg1", 1);
 	//    context_kload(hello_fun, "arg10", 5);
-	context_uload(init_program, (char *[]){init_program, NULL}, NULL, 32, true);
+	// context_uload(init_program, (char *[]){init_program, NULL}, NULL, 32, true);
 	switch_boot_pcb();
 
 	Log("Initializing processes...");
