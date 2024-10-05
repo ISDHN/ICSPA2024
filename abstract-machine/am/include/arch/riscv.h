@@ -12,6 +12,10 @@ typedef struct Context {
 	uintptr_t mcause;
 	uintptr_t mstatus;
 	uintptr_t mepc;
+	enum {
+		USER,
+		KERNEL,
+	} prvl;
 	void *pdir;
 } Context;
 
