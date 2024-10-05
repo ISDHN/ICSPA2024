@@ -119,6 +119,9 @@ static inline void Mret(Decode *s) {
 	status->mie = status->mpie;
 	status->mpie = 1;
 	s->dnpc = MRW(mepc) + 4;
+#ifdef CONFIG_ETRACE
+	Log("Mret to %#x", s->dnpc);
+#endif
 	// if (cpu.mt_csr[mcause] == 0x80000007) {
 	// 	  printf("epc: %#x\n", MRW(mepc));
 	// 	  isa_reg_display();
