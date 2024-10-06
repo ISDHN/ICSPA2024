@@ -55,9 +55,13 @@ save_context:
     addi sp, sp, -CONTEXT_SIZE
     MAP(REGS, PUSH)
 
+    addi t0, zero, 1
+    STORE t0, OFFSET_PRV(sp)
     csrr t0, mscratch
     beqz t0, after_save_sp
-    STORE t0, OFFSET_SP(sp)
+    STORE t0, OFFSET_SP(sp) # user mode: save sp and priv=0
+    mv t0, zero
+    STORE t0, OFFSET_PRV(sp)
 
 after_save_sp:
     csrr t0, mcause
@@ -69,11 +73,6 @@ after_save_sp:
     STORE t2, OFFSET_EPC(sp)
 
     csrrw t0, mscratch, zero  #support cte re-entry
-
-    addi t0, t0, -CONTEXT_SIZE
-    sub t0, t0, sp
-    sltiu t0, t0, 1
-    STORE t0, OFFSET_PRV(sp)
 
     # set mstatus.MPRV to pass difftest
     li a0, (1 << 17) 
