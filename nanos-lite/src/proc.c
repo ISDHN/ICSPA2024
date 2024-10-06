@@ -3,14 +3,33 @@
 #include <debug.h>
 
 #define MAX_NR_PROC 4
+#define MAX_NR_FG 3
 
 static PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
 static PCB pcb_boot = {};
 static int pcb_count = 0;
+static PCB *fgs[MAX_NR_FG] = {};
+static int fg_count = 0;
+static PCB *fg = NULL;
+static PCB *bg = NULL;
 PCB *current = NULL;
 
 void switch_boot_pcb() {
 	current = &pcb_boot;
+}
+
+void register_bg() {
+	bg = pcb + pcb_count - 1;
+}
+
+void register_fg() {
+	fgs[fg_count++] = pcb + pcb_count - 1;
+}
+
+void switch_fg(int index) {
+	if (index < fg_count) {
+		fg = fgs[index];
+	}
 }
 
 int context_kload(thread_entry func, void *arg, uint32_t priority) {
@@ -125,27 +144,29 @@ void hello_fun(void *arg) {
 
 void init_proc() {
 	char *init_program = "/bin/nterm";
-	context_kload(hello_fun, "arg10", 1);
+	// context_kload(hello_fun, "arg10", 1);
 	context_uload("/bin/hello", (char *[]){"/bin/hello", NULL}, NULL, 8, true);
+	register_bg();
 	//  context_kload(hello_fun, "arg1", 8);
 	context_uload(init_program, (char *[]){init_program, NULL}, NULL, 128, true);
+	register_fg();
+	switch_fg(0);
 	switch_boot_pcb();
 
 	Log("Initializing processes...");
-
-	// load program here
-	// char *filename = "/bin/nterm";
-	// Log("Loading program from %s", filename);
-	// naive_uload(NULL, filename);
 }
 
 PCB *get_next_proc() {
-	for (int i = 0; i < pcb_count; i++) {
-		if (pcb + i == current) {
-			return pcb + (i + 1) % pcb_count;
-		}
+	if (current == bg) {
+		return fg;
 	}
-	return pcb + pcb_count - 1; // if boot pcb: return the first
+	return bg;
+	// for (int i = 0; i < pcb_count; i++) {
+	// 	if (pcb + i == current) {
+	// 		return pcb + (i + 1) % pcb_count;
+	// 	}
+	// }
+	// return pcb + pcb_count - 1; // if boot pcb: return the first
 }
 
 Context *schedule(Context *prev) {

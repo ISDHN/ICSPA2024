@@ -29,3 +29,4 @@ Context *schedule(Context *prev);
 uintptr_t loader(PCB *pcb, const char *filename);
 int naive_uload(PCB *pcb, const char *filename);
 int context_uload(const char *filename, char *const argv[], char *const envp[], uint32_t priority, bool new_one);
+void switch_fg(int index);
