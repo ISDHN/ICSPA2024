@@ -1,8 +1,16 @@
 #ifndef __SDL_TIMER_H__
 #define __SDL_TIMER_H__
 
-typedef void* SDL_TimerID;
+#define MACH_HZ 1000000 / 60
+
+typedef void *SDL_TimerID;
 typedef uint32_t (*SDL_NewTimerCallback)(uint32_t interval, void *param);
+
+typedef struct {
+	SDL_NewTimerCallback callback;
+	uint32_t interval;
+	void *param;
+} TimerEvent;
 
 SDL_TimerID SDL_AddTimer(uint32_t interval, SDL_NewTimerCallback callback, void *param);
 int SDL_RemoveTimer(SDL_TimerID id);

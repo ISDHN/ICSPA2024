@@ -102,6 +102,10 @@ int _execve(const char *fname, char *const argv[], char *const envp[]) {
 	return _syscall_(SYS_execve, (uintptr_t)fname, (uintptr_t)argv, (uintptr_t)envp);
 }
 
+sighandler_t signal(int signum, sighandler_t handler) {
+	return _syscall_(SYS_signal, (uintptr_t)signum, (uintptr_t)handle, 0);
+}
+
 // Syscalls below are not used in Nanos-lite.
 // But to pass linking, they are defined as dummy functions.
 

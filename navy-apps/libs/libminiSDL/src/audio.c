@@ -5,30 +5,29 @@
 #include <assert.h>
 
 SDL_AudioSpec spec;
+uint8_t *audio_buf;
 
 bool is_pause = true;
 SDL_AudioCallback callback;
+TimerEvent *callback_event = NULL;
 
-void audio_callback_caller() {
-	if (is_pause) {
+void audio_callback_caller(uint32_t interval, void *param) {
+	if (is_pause || callback == NULL || callback_event->interval == -1) {
 		return;
 	}
-	static int last_time = 0;
-	int now = NDL_GetTicks();
-	if (now - last_time < spec.samples * 256 / spec.freq) {
-		return;
-	}
-	last_time = now;
-	uint8_t *audio_buf = malloc(spec.samples);
-	callback(NULL, audio_buf, spec.samples);
+	callback(spec.userdata, audio_buf, spec.samples);
 	NDL_PlayAudio(audio_buf, spec.samples);
-	free(audio_buf);
 }
 
 int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained) {
+	if (callback_event == NULL) {
+		callback_event = (TimerEvent *)SDL_AddTimer(-1, audio_callback_caller, NULL);
+	}
 	assert(desired != NULL);
 	spec = *desired;
+	audio_buf = malloc(spec.samples);
 	callback = desired->callback;
+	callback_event->interval = spec.samples * 256 / spec.freq;
 	NDL_OpenAudio(desired->freq, desired->channels, desired->samples);
 	if (obtained != NULL) {
 		*obtained = *desired;
