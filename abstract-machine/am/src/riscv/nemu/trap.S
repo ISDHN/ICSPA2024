@@ -69,7 +69,6 @@ after_save_sp:
     STORE t2, OFFSET_EPC(sp)
 
     csrrw t0, mscratch, zero  #support cte re-entry
-    STORE t0, (2 * XLEN)(sp)  # sp is x2
 
     addi t0, t0, -CONTEXT_SIZE
     sub t0, t0, sp
