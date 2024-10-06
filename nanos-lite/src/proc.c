@@ -125,10 +125,10 @@ void hello_fun(void *arg) {
 
 void init_proc() {
 	char *init_program = "/bin/nterm";
-	// context_kload(hello_fun, "arg10", 1);
-	context_uload("/bin/hello", (char *[]){"/bin/hello", NULL}, NULL, 8, true);
-	// context_kload(hello_fun, "arg1", 1);
-	context_uload(init_program, (char *[]){init_program, NULL}, NULL, 128, true);
+	context_kload(hello_fun, "arg10", 16);
+	// context_uload("/bin/hello", (char *[]){"/bin/hello", NULL}, NULL, 8, true);
+	context_kload(hello_fun, "arg1", 1);
+	// context_uload(init_program, (char *[]){init_program, NULL}, NULL, 128, true);
 	switch_boot_pcb();
 
 	Log("Initializing processes...");
