@@ -66,6 +66,13 @@ int sys_execve(const char *pathname, char *const argv[], char *const envp[]) {
 	return res;
 }
 
+int sys_signal(int signum, sighandler_t handler) {
+	if (signum == SIGALRM) {
+		register_timer_handle(handle);
+	}
+	return 0;
+}
+
 void do_syscall(Context *c) {
 	uintptr_t a[4];
 	a[0] = c->GPR1;
@@ -89,6 +96,7 @@ void do_syscall(Context *c) {
 			SYS_DISPATCH(close, a[1]);
 			SYS_DISPATCH(gettimeofday, (struct timeval *)a[1], (void *)a[2]);
 			SYS_DISPATCH(execve, (const char *)a[1], (char **)a[2], (char **)a[3]);
+			SYS_DISPATCH(signal, (int)a[1], (sig_handle)a[2]);
 		default:
 			panic("Unhandled syscall ID = %d", a[0]);
 	}
