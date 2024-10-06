@@ -57,7 +57,7 @@ save_context:
 
     addi t0, zero, 1
     STORE t0, OFFSET_PRV(sp)
-    csrr t0, mscratch
+    csrr t0, mscratch       #if in user mode: t0 is origin sp; if in kernel mode: t0 is ksp: 0
     beqz t0, after_save_sp
     STORE t0, OFFSET_SP(sp) # user mode: save sp and priv=0
     mv t0, zero
