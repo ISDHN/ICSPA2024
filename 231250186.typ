@@ -77,19 +77,6 @@
 
 哥们你这有点古老啊, 不整整最近Linux的打印机RCE吗? \
 
-#line(length: 100%)
-
-#align(center, text(17pt)[
-  *问题* 未解明
-])
-\
-
-
-#line(length: 100%)
-#align(center, text(17pt)[
-  *问题* 已解明
-])
-\
 
 
 #line(length: 100%)
@@ -108,4 +95,5 @@ a0是函数的参数传递, 用a7是为了避免和既有约定冲突 (? \
 /dev/events不可定位, 所以用open \
 float to fixedpt: 把对应bits捞出来, 按IEEE754标准转换成fixedpt \
 LD_PRELOAD: 优先加载动态链接库 \
-秘技: 笑死, uint aroundwarp了
+秘技: 笑死, uint aroundwarp了 \
+唉唉, 代码混淆. 最简单方案: 关键字算hash然后替换
