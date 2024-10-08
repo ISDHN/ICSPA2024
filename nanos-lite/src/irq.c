@@ -17,10 +17,10 @@ void register_timer_handle(sig_handle callback) {
 static Context *do_event(Event e, Context *c) {
 	switch (e.event) {
 		case EVENT_IRQ_TIMER:
-			// for (int i = 0; i < sig_count; i++) {
-			// 	__am_switch(current->as.ptr);
-			// 	callbacks[i].handle(SIGALRM);
-			// }
+			for (int i = 0; i < sig_count; i++) {
+				__am_switch(current->as.ptr);
+				callbacks[i].handle(SIGALRM);
+			}
 			// Log("Tik tak");
 		case EVENT_YIELD:
 			c = schedule(c);
