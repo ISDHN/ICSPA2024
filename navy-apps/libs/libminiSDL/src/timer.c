@@ -34,11 +34,13 @@ void SDL_Delay(uint32_t ms) {
 }
 
 void SDL_SystemTimerHandle(int signum) {
-	static uint64_t local_time = 0;
-	local_time += MACH_HZ;
 	for (int i = 0; i < event_count; i++) {
-		if (events[i].callback && local_time % events[i].interval == 0) {
-			events[i].callback(events[i].interval, events[i].param);
+		if (events[i].callback) {
+			events[i].local += MACH_HZ;
+			if (events[i].local >= events[i].interval) {
+				events[i].local %= events[i].interval;
+				events[i].callback(events[i].interval, events[i].param);
+			}
 		}
 	}
 }

@@ -9,6 +9,7 @@ typedef uint32_t (*SDL_NewTimerCallback)(uint32_t interval, void *param);
 typedef struct {
 	SDL_NewTimerCallback callback;
 	uint32_t interval;
+	uint32_t local;
 	void *param;
 } TimerEvent;
 

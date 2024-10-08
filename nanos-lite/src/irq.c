@@ -3,18 +3,23 @@
 
 #define MAX_CB_NR 32
 
-static sig_handle callbacks[MAX_CB_NR];
+static AlarmerInfo callbacks[MAX_CB_NR];
 static int sig_count = 0;
 
+void __am_switch(Context *c);
+
 void register_timer_handle(sig_handle callback) {
-	callbacks[sig_count++] = callback;
+	callbacks[sig_count].handle = callback;
+	callbacks[sig_count].pdir = current->as.ptr;
+	sig_count++;
 }
 
 static Context *do_event(Event e, Context *c) {
 	switch (e.event) {
 		case EVENT_IRQ_TIMER:
 			for (int i = 0; i < sig_count; i++) {
-				callbacks[i](SIGALRM);
+				__am_switch(current->as.ptr);
+				callbacks[i].handle(SIGALRM);
 			}
 			// Log("Tik tak");
 		case EVENT_YIELD:

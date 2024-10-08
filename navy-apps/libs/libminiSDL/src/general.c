@@ -1,8 +1,9 @@
 #include <NDL.h>
 #include <SDL.h>
+#include <sys/signal.h>
 
 int sdl_start_time = 0;
-extern void *SDL_SystemTimerHandle(int);
+extern void (*SDL_SystemTimerHandle)(int);
 
 int SDL_Init(uint32_t flags) {
 	sdl_start_time = NDL_GetTicks();

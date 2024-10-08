@@ -19,7 +19,12 @@ typedef union {
 	};
 } PCB;
 
-typedef void *(sig_handle)(int);
+typedef void (*sig_handle)(int);
+
+typedef struct {
+	void *pdir;
+	sig_handle handle;
+} AlarmerInfo;
 
 typedef void (*thread_entry)(void *arg);
 

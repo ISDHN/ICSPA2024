@@ -3,6 +3,7 @@
 #include <sys/time.h>
 #include <assert.h>
 #include <stdio.h>
+#include <signal.h>
 #include <time.h>
 #include "syscall.h"
 
@@ -102,8 +103,8 @@ int _execve(const char *fname, char *const argv[], char *const envp[]) {
 	return _syscall_(SYS_execve, (uintptr_t)fname, (uintptr_t)argv, (uintptr_t)envp);
 }
 
-sighandler_t signal(int signum, sighandler_t handler) {
-	return _syscall_(SYS_signal, (uintptr_t)signum, (uintptr_t)handle, 0);
+_sig_func_ptr _signal(int signum, _sig_func_ptr handler) {
+	return (_sig_func_ptr)_syscall_(SYS_signal, (uintptr_t)signum, (uintptr_t)handler, 0);
 }
 
 // Syscalls below are not used in Nanos-lite.

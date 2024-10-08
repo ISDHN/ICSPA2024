@@ -66,9 +66,9 @@ int sys_execve(const char *pathname, char *const argv[], char *const envp[]) {
 	return res;
 }
 
-int sys_signal(int signum, sighandler_t handler) {
+int sys_signal(int signum, sig_handle handler) {
 	if (signum == SIGALRM) {
-		register_timer_handle(handle);
+		register_timer_handle(handler);
 	}
 	return 0;
 }
