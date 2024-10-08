@@ -34,6 +34,7 @@ void SDL_Delay(uint32_t ms) {
 }
 
 void SDL_SystemTimerHandle(int signum) {
+	printf("SDL_SystemTimerHandle\n");
 	for (int i = 0; i < event_count; i++) {
 		if (events[i].callback) {
 			events[i].local += MACH_HZ;
