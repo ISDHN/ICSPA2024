@@ -67,7 +67,6 @@ int sys_execve(const char *pathname, char *const argv[], char *const envp[]) {
 }
 
 int sys_signal(int signum, sig_handle handler) {
-	printf("sys_signal: %d", signum);
 	if (signum == SIGALRM) {
 		register_timer_handle(handler);
 	}
