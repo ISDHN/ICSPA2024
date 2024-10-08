@@ -21,7 +21,7 @@ static Context *do_event(Event e, Context *c) {
 				__am_switch(current->as.ptr);
 				callbacks[i].handle(SIGALRM);
 			}
-			Log("Tik tak");
+			Log("callbak: %d", sig_count);
 		case EVENT_YIELD:
 			c = schedule(c);
 			break;
