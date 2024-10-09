@@ -80,7 +80,7 @@ void __am_switch(Context *c) {
 	} else if (!vme_enable) {
 		printf("vme disable \n");
 	} else {
-		printf("pdir is null");
+		printf("pdir is null\n");
 	}
 }
 
