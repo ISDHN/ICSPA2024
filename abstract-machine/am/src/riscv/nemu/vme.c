@@ -70,17 +70,13 @@ void __am_get_cur_as(Context *c) {
 	c->pdir = (vme_enable ? (void *)get_satp() : NULL);
 }
 
-void __am_switch(Context *c) {
-	if (vme_enable && c->pdir != NULL) {
+void __am_switch(void *pdir) {
+	if (vme_enable && pdir) {
 		uintptr_t prev = get_satp();
-		if ((void *)prev != c->pdir) {
-			printf("set satp to %p\n", c->pdir);
-			set_satp(c->pdir);
+		if ((void *)prev != pdir) {
+			printf("set satp to %p\n", pdir);
+			set_satp(pdir);
 		}
-	} else if (!vme_enable) {
-		printf("vme disable \n");
-	} else {
-		printf("pdir is null\n");
 	}
 }
 

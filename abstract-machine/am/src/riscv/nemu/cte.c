@@ -4,7 +4,7 @@
 #include <riscv/riscv.h>
 
 void __am_get_cur_as(Context *c);
-void __am_switch(Context *c);
+void __am_switch(void *c);
 static Context *(*user_handler)(Event, Context *) = NULL;
 
 Context *__am_irq_handle(Context *c) {
@@ -27,7 +27,7 @@ Context *__am_irq_handle(Context *c) {
 		assert(c != NULL);
 	}
 	if (c->pdir) {
-		__am_switch(c);
+		__am_switch(c->pdir);
 	}
 	return c;
 }
