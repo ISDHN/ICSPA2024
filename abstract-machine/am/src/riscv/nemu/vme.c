@@ -74,7 +74,6 @@ void __am_switch(void *pdir) {
 	if (vme_enable && pdir) {
 		uintptr_t prev = get_satp();
 		if ((void *)prev != pdir) {
-			printf("set satp to %p\n", pdir);
 			set_satp(pdir);
 		}
 	}
