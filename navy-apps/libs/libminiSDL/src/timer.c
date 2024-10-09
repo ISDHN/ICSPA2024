@@ -2,24 +2,28 @@
 #include <SDL.h>
 #include <sdl-timer.h>
 #include <stdio.h>
+#include <string.h>
 
 #define MAX_EVT_NR 16
 
 extern int sdl_start_time;
 static TimerEvent events[MAX_EVT_NR];
-static int event_count = 0;
 
 SDL_TimerID SDL_AddTimer(uint32_t interval, SDL_NewTimerCallback callback, void *param) {
-	events[event_count].interval = interval;
-	events[event_count].callback = callback;
-	events[event_count].param = param;
-	event_count++;
-	return events + event_count - 1;
+	for (int i = 0; i < MAX_EVT_NR; i++) {
+		if (events[i].callback) {
+			continue;
+		}
+		events[i].interval = interval;
+		events[i].callback = callback;
+		events[i].param = param;
+		return events + i;
+	}
+	return NULL;
 }
 
 int SDL_RemoveTimer(SDL_TimerID id) {
-	TODO()
-
+	memset(id, 0, sizeof(TimerEvent));
 	return 1;
 }
 
@@ -34,7 +38,7 @@ void SDL_Delay(uint32_t ms) {
 }
 
 void SDL_SystemTimerHandle(int signum) {
-	for (int i = 0; i < event_count; i++) {
+	for (int i = 0; i < MAX_EVT_NR; i++) {
 		if (events[i].callback) {
 			events[i].local += MACH_HZ;
 			if (events[i].local >= events[i].interval) {
