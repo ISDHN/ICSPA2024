@@ -77,8 +77,10 @@ void __am_switch(Context *c) {
 			printf("set satp to %p\n", c->pdir);
 			set_satp(c->pdir);
 		}
+	} else if (!vme_enable) {
+		printf("vme disable \n");
 	} else {
-		printf("pdir is null \n");
+		printf("pdir is null");
 	}
 }
 
