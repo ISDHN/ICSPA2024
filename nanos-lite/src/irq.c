@@ -9,6 +9,7 @@ static int sig_count = 0;
 void __am_switch(Context *c);
 
 void register_timer_handle(sig_handle callback) {
+	Log("Registering timer handle %p in as %p", callback, current->as.ptr);
 	callbacks[sig_count].handle = callback;
 	callbacks[sig_count].pdir = current->as.ptr;
 	sig_count++;
