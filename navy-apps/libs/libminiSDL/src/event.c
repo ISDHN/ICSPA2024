@@ -1,7 +1,7 @@
 #include <NDL.h>
 #include <SDL.h>
 #include <string.h>
-#define key(k) [SDLK_##k] = #k "\n", // there in \n in the original code
+#define key(k) [SDLK_##k] = #k "\n", // there in \n in the original keycode
 #define init_keystate(k) [SDLK_##k] = 0,
 #define ACT_IND 1
 #define KEY_IND 3
@@ -12,9 +12,21 @@ static const char *keyname[] = {
 static uint8_t key_state[] = {
 	_KEYS(init_keystate)};
 
-int SDL_PushEvent(SDL_Event *ev) {
-	TODO()
+#define EVT_QUEUE_LEN 1024
+static SDL_Event evt_queue[EVT_QUEUE_LEN] = {};
+static int evt_l = 0, evt_r = 0;
+
+static int evt_enqueue(SDL_Event *evt) {
+	if (evt_r = evt_l - 1) {
+		return -1;
+	}
+	evt_queue[evt_r] = *evt;
+	evt_r = (evt_r + 1) % EVT_QUEUE_LEN;
 	return 0;
+}
+
+int SDL_PushEvent(SDL_Event *ev) {
+	return evt_enqueue(ev);
 }
 
 static void Classify_Keyboard_Event(const char *buf, SDL_Event *event) {
@@ -29,13 +41,22 @@ static void Classify_Keyboard_Event(const char *buf, SDL_Event *event) {
 
 int SDL_PollEvent(SDL_Event *ev) {
 	char buf[32] = {0};
-	int res = NDL_PollEvent(buf, sizeof(buf));
-	if (res != 0) {
-		Classify_Keyboard_Event(buf, ev);
-		key_state[ev->key.keysym.sym] = ev->type == SDL_KEYDOWN ? 1 : 0;
-		return 1;
+	SDL_Event local_evt_buf;
+	while (NDL_PollEvent(buf, sizeof(buf))) {
+		memset(buf, 0, 32);
+		Classify_Keyboard_Event(buf, &local_evt_buf);
+		SDL_PushEvent(&local_evt_buf);
+		key_state[local_evt_buf.key.keysym.sym] = local_evt_buf.type == SDL_KEYDOWN ? 1 : 0;
 	}
-	return 0;
+	if (evt_l != evt_r) {
+		if (ev) {
+			*ev = evt_queue[evt_l];
+			evt_l = (evt_l + 1) % EVT_QUEUE_LEN;
+		}
+		return 1;
+	} else {
+		return 0;
+	}
 }
 
 int SDL_WaitEvent(SDL_Event *event) {
