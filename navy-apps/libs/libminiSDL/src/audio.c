@@ -16,7 +16,6 @@ uint32_t audio_callback_caller(uint32_t interval, void *param) {
 		return 0;
 	}
 	callback(spec.userdata, audio_buf, spec.samples);
-	printf("play\n");
 	NDL_PlayAudio(audio_buf, spec.samples);
 	return 0;
 }
