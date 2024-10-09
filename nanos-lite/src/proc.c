@@ -151,8 +151,8 @@ void init_proc() {
 	//  context_kload(hello_fun, "arg1", 8);
 	context_uload(init_program, (char *[]){init_program, NULL}, NULL, 128, true);
 	register_fg();
-	context_uload(init_program, (char *[]){init_program, NULL}, NULL, 128, true);
-	register_fg();
+	// context_uload(init_program, (char *[]){init_program, NULL}, NULL, 128, true);
+	// register_fg();
 	switch_fg(0);
 	switch_boot_pcb();
 
