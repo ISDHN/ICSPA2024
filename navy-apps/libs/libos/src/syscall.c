@@ -104,7 +104,6 @@ int _execve(const char *fname, char *const argv[], char *const envp[]) {
 }
 
 _sig_func_ptr _signal(int signum, _sig_func_ptr handler) {
-	printf("signal: signum = %d, handler = %p\n", signum, handler);
 	return (_sig_func_ptr)_syscall_(SYS_signal, (uintptr_t)signum, (uintptr_t)handler, 0);
 }
 

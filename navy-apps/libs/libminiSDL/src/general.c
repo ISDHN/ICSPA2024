@@ -4,10 +4,11 @@
 
 int sdl_start_time = 0;
 extern void (*SDL_SystemTimerHandle)(int);
+_sig_func_ptr _signal(int signum, _sig_func_ptr handler);
 
 int SDL_Init(uint32_t flags) {
 	sdl_start_time = NDL_GetTicks();
-	signal(SIGALRM, SDL_SystemTimerHandle);
+	_signal(SIGALRM, SDL_SystemTimerHandle);
 	return NDL_Init(flags);
 }
 
