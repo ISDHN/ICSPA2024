@@ -18,7 +18,7 @@ static Context *do_event(Event e, Context *c) {
 	switch (e.event) {
 		case EVENT_IRQ_TIMER:
 			for (int i = 0; i < sig_count; i++) {
-				__am_switch(current->as.ptr);
+				__am_switch(callbacks[i].pdir);
 				callbacks[i].handle(SIGALRM);
 			}
 		case EVENT_YIELD:
