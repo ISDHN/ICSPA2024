@@ -8,7 +8,7 @@ _sig_func_ptr _signal(int signum, _sig_func_ptr handler);
 
 int SDL_Init(uint32_t flags) {
 	sdl_start_time = NDL_GetTicks();
-	_signal(SIGALRM, SDL_SystemTimerHandle);
+	//_signal(SIGALRM, SDL_SystemTimerHandle);
 	return NDL_Init(flags);
 }
 
