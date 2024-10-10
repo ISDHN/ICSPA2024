@@ -72,7 +72,7 @@ static void audio_buffer_handle(uint32_t offset, int len, bool is_write) {
 	assert(len == 1);
 	assert(offset == 0);
 	if (is_write) {
-		while (CONFIG_SB_SIZE - get_count() < audio_base[reg_samples] * 16) {
+		while (CONFIG_SB_SIZE - get_count() < audio_base[reg_samples] * 8) {
 #ifdef CONFIG_WARN_OVERFLOW
 			Warning("audio buffer near overflow. free space = %d", CONFIG_SB_SIZE - get_count());
 #endif
