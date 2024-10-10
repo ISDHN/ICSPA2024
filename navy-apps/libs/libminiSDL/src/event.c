@@ -17,7 +17,7 @@ static SDL_Event evt_queue[EVT_QUEUE_LEN] = {};
 static int evt_l = 0, evt_r = 0;
 
 static int evt_enqueue(SDL_Event *evt) {
-	if (evt_r = evt_l - 1) {
+	if (evt_r == (evt_l - 1 + EVT_QUEUE_LEN) % EVT_QUEUE_LEN) {
 		return -1;
 	}
 	evt_queue[evt_r] = *evt;
@@ -66,8 +66,19 @@ int SDL_WaitEvent(SDL_Event *event) {
 }
 
 int SDL_PeepEvents(SDL_Event *ev, int numevents, int action, uint32_t mask) {
-	TODO()
-	return 0;
+	assert(action == SDL_GETEVENT);
+	assert(numevents == 1);
+	for (int i = evt_l; i != evt_r; i = (i + 1) % EVT_QUEUE_LEN) {
+		if (evt_queue[i].type & mask) {
+			*ev = evt_queue[i];
+			for (int j = i; j != evt_r; j = (j + 1) % EVT_QUEUE_LEN) {
+				evt_queue[j] = evt_queue[(j + 1) % EVT_QUEUE_LEN];
+			}
+			evt_r = (evt_r - 1 + EVT_QUEUE_LEN) % EVT_QUEUE_LEN;
+			return 1;
+		}
+	}
+	return -1;
 }
 
 uint8_t *SDL_GetKeyState(int *numkeys) {
