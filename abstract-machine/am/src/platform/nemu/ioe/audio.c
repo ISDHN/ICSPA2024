@@ -9,6 +9,7 @@
 #define AUDIO_COUNT_ADDR (AUDIO_ADDR + 0x14)
 
 uint32_t buffer_size = 0;
+uint32_t sample = 0;
 
 void __am_audio_init() {
 	buffer_size = inl(AUDIO_SBUF_SIZE_ADDR);
@@ -23,6 +24,7 @@ void __am_audio_ctrl(AM_AUDIO_CTRL_T *ctrl) {
 	outl(AUDIO_FREQ_ADDR, ctrl->freq);
 	outl(AUDIO_CHANNELS_ADDR, ctrl->channels);
 	outl(AUDIO_SAMPLES_ADDR, ctrl->samples);
+	sample = ctrl->samples;
 	outl(AUDIO_INIT_ADDR, 1);
 }
 
@@ -32,7 +34,7 @@ void __am_audio_status(AM_AUDIO_STATUS_T *stat) {
 
 void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
 	int buf_size = ctl->buf.end - ctl->buf.start;
-	while (buffer_size - inl(AUDIO_COUNT_ADDR) < buf_size)
+	while (buffer_size - inl(AUDIO_COUNT_ADDR) < buf_size * 8)
 		;
 	for (uint8_t *i = ctl->buf.start; i < (uint8_t *)(ctl->buf.end); i++) {
 		outb(AUDIO_SBUF_ADDR, *i);
