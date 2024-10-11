@@ -46,10 +46,10 @@ int SDL_PollEvent(SDL_Event *ev) {
 	char buf[32] = {0};
 	SDL_Event local_evt_buf;
 	while (NDL_PollEvent(buf, sizeof(buf))) {
-		memset(buf, 0, 32);
 		Classify_Keyboard_Event(buf, &local_evt_buf);
 		SDL_PushEvent(&local_evt_buf);
 		key_state[local_evt_buf.key.keysym.sym] = local_evt_buf.type == SDL_KEYDOWN ? 1 : 0;
+		memset(buf, 0, 32);
 	}
 	if (evt_l != evt_r) {
 		if (ev) {
