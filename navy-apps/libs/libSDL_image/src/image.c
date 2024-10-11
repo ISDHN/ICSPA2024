@@ -9,7 +9,12 @@
 SDL_Surface *IMG_Load_RW(SDL_RWops *src, int freesrc) {
 	assert(src->type == RW_TYPE_MEM);
 	assert(freesrc == 0);
-	return NULL;
+	long size = src->size(src);
+	char *buffer = (char *)malloc(size);
+	src->read(src, buffer, 1, size);
+	SDL_Surface *image = STBIMG_LoadFromMemory(buffer, size);
+	free(buffer);
+	return image;
 }
 
 SDL_Surface *IMG_Load(const char *filename) {
@@ -27,7 +32,10 @@ SDL_Surface *IMG_Load(const char *filename) {
 }
 
 int IMG_isPNG(SDL_RWops *src) {
-	return 0;
+	char buff[8];
+	char *head = "\x89\x50\x4e\x47\x0d\x0a\x1a\x0a";
+	src->read(src, buff, 1, 8);
+	return !strcmp(buff, head);
 }
 
 SDL_Surface *IMG_LoadJPG_RW(SDL_RWops *src) {
