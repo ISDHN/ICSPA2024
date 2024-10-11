@@ -149,7 +149,7 @@ void init_proc() {
 	context_uload("/bin/hello", (char *[]){"/bin/hello", NULL}, NULL, 1, true);
 	register_bg();
 	//  context_kload(hello_fun, "arg1", 8);
-	context_uload(sec_program, (char *[]){init_program, NULL}, NULL, 512, true);
+	context_uload(init_program, (char *[]){init_program, NULL}, NULL, 512, true);
 	register_fg();
 	context_uload(init_program, (char *[]){init_program, NULL}, NULL, 512, true);
 	register_fg();

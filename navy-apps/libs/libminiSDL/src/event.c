@@ -20,6 +20,7 @@ static int evt_l = 0, evt_r = 0;
 
 static int evt_enqueue(SDL_Event *evt) {
 	if (evt_r == (evt_l - 1 + EVT_QUEUE_LEN) % EVT_QUEUE_LEN) {
+		printf("event overflow\n");
 		return -1;
 	}
 	evt_queue[evt_r] = *evt;
