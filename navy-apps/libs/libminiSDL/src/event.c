@@ -1,6 +1,8 @@
 #include <NDL.h>
 #include <SDL.h>
 #include <string.h>
+#include <assert.h>
+
 #define key(k) [SDLK_##k] = #k "\n", // there in \n in the original keycode
 #define init_keystate(k) [SDLK_##k] = 0,
 #define ACT_IND 1

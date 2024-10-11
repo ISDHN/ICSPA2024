@@ -9,7 +9,7 @@ int64_t __sdl_size(SDL_RWops *f) {
 	return size;
 }
 
-int64_t __sdl_seek(SDL_RWops *f, int offset, int whence) {
+int64_t __sdl_seek(SDL_RWops *f, int64_t offset, int whence) {
 	fseek(f->fp, offset, whence);
 	return ftell(f->fp);
 }
