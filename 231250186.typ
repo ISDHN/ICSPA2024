@@ -73,7 +73,10 @@
     pad(
       text(12pt)[
       最近席卷计算机领域的, 就要数2018年1月爆出的Meltdown和Spectre这两个大名鼎鼎的硬件漏洞了.
-      ],x: 16pt,y:4pt), fill: color.linear-rgb(200, 200, 200, 100)))
+      ],
+    x: 16pt,y:4pt), 
+  fill: color.linear-rgb(200, 200, 200, 100))
+)
 
 哥们你这有点古老啊, 不整整最近Linux的打印机RCE吗? \
 
