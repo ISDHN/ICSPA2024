@@ -3,8 +3,9 @@
 
 #define SYNC_ADDR (VGACTL_ADDR + 4)
 
-int w;
-int h;
+static int gpu_w;
+static int gpu_h;
+static uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
 
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 	uint32_t data = inl(VGACTL_ADDR);
@@ -13,13 +14,13 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 }
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
-	uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
 	uint32_t *src = ctl->pixels;
+	int w = ctl->w, h = ctl->h;
 	if (ctl->pixels != NULL) {
-		int x, y;
-		for (y = 0; y < ctl->h; y++) {
-			for (x = 0; x < ctl->w; x++) {
-				fb[(y + ctl->y) * w + x + ctl->x] = src[y * ctl->w + x];
+		for (int y = 0; y < h; y++) {
+			int y_bias = y + ctl->y;
+			for (int x = 0; x < w; x++) {
+				fb[y_bias * gpu_w + x + ctl->x] = src[y * w + x];
 			}
 		}
 	}
@@ -33,9 +34,8 @@ void __am_gpu_status(AM_GPU_STATUS_T *status) {
 }
 
 void __am_gpu_init() {
-	int i;
 	AM_GPU_CONFIG_T cfg;
 	__am_gpu_config(&cfg);
-	w = cfg.width;
-	h = cfg.height;
+	gpu_w = cfg.width;
+	gpu_h = cfg.height;
 }
