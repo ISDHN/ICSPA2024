@@ -4,7 +4,7 @@ ifeq ($(wildcard $(AM_KERNELS_PATH)/tests/am-tests/src),)
 endif
 
 BENCHMARKS = 
-KERNELS    = bad-apple
+KERNELS    = typing-game
 APP_PATH   = $(AM_KERNELS_PATH)/$(if $(findstring $(1), $(BENCHMARKS)),benchmarks,kernels)/$(1)
 
 ALL = $(BENCHMARKS) $(KERNELS)
