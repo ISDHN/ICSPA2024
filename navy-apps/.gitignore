@@ -5,6 +5,7 @@
 !README.md
 !.gitignore
 !*.[cSh]
+!*.S
 !*.cpp
 !scripts/**/*.mk
 build/
