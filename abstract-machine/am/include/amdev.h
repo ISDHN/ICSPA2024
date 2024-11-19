@@ -14,7 +14,7 @@ AM_DEVREG(2, UART_TX, WR, char data);
 AM_DEVREG(3, UART_RX, RD, char data);
 AM_DEVREG(4, TIMER_CONFIG, RD, bool present, has_rtc);
 AM_DEVREG(5, TIMER_RTC, RD, int year, month, day, hour, minute, second);
-AM_DEVREG(6, TIMER_UPTIME, RD, uint64_t us);
+AM_DEVREG(6, TIMER_UPTIME, RD, uint32_t us);
 AM_DEVREG(7, INPUT_CONFIG, RD, bool present);
 AM_DEVREG(8, INPUT_KEYBRD, RD, bool keydown; int keycode);
 AM_DEVREG(9, GPU_CONFIG, RD, bool present, has_accel; int width, height, vmemsz);
@@ -38,7 +38,8 @@ AM_DEVREG(24, NET_RX, WR, Area buf);
 
 #define AM_KEYS(_)                                                                                               \
 	_(ESCAPE)                                                                                                    \
-	_(F1) _(F2) _(F3) _(F4) _(F5) _(F6) _(F7) _(F8) _(F9) _(F10) _(F11) _(F12)                                   \
+	_(F1)                                                                                                        \
+	_(F2) _(F3) _(F4) _(F5) _(F6) _(F7) _(F8) _(F9) _(F10) _(F11) _(F12)                                         \
 		_(GRAVE) _(1) _(2) _(3) _(4) _(5) _(6) _(7) _(8) _(9) _(0) _(MINUS) _(EQUALS) _(BACKSPACE)               \
 			_(TAB) _(Q) _(W) _(E) _(R) _(T) _(Y) _(U) _(I) _(O) _(P) _(LEFTBRACKET) _(RIGHTBRACKET) _(BACKSLASH) \
 				_(CAPSLOCK) _(A) _(S) _(D) _(F) _(G) _(H) _(J) _(K) _(L) _(SEMICOLON) _(APOSTROPHE) _(RETURN)    \
