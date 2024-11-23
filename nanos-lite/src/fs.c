@@ -75,9 +75,6 @@ int fs_close(int fd) {
 }
 
 size_t fs_lseek(int fd, size_t offset, int whence) {
-	if (fd != FD_FB) {
-		Log("lseek %d %d %d", fd, offset, whence);
-	}
 	Finfo *f = &file_table[fd];
 	switch (whence) {
 		case SEEK_SET:
@@ -106,9 +103,6 @@ size_t fs_read(int fd, void *buf, size_t len) {
 }
 
 size_t fs_write(int fd, const void *buf, size_t len) {
-	if (fd != FD_FB) {
-		Log("write %d %d", fd, len);
-	}
 	Finfo *f = &file_table[fd];
 	if (fd >= FD_FILESTART && f->open_offset + len >= f->size) {
 		len = f->size - f->open_offset;
