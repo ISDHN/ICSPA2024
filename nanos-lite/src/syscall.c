@@ -21,6 +21,7 @@ int sys_yield() {
 }
 
 long sys_write(int fd, const void *buf, size_t count) {
+	putch('t');
 	return fs_write(fd, buf, count);
 }
 
